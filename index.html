@@ -43,7 +43,7 @@
     <!-- Vue root component -->
     <div id="app">
         <!-- Bootstrap class to make this element span the whole width of the viewport -->
-        <div class="container">
+        <div class="container-fluid">
             <h1>{{title}}</h1>
 
             <template v-if="current_view === 'importView'">
@@ -83,16 +83,14 @@
                     I am a about
                 </p>
             </template>
-            <footer class="footer">
-                <div class="container">
-                    <div class="row">
-                        <navigation v-for="item in views" v-bind:view="item" v-bind:key="item.id" inline-template>
-                            <div class="col">
-                                <button type="button" class="btn btn-link"
-                                    v-on:click="changeView(view.viewCode)">{{view.label}}</button>
-                            </div>
-                        </navigation>
-                    </div>
+            <footer>
+                <div class="row">
+                    <navigation v-for="item in views" v-bind:view="item" v-bind:key="item.id" inline-template>
+                        <div class="col">
+                            <button type="button" class="btn btn-link"
+                                v-on:click="changeView(view.viewCode)">{{view.label}}</button>
+                        </div>
+                    </navigation>
                 </div>
             </footer>
         </div>

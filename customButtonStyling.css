@@ -48,11 +48,3 @@
     border-color:  rgb(153, 115, 0);
 }
 /* end adapted from https://www.jquery-az.com/bootstrap-button-9-demos-of-custom-color-size-dropdown-navbar-and-more/ */
-
-/* adapted from https://getbootstrap.com/docs/4.0/examples/sticky-footer/ accessed: 11/17/2019 */
-.footer{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-/* end of adapted from https://getbootstrap.com/docs/4.0/examples/sticky-footer/ */
