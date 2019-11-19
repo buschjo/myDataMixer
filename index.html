@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="author" content="Josefine S. Busch">
+    <meta name="version" content="0.1">
+    <meta name="title" content="My Data Mixer">
+    <!-- Required by lighthouse for pwa audit -->
+    <meta name="theme-color" content="#2F3BA2">
+    <!-- Required for Bootstrap -->
+    <meta charset="utf-8">
+    <!-- This tag is used for the responsive behavior of bootstrap -->
+    <!-- width= device-width ==> page widht == device width-->
+    <!-- zoom level at page load-->
+    <!-- Do not shrink the page to fit the device width-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!-- Crossorigin: stylesheet is fetched using a Cross Origin Ressource Sharing Request. Anonoymous: no credentials are sent-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="customButtonStyling.css">
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- Required by lighthouse for pwa audit -->
+    <link rel="apple-touch-icon" href="ios-icon.png">
+
+    <!-- Link to Web App Manifest -->
+    <!-- as described in https://codelabs.developers.google.com/codelabs/your-first-pwapp/#3 by Pete LePage/Google Developers accessed 11/13/2019 -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Vue JavaScript -->
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <title>My Data Mixer</title>
+
+</head>
+
+<body>
+
+    <!-- Vue root component -->
+    <div id="app">
+        <!-- Bootstrap class to make this element span the whole width of the viewport -->
+        <div class="container">
+            <h1>{{title}}</h1>
+
+            <template v-if="current_view === 'importView'">
+                <!-- adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
+                <!-- v-for iterate trough an array (defined in vue app component) and create new import-button component for each item in the list -->
+                <!-- v-bind:import_source passes the item as a property to the component. import_source is defined as a property in the component -->
+                <!-- v-bind:key is not mandatory. It is used by vue.js for example to reorder elements (https://vuejs.org/v2/guide/list.html#Maintaining-State accessed 11/17/2019)-->
+                <!-- inline-template adapted from https://vuejsdevelopers.com/2017/03/24/vue-js-component-templates/ accessed on 11/17/2019 -->
+                <import-button v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.id"
+                    inline-template>
+                    <div>
+                        <!-- v-on:change listens to "change" event and calls importFile method defined in component import-button -->
+                        <label v-bind:for="import_source.labelId" class="btn btn-lg btn-block"
+                            v-bind:class="import_source.class">{{ import_source.labelText }}</label>
+                        <input type='file' v-bind:name="import_source.labelId" v-bind:id="import_source.labelId"
+                            v-on:change="importFile">
+                    </div>
+                </import-button>
+                <!-- end adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
+
+
+                <button type="button" class="btn btn-secondary btn-lg btn-block" id="createGraphButton"
+                    onclick="openDataSelection()">Create a Graph</button>
+            </template>
+            <template v-else-if="current_view ==='graphView'">
+                <p>
+                    I am a graph
+                </p>
+            </template>
+            <template v-else-if="current_view ==='settingsView'">
+                <p>
+                    I am a settings
+                </p>
+            </template>
+            <template v-else-if="current_view ==='aboutView'">
+                <p>
+                    I am a about
+                </p>
+            </template>
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <navigation v-for="item in views" v-bind:view="item" v-bind:key="item.id" inline-template>
+                            <div class="col">
+                                <button type="button" class="btn btn-link"
+                                    v-on:click="changeView(view.viewCode)">{{view.label}}</button>
+                            </div>
+                        </navigation>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- example page structure from https://vuejs.org/v2/guide/ -->
+    <!-- <div id="app">
+        <app-nav></app-nav>
+        <app-view>
+          <app-sidebar></app-sidebar>
+          <app-content></app-content>
+        </app-view>
+      </div> -->
+
+    <!-- Bootstrap JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+
+    <!-- My JavaScript -->
+    <script type="text/javascript" src="app.js"></script>
+
+</body>
+
+</html>

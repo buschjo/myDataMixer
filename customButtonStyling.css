@@ -1,0 +1,58 @@
+/* adapted from https://www.jquery-az.com/bootstrap-button-9-demos-of-custom-color-size-dropdown-navbar-and-more/ */
+.btn-clue {
+    background-color: rgb(189, 0, 0);
+    color: #FFF;
+    border-color: rgb(189, 0, 0);
+}
+
+.btn-clue:hover,
+.btn-clue:focus,
+.btn-clue:active,
+.btn-clue.active,
+.btn-clue.visited,
+.open .dropdown-toggle.btn-clue {
+    background-color: rgb(99, 0, 0);
+    color: #FFF;
+    border-color: rgb(99, 0, 0);
+}
+
+.btn-strong {
+    background-color: rgb(39, 0, 62);
+    color: #FFF;
+    border-color: rgb(39, 0, 62);
+}
+
+.btn-strong:hover,
+.btn-strong:focus,
+.btn-strong:active,
+.btn-strong.active,
+.open .dropdown-toggle.btn-strong {
+    background-color: rgb(39, 0, 62);
+    color: #FFF;
+    border-color: rgb(39, 0, 62);
+}
+
+.btn-daylio {
+    background-color: rgb(153, 115, 0);
+    color: #FFF;
+    border-color: rgb(153, 115, 0);
+}
+
+.btn-daylio:hover,
+.btn-daylio:focus,
+.btn-daylio:active,
+.btn-daylio.active,
+.open .dropdown-toggle.btn-daylio {
+    background-color: rgb(153, 115, 0);
+    color: #FFF;
+    border-color:  rgb(153, 115, 0);
+}
+/* end adapted from https://www.jquery-az.com/bootstrap-button-9-demos-of-custom-color-size-dropdown-navbar-and-more/ */
+
+/* adapted from https://getbootstrap.com/docs/4.0/examples/sticky-footer/ accessed: 11/17/2019 */
+.footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+/* end of adapted from https://getbootstrap.com/docs/4.0/examples/sticky-footer/ */
