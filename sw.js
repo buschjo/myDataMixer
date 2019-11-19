@@ -6,7 +6,7 @@ const version = 4;
 //https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4 by Google Developers accessed 13.11.2019
 const CACHE_NAME = 'static-cache-v1';
 const FILES_TO_CACHE = [
-	'myDataMixer/offline.html',
+	'/offline.html',
 ];
 //end of https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4
 
