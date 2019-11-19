@@ -69,19 +69,18 @@
                     onclick="openDataSelection()">Create a Graph</button>
             </template>
             <template v-else-if="current_view ==='graphView'">
-                <p>
-                    I am a graph
-                </p>
+                <graphcard v-for="item in graphs" v-bind:graph="item" v-bind:key="item.id">
+
+                </graphcard>
             </template>
             <template v-else-if="current_view ==='settingsView'">
-                <p>
-                    I am a settings
-                </p>
+                <button type="button" class="btn btn-danger btn-lg btn-block">Delete Data</button>
+                <button type="button" class="btn btn-primary btn-lg btn-block">Change Colors</button>
             </template>
             <template v-else-if="current_view ==='aboutView'">
-                <p>
-                    I am a about
-                </p>
+                <p>This app was developed by Josefine S. Busch.</p>
+                <p>The app stores your imported data in this and that way.</p>
+                <p>You can delete all your data in settings.</p>
             </template>
             <footer>
                 <div class="row">
@@ -96,15 +95,6 @@
         </div>
     </div>
 
-    <!-- example page structure from https://vuejs.org/v2/guide/ -->
-    <!-- <div id="app">
-        <app-nav></app-nav>
-        <app-view>
-          <app-sidebar></app-sidebar>
-          <app-content></app-content>
-        </app-view>
-      </div> -->
-
     <!-- Bootstrap JavaScript-->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -116,6 +106,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
+
+	<!-- D3 js for diagrams  -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <!-- My JavaScript -->
     <script type="text/javascript" src="app.js"></script>

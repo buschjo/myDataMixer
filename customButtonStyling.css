@@ -33,9 +33,9 @@
 }
 
 .btn-daylio {
-    background-color: rgb(153, 115, 0);
+    background-color: rgb(86, 0, 94);
     color: #FFF;
-    border-color: rgb(153, 115, 0);
+    border-color: rgb(86, 0, 94);
 }
 
 .btn-daylio:hover,
@@ -43,8 +43,8 @@
 .btn-daylio:active,
 .btn-daylio.active,
 .open .dropdown-toggle.btn-daylio {
-    background-color: rgb(153, 115, 0);
+    background-color: rgb(86, 0, 94);
     color: #FFF;
-    border-color:  rgb(153, 115, 0);
+    border-color:  rgb(86, 0, 94);
 }
 /* end adapted from https://www.jquery-az.com/bootstrap-button-9-demos-of-custom-color-size-dropdown-navbar-and-more/ */
