@@ -8,11 +8,19 @@ if ('serviceWorker' in navigator) {
         .catch(err => console.error('there is a problem', err));
 }
 
-Vue.component('import-button', {
+Vue.component('import_component', {
     props: ['import_source'],
     methods: {
-        importFile() {
-            console.log("nothing imported");
+        importFile(id) {
+            var selectedFile = document.getElementById(id).files[0];
+            var reader = new FileReader();
+            //the onload event is fired when a read was successfull (full exp. https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
+            reader.onload = function(event) {
+                var converter = new dataConverter();
+                dataobject = converter.convert(event.target.result, id);
+                app.importedData.push(dataobject);
+            };
+            reader.readAsText(selectedFile);
         }
     },
     mounted: function () {
@@ -27,8 +35,9 @@ Vue.component('import-button', {
     }
 });
 
-Vue.component('navigation', {
+Vue.component('navigation_component', {
     props: ['view'],
+    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewCode)'>{{view.label}}</button></div>",
     methods: {
         changeView: function (new_view) {
             app.current_view = new_view;
@@ -38,7 +47,6 @@ Vue.component('navigation', {
 
 Vue.component('graphcard', {
     props: ['graph'],
-    template: "<svg style='width: 100%;'></svg>",
     methods: {
         drawGraph: function () {
             console.log('drawing');
@@ -48,34 +56,23 @@ Vue.component('graphcard', {
 
         // adapted from https://www.freecodecamp.org/news/how-to-create-your-first-bar-chart-with-d3-js-a0e8ea2df386/
         // this is adapted by me
-        var parentContainer = document.getElementsByClassName('container-fluid')[0];
-        var parentContainerWidth = window.getComputedStyle(parentContainer, null).getPropertyValue("width");
-        var parentContainerPaddingLeft = window.getComputedStyle(parentContainer, null).getPropertyValue("padding-left");
-        var parentContainerPaddingRight = window.getComputedStyle(parentContainer, null).getPropertyValue("padding-right");
-        // \d searches for digits
-        // + one or more instances
-        // we expect the width to be in a format like "100px" so no need for the \g for global search, because the first match is expected to be the only match
-        var parentWidth = parentContainerWidth.match(/\d+/);
-        var parentPaddingtLeft = parentContainerPaddingLeft.match(/\d+/);
-        var parentPaddingRight = parentContainerPaddingRight.match(/\d+/);
-        var svgWidth = parentWidth - parentPaddingRight - parentPaddingtLeft;
+        var svgWidth = calculateWidth();
         // end this is adapted by me
         
         var svgHeight = 300;
 
-        var svg = d3.select('svg')
-            .attr("width", svgWidth)
-            .attr("height", svgHeight)
-            .attr("class", "bar-chart");
-
-
-        var dataset = [80, 100, 56, 120, 180, 30, 40, 120, 160];
-
+        //this is adapted by me
+        var svg = d3.select("#"+this.graph.graphcode)
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
+        .attr("class", "bar-chart");
+        //end of adapted by me
+        
         var barPadding = 5;
-        var barWidth = (svgWidth / dataset.length);
+        var barWidth = (svgWidth / this.graph.dataset.length);
 
         var barChart = svg.selectAll("rect")
-            .data(dataset)
+            .data(this.graph.dataset)
             .enter()
             .append("rect")
             .attr("y", function (d) {
@@ -94,6 +91,21 @@ Vue.component('graphcard', {
     }
 });
 
+function calculateWidth(){
+    var parentContainer = document.getElementsByClassName('main-content')[0];
+    //width for the element minus padding
+    return extractNumericPropertyValue(parentContainer, "width") - extractNumericPropertyValue(parentContainer, "padding-left") - extractNumericPropertyValue(parentContainer, "padding-right");
+    
+    function extractNumericPropertyValue(element, propertyName){
+        // computedStyle because when the DOM is manipulated the normal style attribute is not reliable anymore
+        var value = window.getComputedStyle(element, null).getPropertyValue(propertyName);
+        // \d searches for digits
+        // + one or more instances
+        // we expect the width to be in a format like "100px" so no need for the \g for global search, because the first match is expected to be the only match
+        return value.match(/\d+/);
+    }
+}
+
 //Create vue app with name "app" and data
 var app = new Vue({
     el: '#app',
@@ -103,17 +115,17 @@ var app = new Vue({
         import_sources: [{
             id: 0,
             class: 'btn-clue',
-            labelId: 'clueDataImport',
+            labelId: 'clueData',
             labelText: 'Clue Data'
         }, {
             id: 1,
             class: 'btn-daylio',
-            labelId: 'daylioDataImport',
+            labelId: 'daylioData',
             labelText: 'Daylio Data'
         }, {
             id: 2,
             class: 'btn-strong',
-            labelId: 'strongDataImport',
+            labelId: 'strongData',
             labelText: 'Strong Data'
         }],
         current_view: 'importView',
@@ -135,7 +147,15 @@ var app = new Vue({
             viewCode: 'aboutView'
         }],
         graphs: [{
-            id: 7
-        }]
+            id: 7,
+            dataset: [80, 100, 56, 120, 180, 30, 40, 120, 160],
+            graphcode: 'graph1'
+        },
+        {
+            id: 8,
+            dataset: [90, 30, 120, 10, 80, 35, 60, 200, 33],
+            graphcode: 'graph2'
+        }],
+        importedData: []
     }
 });

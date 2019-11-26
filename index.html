@@ -43,7 +43,7 @@
     <!-- Vue root component -->
     <div id="app">
         <!-- Bootstrap class to make this element span the whole width of the viewport -->
-        <div class="container-fluid">
+        <div class="container-fluid main-content">
             <h1>{{title}}</h1>
 
             <template v-if="current_view === 'importView'">
@@ -52,16 +52,16 @@
                 <!-- v-bind:import_source passes the item as a property to the component. import_source is defined as a property in the component -->
                 <!-- v-bind:key is not mandatory. It is used by vue.js for example to reorder elements (https://vuejs.org/v2/guide/list.html#Maintaining-State accessed 11/17/2019)-->
                 <!-- inline-template adapted from https://vuejsdevelopers.com/2017/03/24/vue-js-component-templates/ accessed on 11/17/2019 -->
-                <import-button v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.id"
+                <import_component v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.id"
                     inline-template>
                     <div>
                         <!-- v-on:change listens to "change" event and calls importFile method defined in component import-button -->
                         <label v-bind:for="import_source.labelId" class="btn btn-lg btn-block"
                             v-bind:class="import_source.class">{{ import_source.labelText }}</label>
                         <input type='file' v-bind:name="import_source.labelId" v-bind:id="import_source.labelId"
-                            v-on:change="importFile">
+                            v-on:change="importFile(import_source.labelId)">
                     </div>
-                </import-button>
+                </import_component>
                 <!-- end adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
 
 
@@ -69,9 +69,19 @@
                     onclick="openDataSelection()">Create a Graph</button>
             </template>
             <template v-else-if="current_view ==='graphView'">
-                <graphcard v-for="item in graphs" v-bind:graph="item" v-bind:key="item.id">
-
-                </graphcard>
+                <template v-if="graphs.length === 0">
+                    <p>No data is imported yet</p>
+                </template>
+                <template v-else>
+                    <graphcard inline-template v-for="item in graphs" v-bind:graph="item" v-bind:key="item.id">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{graph.graphcode}}</h5>
+                                <svg v-bind:id='graph.graphcode' style='width: 100%;'></svg>
+                            </div>
+                        </div>
+                    </graphcard>
+                </template>
             </template>
             <template v-else-if="current_view ==='settingsView'">
                 <button type="button" class="btn btn-danger btn-lg btn-block">Delete Data</button>
@@ -82,16 +92,10 @@
                 <p>The app stores your imported data in this and that way.</p>
                 <p>You can delete all your data in settings.</p>
             </template>
-            <footer>
-                <div class="row">
-                    <navigation v-for="item in views" v-bind:view="item" v-bind:key="item.id" inline-template>
-                        <div class="col">
-                            <button type="button" class="btn btn-link"
-                                v-on:click="changeView(view.viewCode)">{{view.label}}</button>
-                        </div>
-                    </navigation>
-                </div>
-            </footer>
+            <div class="row">
+                <navigation_component v-for="item in views" v-bind:view="item" v-bind:key="item.id">
+                </navigation_component>
+            </div>
         </div>
     </div>
 
@@ -107,10 +111,11 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
 
-	<!-- D3 js for diagrams  -->
+    <!-- D3 js for diagrams  -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <!-- My JavaScript -->
+    <script type="text/javascript" src="dataConverter.js"></script>
     <script type="text/javascript" src="app.js"></script>
 
 </body>
