@@ -52,32 +52,29 @@
                 <!-- v-bind:import_source passes the item as a property to the component. import_source is defined as a property in the component -->
                 <!-- v-bind:key is not mandatory. It is used by vue.js for example to reorder elements (https://vuejs.org/v2/guide/list.html#Maintaining-State accessed 11/17/2019)-->
                 <!-- inline-template adapted from https://vuejsdevelopers.com/2017/03/24/vue-js-component-templates/ accessed on 11/17/2019 -->
-                <import_component v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.id"
+                <import_component v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.labelid"
                     inline-template>
                     <div>
                         <!-- v-on:change listens to "change" event and calls importFile method defined in component import-button -->
-                        <label v-bind:for="import_source.labelId" class="btn btn-lg btn-block"
-                            v-bind:class="import_source.class">{{ import_source.labelText }}</label>
-                        <input type='file' v-bind:name="import_source.labelId" v-bind:id="import_source.labelId"
-                            v-on:change="importFile(import_source.labelId)">
+                        <label v-bind:for="import_source.labelid" class="btn btn-lg btn-block"
+                            v-bind:class="import_source.class">{{ import_source.labeltext }}</label>
+                        <input type='file' v-bind:name="import_source.labelid" v-bind:id="import_source.labelid"
+                            v-on:change="importFile(import_source.labelid)">
                     </div>
                 </import_component>
                 <!-- end adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
-
-
-                <button type="button" class="btn btn-secondary btn-lg btn-block" id="createGraphButton"
-                    onclick="openDataSelection()">Create a Graph</button>
+                <create_graph_component></create_graph_component>
             </template>
             <template v-else-if="current_view ==='graphView'">
                 <template v-if="graphs.length === 0">
                     <p>No data is imported yet</p>
                 </template>
                 <template v-else>
-                    <graphcard inline-template v-for="item in graphs" v-bind:graph="item" v-bind:key="item.id">
+                    <graphcard inline-template v-for="item in graphs" v-bind:graph="item" v-bind:key="item.graphid">
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
-                                <h5 class="card-title">{{graph.graphcode}}</h5>
-                                <svg v-bind:id='graph.graphcode' style='width: 100%;'></svg>
+                                <h5 class="card-title">{{graph.graphid}}</h5>
+                                <svg v-bind:id='graph.graphid' style='width: 100%;'></svg>
                             </div>
                         </div>
                     </graphcard>
@@ -92,8 +89,16 @@
                 <p>The app stores your imported data in this and that way.</p>
                 <p>You can delete all your data in settings.</p>
             </template>
+            <template v-else-if="current_view ==='listView'">
+                <ul class="list-group">
+                    <datalist_component inline-template v-for="item in imported_data" v-bind:imported_data="item"
+                        v-bind:key="item.id">
+                        <li class="list-group-item">{{imported_data.id}}</li>
+                    </datalist_component>
+                </ul>
+            </template>
             <div class="row">
-                <navigation_component v-for="item in views" v-bind:view="item" v-bind:key="item.id">
+                <navigation_component v-for="item in views" v-bind:view="item" v-bind:key="item.viewid">
                 </navigation_component>
             </div>
         </div>

@@ -18,7 +18,7 @@ Vue.component('import_component', {
             reader.onload = function(event) {
                 var converter = new dataConverter();
                 dataobject = converter.convert(event.target.result, id);
-                app.importedData.push(dataobject);
+                app.imported_data.push(dataobject);
             };
             reader.readAsText(selectedFile);
         }
@@ -35,14 +35,17 @@ Vue.component('import_component', {
     }
 });
 
-Vue.component('navigation_component', {
-    props: ['view'],
-    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewCode)'>{{view.label}}</button></div>",
+Vue.component('create_graph_component', {
+    template: "<button type='button' class='btn btn-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph</button>",
     methods: {
-        changeView: function (new_view) {
-            app.current_view = new_view;
+        openDataSelection: function () {
+            app.current_view = "listView";
         }
     }
+});
+
+Vue.component('datalist_component', {
+    props: ['imported_data']
 });
 
 Vue.component('graphcard', {
@@ -53,16 +56,16 @@ Vue.component('graphcard', {
         }
     },
     mounted: function () {
-
+        
         // adapted from https://www.freecodecamp.org/news/how-to-create-your-first-bar-chart-with-d3-js-a0e8ea2df386/
         // this is adapted by me
         var svgWidth = calculateWidth();
         // end this is adapted by me
         
         var svgHeight = 300;
-
+        
         //this is adapted by me
-        var svg = d3.select("#"+this.graph.graphcode)
+        var svg = d3.select("#"+this.graph.graphid)
         .attr("width", svgWidth)
         .attr("height", svgHeight)
         .attr("class", "bar-chart");
@@ -70,23 +73,23 @@ Vue.component('graphcard', {
         
         var barPadding = 5;
         var barWidth = (svgWidth / this.graph.dataset.length);
-
+        
         var barChart = svg.selectAll("rect")
-            .data(this.graph.dataset)
-            .enter()
-            .append("rect")
-            .attr("y", function (d) {
-                return svgHeight - d;
-            })
-            .attr("height", function (d) {
-                return d;
-            })
-            .attr("width", barWidth - barPadding)
-            .attr("transform", function (d, i) {
-                var translate = [barWidth * i, 0];
-                return "translate(" + translate + ")";
-            });
-
+        .data(this.graph.dataset)
+        .enter()
+        .append("rect")
+        .attr("y", function (d) {
+            return svgHeight - d;
+        })
+        .attr("height", function (d) {
+            return d;
+        })
+        .attr("width", barWidth - barPadding)
+        .attr("transform", function (d, i) {
+            var translate = [barWidth * i, 0];
+            return "translate(" + translate + ")";
+        });
+        
         // end https://www.freecodecamp.org/news/how-to-create-your-first-bar-chart-with-d3-js-a0e8ea2df386/
     }
 });
@@ -106,56 +109,56 @@ function calculateWidth(){
     }
 }
 
+Vue.component('navigation_component', {
+    props: ['view'],
+    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewid)'>{{view.label}}</button></div>",
+    methods: {
+        changeView: function (new_view) {
+            app.current_view = new_view;
+        }
+    }
+});
+
 //Create vue app with name "app" and data
 var app = new Vue({
     el: '#app',
     data: {
         title: 'My Data Mix',
-        message: 'No data yet',
         import_sources: [{
-            id: 0,
             class: 'btn-clue',
-            labelId: 'clueData',
-            labelText: 'Clue Data'
+            labelid: 'clueData',
+            labeltext: 'Clue Data'
         }, {
-            id: 1,
             class: 'btn-daylio',
-            labelId: 'daylioData',
-            labelText: 'Daylio Data'
+            labelid: 'daylioData',
+            labeltext: 'Daylio Data'
         }, {
-            id: 2,
             class: 'btn-strong',
-            labelId: 'strongData',
-            labelText: 'Strong Data'
+            labelid: 'strongData',
+            labeltext: 'Strong Data'
         }],
         current_view: 'importView',
         views: [{
-            id: 3,
             label: 'Import',
-            viewCode: 'importView'
+            viewid: 'importView'
         }, {
-            id: 4,
             label: 'Graphs',
-            viewCode: 'graphView'
+            viewid: 'graphView'
         }, {
-            id: 5,
             label: 'Settings',
-            viewCode: 'settingsView'
+            viewid: 'settingsView'
         }, {
-            id: 6,
             label: 'About',
-            viewCode: 'aboutView'
+            viewid: 'aboutView'
         }],
         graphs: [{
-            id: 7,
             dataset: [80, 100, 56, 120, 180, 30, 40, 120, 160],
-            graphcode: 'graph1'
+            graphid: 'examplegraph1'
         },
         {
-            id: 8,
             dataset: [90, 30, 120, 10, 80, 35, 60, 200, 33],
-            graphcode: 'graph2'
+            graphid: 'examplegraph2'
         }],
-        importedData: []
+        imported_data: []
     }
 });
