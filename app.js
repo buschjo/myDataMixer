@@ -14,13 +14,19 @@ Vue.component('import_component', {
         importFile(id) {
             var selectedFile = document.getElementById(id).files[0];
             var reader = new FileReader();
+            // need to get the labeltext here because here 'this' is the component
+            var labeltext = this.import_source.labeltext;
             //the onload event is fired when a read was successfull (full exp. https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
             reader.onload = function(event) {
-                var converter = new dataConverter();
-                dataobject = converter.convert(event.target.result, id);
+                var converter = new DataConverter();
+                dataobject = converter.convert(event.target.result, id, labeltext);
                 app.imported_data.push(dataobject);
             };
             reader.readAsText(selectedFile);
+
+            function createGraph() {
+                // app.graphs.push
+            }
         }
     },
     mounted: function () {
@@ -45,7 +51,20 @@ Vue.component('create_graph_component', {
 });
 
 Vue.component('datalist_component', {
-    props: ['imported_data']
+    props: ['imported_data_structure'],
+    methods: {
+        showCategories: function() {
+            var categories_container = document.getElementById(this.imported_data_structure.id + "Categories");
+            if (categories_container.style.display === "none") {
+                categories_container.style.display = '';
+            } else {
+                categories_container.style.display = 'none';
+            }
+        },
+        getCssClass: function(id) {
+            return app.getCssClass(id);
+        }
+    }
 });
 
 Vue.component('graphcard', {
@@ -95,7 +114,7 @@ Vue.component('graphcard', {
 });
 
 function calculateWidth(){
-    var parentContainer = document.getElementsByClassName('main-content')[0];
+    var parentContainer = document.getElementsByClassName('card-body')[0];
     //width for the element minus padding
     return extractNumericPropertyValue(parentContainer, "width") - extractNumericPropertyValue(parentContainer, "padding-left") - extractNumericPropertyValue(parentContainer, "padding-right");
     
@@ -125,15 +144,15 @@ var app = new Vue({
     data: {
         title: 'My Data Mix',
         import_sources: [{
-            class: 'btn-clue',
+            cssclass: 'btn-clue',
             labelid: 'clueData',
             labeltext: 'Clue Data'
         }, {
-            class: 'btn-daylio',
+            cssclass: 'btn-daylio',
             labelid: 'daylioData',
             labeltext: 'Daylio Data'
         }, {
-            class: 'btn-strong',
+            cssclass: 'btn-strong',
             labelid: 'strongData',
             labeltext: 'Strong Data'
         }],
@@ -151,14 +170,22 @@ var app = new Vue({
             label: 'About',
             viewid: 'aboutView'
         }],
-        graphs: [{
-            dataset: [80, 100, 56, 120, 180, 30, 40, 120, 160],
-            graphid: 'examplegraph1'
-        },
-        {
-            dataset: [90, 30, 120, 10, 80, 35, 60, 200, 33],
-            graphid: 'examplegraph2'
-        }],
+        graphs: [
+            new Graph([80, 100, 56, 120, 180, 30, 40, 120, 160],'examplegraph1'),
+            new Graph([80, 100, 56, 120, 180, 30, 40, 120, 160],'examplegraph2'),
+        ],
         imported_data: []
+    },
+    methods: {
+        getCssClass: function(id){
+            for (var import_source of this.import_sources) {
+                // === checks for equal value and equal type (== only checks value)
+                if (import_source.labelid === id) {
+                    return import_source.cssclass;
+                }
+            }
+            //if no fitting css class can be found an empty string is returned, which means no added class to the html tag
+            return "";
+        }
     }
 });

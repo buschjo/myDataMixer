@@ -48,3 +48,7 @@
     border-color:  rgb(86, 0, 94);
 }
 /* end adapted from https://www.jquery-az.com/bootstrap-button-9-demos-of-custom-color-size-dropdown-navbar-and-more/ */
+
+.source-list-button {
+    margin-bottom: .5rem;
+}
