@@ -1,36 +1,36 @@
-class dataConverter {
-    convert(imported_data, id) {
-        var data = {};
+class DataConverter {
+    convert(imported_data, id, labeltext) {
+        var categories;
+        var data;
         if (id.includes('clue')) {
-            data = this.extractRelevantJSON(imported_data);
+            categories = this.extractCategoriesFromJson(imported_data);
+            data = this.extractDatasetsFromJson(imported_data);
         } else if (id.includes('daylio') || id.includes('strong')) {
-            data = this.extractRelevantCSV(imported_data);
+            categories = this.extractCategoriesFromCsv(imported_data);
+            data = this.extractDatasetsFromCsv(imported_data, categories);
         }
-        data.id = id;
-        return data;
+        return new DataStructure(categories, data, id, labeltext);
     }
 
-    extractRelevantJSON(imported_data) {
-        //new object
-        var result = {};
+    extractCategoriesFromJson(imported_data) {
+        var all_info = JSON.parse(imported_data);
+        //I use the first object in "data" to get the categories, the keys are the categories
+        return Object.keys(all_info.data[0]);
+    }
+
+    extractDatasetsFromJson(imported_data) {
         var all_info = JSON.parse(imported_data);
         //"data" is the key in the JSON for the data I need
-        result.data = all_info.data;
-        //I use the first object in "data" to get the categories, the keys are the categories
-        result.categories = Object.keys(result.data[0]);
-        return result;
+        return all_info.data;
     }
 
-    extractRelevantCSV(imported_data) {
-        var result = {};
+    extractCategoriesFromCsv(imported_data) {
         var splitdata = imported_data.split('\n');
         //first line has category info
-        result.categories = splitdata[0].split(',');
-        result.data = this.convertCSV(imported_data, result.categories);
-        return result;
+        return splitdata[0].split(',');
     }
 
-    convertCSV(imported_data, categories) {
+    extractDatasetsFromCsv(imported_data, categories) {
         var data = [];
         var splitdata = imported_data.split('\n');
         for (var j = 1; j < splitdata.length; j++) {
