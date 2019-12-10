@@ -34,12 +34,15 @@
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
+    <!-- Plotly Graphics Library -->
+    <!-- CDN Link because (content delivery networks) higher availability and performance -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <title>My Data Mixer</title>
 
 </head>
 
 <body>
-
     <!-- Vue root component -->
     <div id="app">
         <!-- Bootstrap class to make this element span the whole width of the viewport -->
@@ -54,11 +57,12 @@
                 <!-- v-bind:import_source passes the item as a property to the component. import_source is defined as a property in the component -->
                 <!-- v-bind:key is not mandatory. It is used by vue.js for example to reorder elements (https://vuejs.org/v2/guide/list.html#Maintaining-State accessed 11/17/2019)-->
                 <!-- inline-template adapted from https://vuejsdevelopers.com/2017/03/24/vue-js-component-templates/ accessed on 11/17/2019 -->
-                <import_component v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.labelid" inline-template>
+                <import_component v-for="item in import_sources" v-bind:import_source="item" v-bind:key="item.labelid"
+                    inline-template>
                     <div>
                         <!-- v-on:change listens to "change" event and calls importFile method defined in component import-button -->
-                        <label v-bind:for="import_source.labelid" v-bind:class="import_source.cssclass" class="btn btn-lg btn-block"
-                             >{{ import_source.labeltext }}</label>
+                        <label v-bind:for="import_source.labelid" v-bind:class="import_source.cssclass"
+                            class="btn btn-lg btn-block">{{ import_source.labeltext }}</label>
                         <input type='file' v-bind:name="import_source.labelid" v-bind:id="import_source.labelid"
                             v-on:change="importFile(import_source.labelid)">
                     </div>
@@ -75,8 +79,9 @@
                         <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">{{graph.graphid}}</h5>
-                                <svg v-bind:id='graph.graphid' style='width: 100%;'></svg>
+                                <h5 class="card-title">{{graph.title}}</h5>
+                                <div v-bind:id='graph.graphid' style="width:100%;"></div>
+                                <!-- <svg v-bind:id='graph.graphid' style='width: 100%;'></svg> -->
                             </div>
                         </div>
                     </graphcard>
@@ -99,10 +104,14 @@
                     <datalist_component inline-template v-for="item in imported_data"
                         v-bind:imported_data_structure="item" v-bind:key="item.id">
                         <div>
-                            <button type="button" class="btn btn-lg btn-block dropdown-toggle source-list-button" v-bind:class="getCssClass(imported_data_structure.id)" v-on:click="showCategories"> {{imported_data_structure.labeltext}} </button>
-                            <div class="form-check" style="display: none;" v-bind:id="imported_data_structure.id+'Categories'">
+                            <button type="button" class="btn btn-lg btn-block dropdown-toggle source-list-button"
+                                v-bind:class="getCssClass(imported_data_structure.id)" v-on:click="showCategories">
+                                {{imported_data_structure.labeltext}} </button>
+                            <div class="form-check" style="display: none;"
+                                v-bind:id="imported_data_structure.id+'Categories'">
                                 <div v-for="category in imported_data_structure.categories">
-                                    <input class="form-check-input" type="checkbox" value="category" v-bind:id="category">
+                                    <input class="form-check-input" type="checkbox" value="category"
+                                        v-bind:id="category">
                                     <label class="form-check-label" v-bind:for="category">
                                         {{category}}
                                     </label>
@@ -131,13 +140,12 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
 
-    <!-- D3 js for diagrams  -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-
     <!-- My JavaScript -->
+    <script type="text/javascript" src="dataSource.js"></script>
     <script type="text/javascript" src="dataStructrue.js"></script>
-    <script type="text/javascript" src="graph.js"></script>
     <script type="text/javascript" src="dataConverter.js"></script>
+    <script type="text/javascript" src="graph.js"></script>
+    <script type="text/javascript" src="graphCreator.js"></script>
     <script type="text/javascript" src="app.js"></script>
 
 </body>

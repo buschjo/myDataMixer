@@ -2,14 +2,21 @@ class DataConverter {
     convert(imported_data, id, labeltext) {
         var categories;
         var data;
-        if (id.includes('clue')) {
+        var current_datasource;
+        if (id.includes(datasources.CLUE)) {
             categories = this.extractCategoriesFromJson(imported_data);
             data = this.extractDatasetsFromJson(imported_data);
-        } else if (id.includes('daylio') || id.includes('strong')) {
+            current_datasource = datasources.CLUE;
+        } else if (id.includes(datasources.DAYLIO)) {
             categories = this.extractCategoriesFromCsv(imported_data);
             data = this.extractDatasetsFromCsv(imported_data, categories);
+            current_datasource = datasources.DAYLIO;
+        } else if (id.includes(datasources.STRONG)) {
+            categories = this.extractCategoriesFromCsv(imported_data);
+            data = this.extractDatasetsFromCsv(imported_data, categories);
+            current_datasource = datasources.STRONG;
         }
-        return new DataStructure(categories, data, id, labeltext);
+        return new DataStructure(categories, data, id, labeltext, current_datasource);
     }
 
     extractCategoriesFromJson(imported_data) {

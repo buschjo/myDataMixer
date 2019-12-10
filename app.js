@@ -17,15 +17,17 @@ Vue.component('import_component', {
             // need to get the labeltext here because here 'this' is the component
             var labeltext = this.import_source.labeltext;
             //the onload event is fired when a read was successfull (full exp. https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 var converter = new DataConverter();
                 dataobject = converter.convert(event.target.result, id, labeltext);
+                createGraph(dataobject);
                 app.imported_data.push(dataobject);
             };
             reader.readAsText(selectedFile);
 
-            function createGraph() {
-                // app.graphs.push
+            function createGraph(dataobject) {
+                var creator = new GraphCreator(dataobject);
+                app.graphs.push(creator.createDefaultGraph());
             }
         }
     },
@@ -53,7 +55,7 @@ Vue.component('create_graph_component', {
 Vue.component('datalist_component', {
     props: ['imported_data_structure'],
     methods: {
-        showCategories: function() {
+        showCategories: function () {
             var categories_container = document.getElementById(this.imported_data_structure.id + "Categories");
             if (categories_container.style.display === "none") {
                 categories_container.style.display = '';
@@ -61,7 +63,7 @@ Vue.component('datalist_component', {
                 categories_container.style.display = 'none';
             }
         },
-        getCssClass: function(id) {
+        getCssClass: function (id) {
             return app.getCssClass(id);
         }
     }
@@ -69,66 +71,10 @@ Vue.component('datalist_component', {
 
 Vue.component('graphcard', {
     props: ['graph'],
-    methods: {
-        drawGraph: function () {
-            console.log('drawing');
-        }
-    },
     mounted: function () {
-        
-        // adapted from https://www.freecodecamp.org/news/how-to-create-your-first-bar-chart-with-d3-js-a0e8ea2df386/
-        // this is adapted by me
-        var svgWidth = calculateWidth();
-        // end this is adapted by me
-        
-        var svgHeight = 300;
-        
-        //this is adapted by me
-        var svg = d3.select("#"+this.graph.graphid)
-        .attr("width", svgWidth)
-        .attr("height", svgHeight)
-        .attr("class", "bar-chart");
-        //end of adapted by me
-
-        //look into https://www.competa.com/blog/d3-js-part-7-of-9-adding-a-legend-to-explain-the-data/ for adding legends
-        
-        var barPadding = 5;
-        var barWidth = (svgWidth / this.graph.dataset.length);
-        
-        var barChart = svg.selectAll("rect")
-        .data(this.graph.dataset)
-        .enter()
-        .append("rect")
-        .attr("y", function (d) {
-            return svgHeight - d;
-        })
-        .attr("height", function (d) {
-            return d;
-        })
-        .attr("width", barWidth - barPadding)
-        .attr("transform", function (d, i) {
-            var translate = [barWidth * i, 0];
-            return "translate(" + translate + ")";
-        });
-        
-        // end https://www.freecodecamp.org/news/how-to-create-your-first-bar-chart-with-d3-js-a0e8ea2df386/
+        this.graph.draw(document.getElementById(this.graph.graphid));
     }
 });
-
-function calculateWidth(){
-    var parentContainer = document.getElementsByClassName('card-body')[0];
-    //width for the element minus padding
-    return extractNumericPropertyValue(parentContainer, "width") - extractNumericPropertyValue(parentContainer, "padding-left") - extractNumericPropertyValue(parentContainer, "padding-right");
-    
-    function extractNumericPropertyValue(element, propertyName){
-        // computedStyle because when the DOM is manipulated the normal style attribute is not reliable anymore
-        var value = window.getComputedStyle(element, null).getPropertyValue(propertyName);
-        // \d searches for digits
-        // + one or more instances
-        // we expect the width to be in a format like "100px" so no need for the \g for global search, because the first match is expected to be the only match
-        return value.match(/\d+/);
-    }
-}
 
 Vue.component('navigation_component', {
     props: ['view'],
@@ -173,13 +119,23 @@ var app = new Vue({
             viewid: 'aboutView'
         }],
         graphs: [
-            new Graph([80, 100, 56, 120, 180, 30, 40, 120, 160],'examplegraph1'),
-            new Graph([80, 100, 56, 120, 180, 30, 40, 120, 160],'examplegraph2'),
+            new Graph([80, 100, 56, 120],
+                [new Date("2015-03-25"), new Date("2015-03-26"), new Date("2015-03-27"), new Date("2015-03-28")],
+                'examplegraph1',
+                'dates',
+                'values',
+                'Example Graph'),
+            new Graph([12, 50, 100, 200, 80, 50, 10, 120],
+                [new Date("2015-03-25"), new Date("2015-03-26"), new Date("2015-03-27"), new Date("2015-03-28"), new Date("2015-03-29"), new Date("2015-03-30"), new Date("2015-03-31"), new Date("2015-04-01")],
+                'examplegraph2', 
+                'dates',
+                'values',
+                'Example Graph'),
         ],
         imported_data: []
     },
     methods: {
-        getCssClass: function(id){
+        getCssClass: function (id) {
             for (var import_source of this.import_sources) {
                 // === checks for equal value and equal type (== only checks value)
                 if (import_source.labelid === id) {
