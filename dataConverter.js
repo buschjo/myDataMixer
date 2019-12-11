@@ -1,20 +1,24 @@
 class DataConverter {
+    constructor() {
+        this.date_field_name = 'unified_date';
+    }
+
     convert(imported_data, id, labeltext) {
         var categories;
         var data;
         var current_datasource;
-        if (id.includes(datasources.CLUE)) {
+        if (id.includes(datasources.CLUE.title)) {
             categories = this.extractCategoriesFromJson(imported_data);
-            data = this.extractDatasetsFromJson(imported_data);
-            current_datasource = datasources.CLUE;
-        } else if (id.includes(datasources.DAYLIO)) {
+            data = this.extractClueDatasetsFromJson(imported_data);
+            current_datasource = datasources.CLUE.title;
+        } else if (id.includes(datasources.DAYLIO.title)) {
             categories = this.extractCategoriesFromCsv(imported_data);
-            data = this.extractDatasetsFromCsv(imported_data, categories);
-            current_datasource = datasources.DAYLIO;
-        } else if (id.includes(datasources.STRONG)) {
+            data = this.extractDaylioDatasetsFromCsv(imported_data, categories);
+            current_datasource = datasources.DAYLIO.title;
+        } else if (id.includes(datasources.STRONG.title)) {
             categories = this.extractCategoriesFromCsv(imported_data);
-            data = this.extractDatasetsFromCsv(imported_data, categories);
-            current_datasource = datasources.STRONG;
+            data = this.extractStrongDatasetsFromCsv(imported_data, categories);
+            current_datasource = datasources.STRONG.title;
         }
         return new DataStructure(categories, data, id, labeltext, current_datasource);
     }
@@ -25,9 +29,16 @@ class DataConverter {
         return Object.keys(all_info.data[0]);
     }
 
-    extractDatasetsFromJson(imported_data) {
+    extractClueDatasetsFromJson(imported_data) {
         var all_info = JSON.parse(imported_data);
         //"data" is the key in the JSON for the data I need
+
+        //rename date attribute
+        all_info.data.forEach(element => {
+            var date = element[datasources.CLUE.date_field];
+            element[this.date_field_name] = date;
+            delete element[datasources.CLUE.date_field];
+        });
         return all_info.data;
     }
 
@@ -37,17 +48,30 @@ class DataConverter {
         return splitdata[0].split(',');
     }
 
-    extractDatasetsFromCsv(imported_data, categories) {
+    extractStrongDatasetsFromCsv(imported_data, categories) {
+        return this.extractDatasetsFromCsv(imported_data, categories, datasources.STRONG.date_field, datasources.STRONG.standardize_date);
+    }
+
+    extractDaylioDatasetsFromCsv(imported_data, categories) {
+        return this.extractDatasetsFromCsv(imported_data, categories, datasources.DAYLIO.date_field, datasources.DAYLIO.standardize_date);
+    }
+
+    extractDatasetsFromCsv(imported_data, categories, date_field, standardize_date) {
         var data = [];
         var splitdata = imported_data.split('\n');
         for (var j = 1; j < splitdata.length; j++) {
             var dataset = {};
             var values = splitdata[j].split(',');
             for (var i = 0; i < categories.length; i++) {
-                dataset[categories[i]] = values[i];
+                if (categories[i] === date_field) {
+                    dataset[this.date_field_name] = standardize_date(values[i]);
+                } else {
+                    dataset[categories[i]] = values[i];
+                }
             }
             data.push(dataset);
         }
         return data;
     }
+
 }

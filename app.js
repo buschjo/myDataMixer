@@ -27,7 +27,8 @@ Vue.component('import_component', {
 
             function createGraph(dataobject) {
                 var creator = new GraphCreator(dataobject);
-                app.graphs.push(creator.createDefaultGraph());
+                var graph = creator.createDefaultGraph();
+                app.graphs.push(graph);
             }
         }
     },
@@ -118,20 +119,7 @@ var app = new Vue({
             label: 'About',
             viewid: 'aboutView'
         }],
-        graphs: [
-            new Graph([80, 100, 56, 120],
-                [new Date("2015-03-25"), new Date("2015-03-26"), new Date("2015-03-27"), new Date("2015-03-28")],
-                'examplegraph1',
-                'dates',
-                'values',
-                'Example Graph'),
-            new Graph([12, 50, 100, 200, 80, 50, 10, 120],
-                [new Date("2015-03-25"), new Date("2015-03-26"), new Date("2015-03-27"), new Date("2015-03-28"), new Date("2015-03-29"), new Date("2015-03-30"), new Date("2015-03-31"), new Date("2015-04-01")],
-                'examplegraph2', 
-                'dates',
-                'values',
-                'Example Graph'),
-        ],
+        graphs: [],
         imported_data: []
     },
     methods: {

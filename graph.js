@@ -1,11 +1,12 @@
 class Graph {
-    constructor(data, dates, graphid, xaxis_title, yaxis_title, title) {
+    constructor(data, dates, graphid, xaxis_title, yaxis_title, title, more_space_needed) {
         this.data = data;
         this.dates = dates;
         this.graphid = graphid;
         this.xaxis_title = xaxis_title;
         this.yaxis_title = yaxis_title;
         this.title = title;
+        this.more_space_needed = more_space_needed;
     }
 
     draw(container) {
@@ -28,6 +29,12 @@ class Graph {
         };
 
         var data = [trace];
+        var margin_left = 60;
+
+        if (this.more_space_needed) {
+            margin_left = 250;
+        }
+
         var layout = {
             xaxis: x_axis_template,
             yaxis: y_axis_template,
@@ -37,7 +44,7 @@ class Graph {
                 y: 1.2
             },
             margin: {
-                l: 50,
+                l: margin_left,
                 b: 50,
                 r: 1,
                 t: 1,
