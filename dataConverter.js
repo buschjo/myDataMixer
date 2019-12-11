@@ -8,7 +8,7 @@ class DataConverter {
         var data;
         var current_datasource;
         if (id.includes(datasources.CLUE.title)) {
-            categories = this.extractCategoriesFromJson(imported_data);
+            categories = this.extractClueCategoriesFromJson(imported_data);
             data = this.extractClueDatasetsFromJson(imported_data);
             current_datasource = datasources.CLUE.title;
         } else if (id.includes(datasources.DAYLIO.title)) {
@@ -23,10 +23,15 @@ class DataConverter {
         return new DataStructure(categories, data, id, labeltext, current_datasource);
     }
 
-    extractCategoriesFromJson(imported_data) {
+    extractClueCategoriesFromJson(imported_data) {
         var all_info = JSON.parse(imported_data);
-        //I use the first object in "data" to get the categories, the keys are the categories
-        return Object.keys(all_info.data[0]);
+        var categories = [];
+        console.log(all_info);
+        all_info.settings.measurement_categories.forEach(category => {
+            categories.push(category.category_key);
+        });
+
+        return categories;
     }
 
     extractClueDatasetsFromJson(imported_data) {
