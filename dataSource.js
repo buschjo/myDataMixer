@@ -3,32 +3,93 @@ const datasources = {
         title: 'clue',
         date_field: 'day',
         default_graph_category: 'period',
-        included_categories: [
-            'digestion',
-            'energy',
-            'ailment',
-            'poop',
-            'motivation',
-            'craving',
-            'collection_method',
-            'sex',
-            'appointment',
-            'social',
-            'party',
-            'hair',
-            'test',
-            'mental',
-            'medication',
-            'skin',
-            'pain',
-            'exercise',
-            'mood'
-        ]
+        categories: {
+            period: {
+                values: {
+                    HEAVY: 'heavy',
+                    MEDIUM: 'medium',
+                    LIGHT: 'light',
+                    SPOTTING: 'spotting'
+                },
+                digestion: {
+                    values: {
+                        GREAT: 'great',
+                        BLOATED: 'bloated',
+                        NAUSEATED: 'nauseated',
+                        GASSY: 'gassy'
+                    }
+                },
+                energy: {
+                    EXHAUSTED: 'exhausted',
+                    LOW: 'low',
+                    HIGH: 'high',
+                    ENERGIZED: 'energized'
+                },
+                ailment: {},
+                poop: {
+                    GREAT: 'great',
+                    NORMAL: 'normal',
+                    CONSTIPATED: 'constipated',
+                    DIARRHEA: 'diarrhea'
+                },
+                motivation: {
+                    MOTIVATED: 'motivated',
+                    UNMOTIVATED: 'unmotivated',
+                    PRODUCTIVE: 'productive',
+                    UNPRODUCTIVE: 'unproductive'
+                },
+                craving: {},
+                collection_method: {},
+                sex: {
+                    UNPROTECTED: 'unprodtected',
+                    PROTECTED: 'protected',
+                    HIGH: 'high sex drive',
+                    WITHDRAWAL: 'withdrawal'
+                },
+                appointment: {},
+                social: {},
+                party: {},
+                hair: {
+                    BAD: 'bad',
+                    OILY: 'oily',
+                    DRY: 'dry',
+                    GOOD: 'good'
+                },
+                test: {},
+                mood: {
+                    HAPPY: 'happy',
+                    SENSITIVE: 'sensitive',
+                    SAD: 'sad',
+                    PMS: 'pms'
+                },
+                medication: {},
+                skin: {
+                    GOOD: 'good',
+                    OILY: 'oily',
+                    DRY: 'dry',
+                    ACNE: 'acne'
+                },
+                pain: {},
+                exercise: {},
+                mental: {
+                    FOCUSED: 'focused',
+                    DISTRACTED: 'distracted',
+                    CALM: 'calm',
+                    STRESSED: 'stressed'
+                },
+                sleep: {
+                    0: '0 to 3 hours',
+                    3: '3 to 6 hours',
+                    6: '6 to 9 hours',
+                    9: '9 hours or more'
+                }
+            }
+        }
     },
     STRONG: {
         title: 'strong',
         date_field: 'Date',
-        default_graph_category: 'Exercise Name',
+        default_graph_category: 'ExerciseName',
         standardize_date: function (date_string) {
             if (date_string != "") {
                 //source: Strong date format: DD-MM-YY HH:MM
@@ -43,7 +104,12 @@ const datasources = {
                 return yyyy + '-' + mm + '-' + dd + time;
             }
         },
-        included_categories: ['Exercise Name', 'Reps', 'Distance', 'Seconds']
+        categories: {
+            ExerciseName: {},
+            Reps:{},
+            Distance:{},
+            Seconds:{},
+        }
     },
     DAYLIO: {
         title: 'daylio',
@@ -62,6 +128,22 @@ const datasources = {
                 return yyyy + '-' + mm + '-' + dd + 'T' + time + ':00Z';
             }
         },
-        included_categories: ['activities', 'mood', 'weekday']
+        categories: {
+            mood: {
+                values: {
+                    AWFUL: 'awful',
+                    BAD: 'bad',
+                    MEH: 'meh',
+                    GOOD: 'good',
+                    RAD: 'rad'
+                },
+            },
+            activities: {},
+            weekday: {}
+        }
     },
 };
+
+//https://blog.prototypr.io/enumeration-objects-in-javascript-ec06a83f39f2?gi=c85768b6d0d2
+//freeze makes the object immutable
+Object.freeze(datasources);

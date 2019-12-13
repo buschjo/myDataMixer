@@ -1,5 +1,5 @@
 class Graph {
-    constructor(data, dates, graphid, xaxis_title, yaxis_title, title, more_space_needed) {
+    constructor(data, dates, graphid, xaxis_title, yaxis_title, title, more_space_needed, categoryarray) {
         this.data = data;
         this.dates = dates;
         this.graphid = graphid;
@@ -7,6 +7,7 @@ class Graph {
         this.yaxis_title = yaxis_title;
         this.title = title;
         this.more_space_needed = more_space_needed;
+        this.categoryarray = categoryarray;
     }
 
     draw(container) {
@@ -16,9 +17,18 @@ class Graph {
             title: this.xaxis_title
         };
 
+        var categoryorder = 'trace';
+
+        if (this.categoryarray !== undefined) {
+            categoryorder = 'array';
+        }
+
+        //if categoryorder == 'trace' categoryarray will not be used
         var y_axis_template = {
             showline: true,
-            title: this.yaxis_title
+            title: this.yaxis_title,
+            categoryorder: categoryorder,
+            categoryarray: this.categoryarray
         };
 
         var trace = {

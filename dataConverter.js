@@ -10,15 +10,15 @@ class DataConverter {
         if (id.includes(datasources.CLUE.title)) {
             categories = this.extractClueCategoriesFromJson(imported_data);
             data = this.extractClueDatasetsFromJson(imported_data);
-            current_datasource = datasources.CLUE.title;
+            current_datasource = datasources.CLUE;
         } else if (id.includes(datasources.DAYLIO.title)) {
             categories = this.extractCategoriesFromCsv(imported_data);
             data = this.extractDaylioDatasetsFromCsv(imported_data, categories);
-            current_datasource = datasources.DAYLIO.title;
+            current_datasource = datasources.DAYLIO;
         } else if (id.includes(datasources.STRONG.title)) {
             categories = this.extractCategoriesFromCsv(imported_data);
             data = this.extractStrongDatasetsFromCsv(imported_data, categories);
-            current_datasource = datasources.STRONG.title;
+            current_datasource = datasources.STRONG;
         }
         return new DataStructure(categories, data, id, labeltext, current_datasource);
     }
@@ -26,19 +26,16 @@ class DataConverter {
     extractClueCategoriesFromJson(imported_data) {
         var all_info = JSON.parse(imported_data);
         var categories = [];
-        // console.log(all_info);
         all_info.settings.measurement_categories.forEach(category => {
             categories.push(category.category_key);
         });
-
         return categories;
     }
 
     extractClueDatasetsFromJson(imported_data) {
         var all_info = JSON.parse(imported_data);
-        //"data" is the key in the JSON for the data I need
-
         //rename date attribute
+        //"data" is the key in the JSON for the data I need
         all_info.data.forEach(element => {
             element[this.new_date_field_name] = element[datasources.CLUE.date_field];
             delete element[datasources.CLUE.date_field];
@@ -60,7 +57,6 @@ class DataConverter {
         return this.extractDatasetsFromCsv(imported_data, categories, datasources.DAYLIO);
     }
 
-
     //changes csv format to key value pairs
     extractDatasetsFromCsv(imported_data, categories, datasource) {
         var data = [];
@@ -80,7 +76,8 @@ class DataConverter {
             var dataset = {};
             var values = line.split(',');
             for (var i = 0; i < categories.length; i++) {
-                    dataset[categories[i]] = values[i];
+                //remove all spaces to make the keys better usable
+                dataset[categories[i].replace(" ", "")] = values[i];
             }
             return dataset;
         }
@@ -90,7 +87,7 @@ class DataConverter {
         if ('time_field' in datasource) {
             dataset[this.new_date_field_name] = datasource.standardize_date(dataset[datasource.date_field], dataset[datasource.time_field]);
             delete dataset[datasource.time_field];
-        }else{
+        } else {
             dataset[this.new_date_field_name] = datasource.standardize_date(dataset[datasource.date_field]);
         }
         delete dataset[datasource.date_field];

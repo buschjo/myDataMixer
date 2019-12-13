@@ -1,36 +1,50 @@
 class GraphCreator {
-    constructor(data) {
-        this.data = data;
+    constructor(datastructure) {
+        this.datastructure = datastructure;
     }
 
     createDefaultGraph() {
+        var datasource = this.datastructure.datasource;
         var data = [];
-        var dates = [];
-        this.data.data.forEach(el => {
-            dates.push(el.unified_date);
-        });
-        var graphid = this.data.id + '_default_graph';
+        var dates = getDates(this.datastructure);
+
+        var graphid = this.datastructure.id + '_default_graph';
         var xaxis_title = 'dates';
         var yaxis_title;
-        var title = this.data.labeltext + ' Default Graph';
-        var more_space_needed = false;
+        var title = this.datastructure.labeltext + ' Default Graph';
+        var more_space_needed = moreSpaceNeeded(datasource);
+        yaxis_title = datasource.default_graph_category;
+        var categoryarray = extractCategories(datasource);
+        data = defaultGraphValues(this.datastructure, datasource.default_graph_category);
 
-        switch (this.data.datasource) {
-            case datasources.CLUE.title:
-                data = defaultGraphValues(this.data, 'period');
-                yaxis_title = datasources.CLUE.default_graph_category;
-                break;
-            case datasources.DAYLIO.title:
-                data = defaultGraphValues(this.data, 'mood');
-                yaxis_title = datasources.DAYLIO.default_graph_category;
-                break;
-            case datasources.STRONG.title:
-                data = defaultGraphValues(this.data, 'Exercise Name');
-                yaxis_title = datasources.STRONG.default_graph_category;
-                more_space_needed = true;
-                break;
+        return new Graph(data, dates, graphid, xaxis_title, yaxis_title, title, more_space_needed, categoryarray);
+
+        function moreSpaceNeeded(datasource) {
+            return datasource === datasources.STRONG;
         }
-        return new Graph(data, dates, graphid, xaxis_title, yaxis_title, title, more_space_needed);
+
+        function getDates(datastructure) {
+            var dates = [];
+            datastructure.data.forEach(el => {
+                dates.push(el.unified_date);
+            });
+            return dates;
+        }
+
+        function extractCategories(datasource) {
+            if (datasource.default_graph_category in datasource.categories) {
+                // categoryarray = datasource.categories[datasource.default_graph_category].values;
+                return extractOrderedCategoryNames(datasource.categories[datasource.default_graph_category].values);
+            }
+        }
+
+        function extractOrderedCategoryNames(values) {
+            categoryarray = [];
+            for (var prop in values) {
+                categoryarray.push(values[prop]);
+            }
+            return categoryarray;
+        }
 
         function defaultGraphValues(alldata, category_name) {
             var values = [];
