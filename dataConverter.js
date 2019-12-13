@@ -1,6 +1,6 @@
 class DataConverter {
     constructor() {
-        this.date_field_name = 'unified_date';
+        this.new_date_field_name = 'unified_date';
     }
 
     convert(imported_data, id, labeltext) {
@@ -26,7 +26,7 @@ class DataConverter {
     extractClueCategoriesFromJson(imported_data) {
         var all_info = JSON.parse(imported_data);
         var categories = [];
-        console.log(all_info);
+        // console.log(all_info);
         all_info.settings.measurement_categories.forEach(category => {
             categories.push(category.category_key);
         });
@@ -40,8 +40,7 @@ class DataConverter {
 
         //rename date attribute
         all_info.data.forEach(element => {
-            var date = element[datasources.CLUE.date_field];
-            element[this.date_field_name] = date;
+            element[this.new_date_field_name] = element[datasources.CLUE.date_field];
             delete element[datasources.CLUE.date_field];
         });
         return all_info.data;
@@ -54,29 +53,48 @@ class DataConverter {
     }
 
     extractStrongDatasetsFromCsv(imported_data, categories) {
-        return this.extractDatasetsFromCsv(imported_data, categories, datasources.STRONG.date_field, datasources.STRONG.standardize_date);
+        return this.extractDatasetsFromCsv(imported_data, categories, datasources.STRONG);
     }
 
     extractDaylioDatasetsFromCsv(imported_data, categories) {
-        return this.extractDatasetsFromCsv(imported_data, categories, datasources.DAYLIO.date_field, datasources.DAYLIO.standardize_date);
+        return this.extractDatasetsFromCsv(imported_data, categories, datasources.DAYLIO);
     }
 
-    extractDatasetsFromCsv(imported_data, categories, date_field, standardize_date) {
+
+    //changes csv format to key value pairs
+    extractDatasetsFromCsv(imported_data, categories, datasource) {
         var data = [];
-        var splitdata = imported_data.split('\n');
-        for (var j = 1; j < splitdata.length; j++) {
-            var dataset = {};
-            var values = splitdata[j].split(',');
-            for (var i = 0; i < categories.length; i++) {
-                if (categories[i] === date_field) {
-                    dataset[this.date_field_name] = standardize_date(values[i]);
-                } else {
-                    dataset[categories[i]] = values[i];
-                }
+        var lines = imported_data.split('\n');
+        for (var j = 1; j < lines.length; j++) {
+            if (!isEmptyLine(lines[j])) {
+                data.push(this.standardize(datasource, createDataSet(lines[j])));
             }
-            data.push(dataset);
         }
         return data;
+
+        function isEmptyLine(line) {
+            return line.startsWith(',,');
+        }
+
+        function createDataSet(line) {
+            var dataset = {};
+            var values = line.split(',');
+            for (var i = 0; i < categories.length; i++) {
+                    dataset[categories[i]] = values[i];
+            }
+            return dataset;
+        }
+    }
+
+    standardize(datasource, dataset) {
+        if ('time_field' in datasource) {
+            dataset[this.new_date_field_name] = datasource.standardize_date(dataset[datasource.date_field], dataset[datasource.time_field]);
+            delete dataset[datasource.time_field];
+        }else{
+            dataset[this.new_date_field_name] = datasource.standardize_date(dataset[datasource.date_field]);
+        }
+        delete dataset[datasource.date_field];
+        return dataset;
     }
 
 }
