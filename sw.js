@@ -4,7 +4,7 @@
 const version = 5;
 
 //https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4 by Google Developers accessed 13.11.2019
-const CACHE_NAME = 'static-cache-v1';
+const CACHE_NAME = 'static-cache-v2';
 const FILES_TO_CACHE = [
 	'/',
 	'index.html',
