@@ -6,7 +6,9 @@ const version = 4;
 //https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4 by Google Developers accessed 13.11.2019
 const CACHE_NAME = 'static-cache-v1';
 const FILES_TO_CACHE = [
-	'offline.html',
+	'/',
+	'index.html',
+	'images/favicon.png'
 ];
 //end of https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4
 
@@ -42,20 +44,13 @@ self.addEventListener('activate', function (event) {
 	);
 });
 
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', function (evt) {
 	//https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4 by Google Developers accessed 13.11.2019
-
-	// CODELAB: Add fetch event handler here.
-	if (event.request.mode !== 'navigate') {
-		// Not a page navigation, bail.
-		return;
-	}
-	event.respondWith(
-		fetch(event.request)
-		.catch(() => {
-			return caches.open(CACHE_NAME)
-				.then((cache) => {
-					return cache.match('offline.html');
+	evt.respondWith(
+		caches.open(CACHE_NAME).then((cache) => {
+			return cache.match(evt.request)
+				.then((response) => {
+					return response || fetch(evt.request);
 				});
 		})
 	);
