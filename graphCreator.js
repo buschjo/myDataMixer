@@ -5,19 +5,16 @@ class GraphCreator {
 
     createDefaultGraph() {
         var datasource = this.datastructure.datasource;
-        var data = [];
-        var dates = getDates(this.datastructure);
 
-        var graphid = this.datastructure.id + '_default_graph';
-        var xaxis_title = 'dates';
-        var yaxis_title;
-        var title = this.datastructure.labeltext + ' Default Graph';
-        var more_space_needed = moreSpaceNeeded(datasource);
-        yaxis_title = datasource.default_graph_category;
-        var categoryarray = extractCategories(datasource);
-        data = defaultGraphValues(this.datastructure, datasource.default_graph_category);
-
-        return new Graph(data, dates, graphid, xaxis_title, yaxis_title, title, more_space_needed, categoryarray);
+        return new Graph([new GraphTrace(
+                            defaultGraphValues(this.datastructure, datasource.default_graph_category),
+                            getDates(this.datastructure),
+                            datasource.default_graph_category,
+                            extractCategories(datasource))],         //traces as an array, so it can be iterated in graph.draw
+                        this.datastructure.id + '_default_graph',
+                        'dates',
+                        this.datastructure.labeltext + ' Default Graph',
+                        moreSpaceNeeded(datasource));
 
         function moreSpaceNeeded(datasource) {
             return datasource === datasources.STRONG;
@@ -39,7 +36,7 @@ class GraphCreator {
         }
 
         function extractOrderedCategoryNames(values) {
-            categoryarray = [];
+            var categoryarray = [];
             for (var prop in values) {
                 categoryarray.push(values[prop]);
             }
