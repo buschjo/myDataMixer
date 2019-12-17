@@ -45,7 +45,7 @@ Vue.component('import_component', {
 });
 
 Vue.component('create_graph_component', {
-    template: "<button type='button' class='btn btn-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph</button>",
+    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph &rarr;</button>",
     methods: {
         openDataSelection: function () {
             app.current_view = "listView";
