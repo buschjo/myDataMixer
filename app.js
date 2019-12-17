@@ -19,6 +19,7 @@ Vue.component('import_component', {
             //the onload event is fired when a read was successfull (full exp. https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
             reader.onload = function (event) {
                 var converter = new DataConverter();
+                // event target is the file reader, in result is the read data
                 dataobject = converter.convert(event.target.result, id, labeltext);
                 createGraph(dataobject);
                 app.imported_data.push(dataobject);
@@ -44,8 +45,8 @@ Vue.component('import_component', {
     }
 });
 
-Vue.component('create_graph_component', {
-    template: "<button type='button' class='btn btn-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph &rarr;</button>",
+Vue.component('open_data_selection_component', {
+    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph &rarr;</button>",
     methods: {
         openDataSelection: function () {
             app.current_view = "listView";
@@ -53,7 +54,46 @@ Vue.component('create_graph_component', {
     }
 });
 
+//in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
 Vue.component('datalist_component', {
+    data: function () {
+        return {
+            imported_data: app.imported_data
+        };
+    }
+
+});
+
+Vue.component('create_graph_component', {
+    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' v-on:click='createGraph()' id='createGraphButton'>Create Graph from Selection &rarr;</button>",
+    methods: {
+        createGraph: function () {
+            createGraph(app.imported_data[0], getSelectedCategories());
+            app.current_view = "graphView";
+
+            function createGraph(dataobject, categories) {
+                var creator = new GraphCreator(dataobject);
+                var graph = creator.createCustomGraph(categories);
+                app.graphs.push(graph);
+            }
+            
+            function getSelectedCategories() {
+                //all checkboxes have this class
+                var categoryToggles = document.getElementsByClassName('datalist-category-option');
+                var categories = [];
+                for (let index = 0; index < categoryToggles.length; index++) {
+                    const toggle = categoryToggles[index];
+                    if (toggle.checked) {
+                        categories.push(toggle.value);
+                    }
+                }
+                return categories;
+            }
+        }
+    }
+});
+
+Vue.component('datalist_element_component', {
     props: ['imported_data_structure'],
     methods: {
         showCategories: function () {
@@ -89,16 +129,16 @@ Vue.component('navigation_component', {
 
 Vue.component('settings_component', {
     methods: {
-        deleteAllData: function(){
+        deleteAllData: function () {
             app.graphs = [];
             app.imported_data = [];
             alert('All imported data and graphs were deleted.');
         },
-        deleteGraphs: function(){
+        deleteGraphs: function () {
             app.graphs = [];
             alert('All graphs were deleted.');
         },
-        deleteData: function(){
+        deleteData: function () {
             app.imported_data = [];
             alert('All imported data was deleted.');
         }

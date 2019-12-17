@@ -10,78 +10,104 @@ const datasources = {
                     MEDIUM: 'medium',
                     LIGHT: 'light',
                     SPOTTING: 'spotting'
-                },
-                digestion: {
-                    values: {
-                        GREAT: 'great',
-                        BLOATED: 'bloated',
-                        NAUSEATED: 'nauseated',
-                        GASSY: 'gassy'
-                    }
-                },
-                energy: {
+                }
+            },
+            digestion: {
+                values: {
+                    GREAT: 'great',
+                    BLOATED: 'bloated',
+                    NAUSEATED: 'nauseated',
+                    GASSY: 'gassy'
+                }
+            },
+            energy: {
+                values: {
                     EXHAUSTED: 'exhausted',
                     LOW: 'low',
                     HIGH: 'high',
                     ENERGIZED: 'energized'
-                },
-                ailment: {},
-                poop: {
+                }
+            },
+            ailment: {},
+            poop: {
+                values: {
                     GREAT: 'great',
                     NORMAL: 'normal',
                     CONSTIPATED: 'constipated',
                     DIARRHEA: 'diarrhea'
-                },
-                motivation: {
+                }
+            },
+            motivation: {
+                values: {
                     MOTIVATED: 'motivated',
                     UNMOTIVATED: 'unmotivated',
                     PRODUCTIVE: 'productive',
                     UNPRODUCTIVE: 'unproductive'
-                },
-                craving: {},
-                collection_method: {},
-                sex: {
+                }
+            },
+            craving: {},
+            collection_method: {},
+            sex: {
+                values: {
                     UNPROTECTED: 'unprodtected',
                     PROTECTED: 'protected',
                     HIGH: 'high sex drive',
                     WITHDRAWAL: 'withdrawal'
-                },
-                appointment: {},
-                social: {},
-                party: {},
-                hair: {
+                }
+            },
+            appointment: {},
+            social: {},
+            party: {},
+            hair: {
+                values: {
                     BAD: 'bad',
                     OILY: 'oily',
                     DRY: 'dry',
                     GOOD: 'good'
-                },
-                test: {},
-                mood: {
+                }
+            },
+            test: {},
+            mood: {
+                values: {
                     HAPPY: 'happy',
                     SENSITIVE: 'sensitive',
                     SAD: 'sad',
                     PMS: 'pms'
-                },
-                medication: {},
-                skin: {
+                }
+            },
+            medication: {},
+            skin: {
+                values: {
                     GOOD: 'good',
                     OILY: 'oily',
                     DRY: 'dry',
                     ACNE: 'acne'
-                },
-                pain: {},
-                exercise: {},
-                mental: {
+                }
+            },
+            pain: {},
+            exercise: {},
+            mental: {
+                values: {
                     FOCUSED: 'focused',
                     DISTRACTED: 'distracted',
                     CALM: 'calm',
                     STRESSED: 'stressed'
-                },
-                sleep: {
+                }
+            },
+            sleep: {
+                values: {
                     0: '0 to 3 hours',
                     3: '3 to 6 hours',
                     6: '6 to 9 hours',
                     9: '9 hours or more'
+                }
+            },
+            pill: {
+                values: {
+                    TAKEN: 'taken',
+                    LATE: 'late',
+                    DOUBLE: 'double',
+                    MISSED: 'missed'
                 }
             }
         }
@@ -106,9 +132,9 @@ const datasources = {
         },
         categories: {
             ExerciseName: {},
-            Reps:{},
-            Distance:{},
-            Seconds:{},
+            Reps: {},
+            Distance: {},
+            Seconds: {},
         }
     },
     DAYLIO: {
