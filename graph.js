@@ -11,12 +11,75 @@ class Graph {
         Plotly.newPlot(container, this.getTraces(), this.getLayout(), this.getConfig());
     }
 
+    getTraces() {
+        var yaxes = ['y1', 'y2', 'y3'];
+        var traces = [];
+
+        for (let index = 0; index < this.traces.length; index++) {
+            const trace = this.traces[index];
+            traces.push({
+                x: trace.dates,
+                y: trace.data,
+                name: trace.yaxis_title, //this name will be used for the legend
+                mode: 'markers',
+                yaxis: yaxes[index] //this is neccessary to show more than one yaxis
+            });
+        }
+        return traces;
+    }
+
     getLayout() {
         var y_axis_templates = this.getYAxisTemplates();
         if (y_axis_templates.length === 1) {
             return this.getOneTraceLayout(y_axis_templates);
-        } else if (y_axis_templates === 2) {
-            return this.getOneTraceLayout(y_axis_templates);
+        } else if (y_axis_templates.length === 2) {
+            return this.getTwoTraceLayout(y_axis_templates);
+        }
+    }
+
+    getYAxisTemplates() {
+        //if categoryorder == 'trace' categoryarray will not be used
+        var templates = [];
+        if (this.traces.length === 1) {
+            templates.push(this.getFirstYAxisTemplate(this.traces[0]));
+        } else if (this.traces.length === 2) {
+            templates.push(this.getFirstYAxisTemplate(this.traces[0]));
+            templates.push(this.getSecondYAxisTemplate(this.traces[1]));
+        } else {
+            templates.push(this.getSecondYAxisTemplate(this.traces[1]));
+            // templates.push(this.getFirstYAxisTemplate(this.traces[2]));
+        }
+        return templates;
+
+    }
+
+    getFirstYAxisTemplate(trace) {
+        return {
+            showline: true,
+            title: trace.yaxis_title,
+            categoryorder: this.getCategoryOrder(trace),
+            categoryarray: trace.categoryarray
+        };
+    }
+    
+    getSecondYAxisTemplate(trace) {
+        return {
+            showline: true,
+            title: trace.yaxis_title,
+            categoryorder: this.getCategoryOrder(trace),
+            categoryarray: trace.categoryarray,
+            anchor: 'free',
+            overlaying: 'y',
+            side: 'left',
+            position: 0.15
+        };
+    }
+
+    getCategoryOrder(trace) {
+        if (trace.categoryarray !== undefined) {
+            return 'array';
+        } else {
+            return 'trace';
         }
     }
 
@@ -38,9 +101,25 @@ class Graph {
         };
     }
 
+    getXAxisTemplate() {
+        return {
+            showline: true,
+            title: this.xaxis_title
+        };
+    }
+
+    getMarginLeft() {
+        if (this.more_space_needed) {
+            return 250;
+        } else {
+            return 60;
+        }
+
+    }
+
     getTwoTraceLayout(y_axis_templates) {
         return {
-            xaxis: x_axis_template,
+            xaxis: this.getXAxisTemplate(),
             yaxis: y_axis_templates[0],
             yaxis2: y_axis_templates[1],
             showlegend: true,
@@ -64,56 +143,5 @@ class Graph {
         };
         // responsive: true for resizing when switching landscape/portrait mode (https://plot.ly/javascript/responsive-fluid-layout/)
         // displayModeBar: false because plotly plots come with a toolbar, but that is not needed for thsi project (https://plot.ly/javascript/configuration-options/)
-    }
-
-    getXAxisTemplate() {
-        return {
-            showline: true,
-            title: this.xaxis_title
-        };
-    }
-
-    getYAxisTemplates() {
-        //if categoryorder == 'trace' categoryarray will not be used
-        var templates = [];
-        this.traces.forEach(trace => {
-            templates.push({
-                showline: true,
-                title: trace.yaxis_title,
-                categoryorder: this.getCategoryOrder(trace),
-                categoryarray: trace.categoryarray
-            });
-        });
-        return templates;
-    }
-
-    getCategoryOrder(trace) {
-        if (trace.categoryarray !== undefined) {
-            return 'array';
-        } else {
-            return 'trace';
-        }
-    }
-
-    getTraces() {
-        var traces = [];
-        this.traces.forEach(trace => {
-            traces.push({
-                x: trace.dates,
-                y: trace.data,
-                name: trace.yaxis_title, //this name will be used for the legend
-                mode: 'markers'
-            });
-        });
-        return traces;
-    }
-
-    getMarginLeft() {
-        if (this.more_space_needed) {
-            return 250;
-        } else {
-            return 60;
-        }
-
     }
 }

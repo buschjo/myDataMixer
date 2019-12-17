@@ -68,14 +68,15 @@
                     </div>
                 </import_component>
                 <!-- end adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
-                <create_graph_component></create_graph_component>
+                <open_data_selection_component></open_data_selection_component>
             </template>
             <template v-else-if="current_view ==='graphView'">
                 <template v-if="graphs.length === 0">
                     <p>No data is imported yet</p>
                 </template>
                 <template v-else>
-                    <graphcard_component inline-template v-for="item in graphs" v-bind:graph="item" v-bind:key="item.graphid">
+                    <graphcard_component inline-template v-for="item in graphs" v-bind:graph="item"
+                        v-bind:key="item.graphid">
                         <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
                         <div class="card">
                             <div class="card-body">
@@ -90,9 +91,12 @@
             <template v-else-if="current_view ==='settingsView'">
                 <settings_component inline-template>
                     <div class="col">
-                        <button type="button" class="btn btn-outline-danger btn-lg btn-block" v-on:click='deleteData()'>Delete Imported Data</button>
-                        <button type="button" class="btn btn-outline-danger btn-lg btn-block" v-on:click='deleteGraphs()'>Delete Graphs</button>
-                        <button type="button" class="btn btn-danger btn-lg btn-block" v-on:click='deleteAllData()'>Delete Everything</button>
+                        <button type="button" class="btn btn-outline-danger btn-lg btn-block"
+                            v-on:click='deleteData()'>Delete Imported Data</button>
+                        <button type="button" class="btn btn-outline-danger btn-lg btn-block"
+                            v-on:click='deleteGraphs()'>Delete Graphs</button>
+                        <button type="button" class="btn btn-danger btn-lg btn-block"
+                            v-on:click='deleteAllData()'>Delete Everything</button>
                     </div>
                 </settings_component>
                 <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Change Colors</button> -->
@@ -107,22 +111,29 @@
                     <p>No data is imported yet</p>
                 </template>
                 <template v-else>
-                    <datalist_component inline-template v-for="item in imported_data"
-                        v-bind:imported_data_structure="item" v-bind:key="item.id">
+                    <datalist_component inline-template>
                         <div>
-                            <button type="button" class="btn btn-lg btn-block dropdown-toggle source-list-button"
-                                v-bind:class="getCssClass(imported_data_structure.id)" v-on:click="showCategories">
-                                {{imported_data_structure.labeltext}} </button>
-                            <div class="form-check" style="display: none;"
-                                v-bind:id="imported_data_structure.id+'Categories'">
-                                <div v-for="category in imported_data_structure.categories">
-                                    <input class="form-check-input" type="checkbox" value="category"
-                                        v-bind:id="category">
-                                    <label class="form-check-label" v-bind:for="category">
-                                        {{category}}
-                                    </label>
+                            <datalist_element_component inline-template v-for="item in imported_data"
+                                v-bind:imported_data_structure="item" v-bind:key="item.id">
+                                <div>
+                                    <button type="button"
+                                        class="btn btn-lg btn-block dropdown-toggle source-list-button"
+                                        v-bind:class="getCssClass(imported_data_structure.id)"
+                                        v-on:click="showCategories">
+                                        {{imported_data_structure.labeltext}} </button>
+                                    <div class="form-check" style="display: none;"
+                                        v-bind:id="imported_data_structure.id+'Categories'">
+                                        <div v-for="category in imported_data_structure.categories">
+                                            <input class="form-check-input datalist-category-option" type="checkbox" v-bind:value="category"
+                                                v-bind:id="category">
+                                            <label class="form-check-label" v-bind:for="category">
+                                                {{category}}
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </datalist_element_component>
+                            <create_graph_component></create_graph_component>
                         </div>
                     </datalist_component>
                 </template>
