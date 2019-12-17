@@ -45,7 +45,7 @@ Vue.component('import_component', {
 });
 
 Vue.component('create_graph_component', {
-    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph &rarr;</button>",
+    template: "<button type='button' class='btn btn-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph &rarr;</button>",
     methods: {
         openDataSelection: function () {
             app.current_view = "listView";
@@ -70,7 +70,7 @@ Vue.component('datalist_component', {
     }
 });
 
-Vue.component('graphcard', {
+Vue.component('graphcard_component', {
     props: ['graph'],
     mounted: function () {
         this.graph.draw(document.getElementById(this.graph.graphid));
