@@ -87,6 +87,17 @@ Vue.component('navigation_component', {
     }
 });
 
+Vue.component('settings_component', {
+    template: "<div class='col'><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Data</button></div>",
+    methods: {
+        deleteData: function(){
+            app.graphs = [];
+            app.imported_data = [];
+            alert('All imported data and graphs were deleted.');
+        }
+    }
+});
+
 //Create vue app with name "app" and data
 var app = new Vue({
     el: '#app',

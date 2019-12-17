@@ -88,8 +88,8 @@
                 </template>
             </template>
             <template v-else-if="current_view ==='settingsView'">
-                <button type="button" class="btn btn-danger btn-lg btn-block">Delete Data</button>
-                <button type="button" class="btn btn-primary btn-lg btn-block">Change Colors</button>
+                <settings_component></settings_component>
+                <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Change Colors</button> -->
             </template>
             <template v-else-if="current_view ==='aboutView'">
                 <p>This app was developed by Josefine S. Busch.</p>
