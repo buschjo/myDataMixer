@@ -88,13 +88,19 @@
                 </template>
             </template>
             <template v-else-if="current_view ==='settingsView'">
-                <settings_component></settings_component>
+                <settings_component inline-template>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-danger btn-lg btn-block" v-on:click='deleteData()'>Delete Imported Data</button>
+                        <button type="button" class="btn btn-outline-danger btn-lg btn-block" v-on:click='deleteGraphs()'>Delete Graphs</button>
+                        <button type="button" class="btn btn-danger btn-lg btn-block" v-on:click='deleteAllData()'>Delete Everything</button>
+                    </div>
+                </settings_component>
                 <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Change Colors</button> -->
             </template>
             <template v-else-if="current_view ==='aboutView'">
                 <p>This app was developed by Josefine S. Busch.</p>
-                <p>The app stores your imported data in this and that way.</p>
-                <p>You can delete all your data in settings.</p>
+                <p>The app stores your imported data as data objects and graphs.</p>
+                <p>You can delete all your imported data and all graphs in settings.</p>
             </template>
             <template v-else-if="current_view ==='listView'">
                 <template v-if="imported_data.length === 0">
