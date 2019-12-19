@@ -8,8 +8,8 @@ class DataConverter {
         var data;
         var current_datasource;
         if (id.includes(datasources.CLUE.title)) {
-            categories = this.extractClueCategoriesFromJson(imported_data);
-            data = this.extractClueDatasetsFromJson(imported_data);
+            categories = this.extractClueCategoriesFromJson(JSON.parse(imported_data));
+            data = this.extractClueDatasetsFromJson(JSON.parse(imported_data));
             current_datasource = datasources.CLUE;
         } else if (id.includes(datasources.DAYLIO.title)) {
             categories = this.extractCategoriesFromCsv(imported_data);
@@ -24,23 +24,23 @@ class DataConverter {
     }
 
     extractClueCategoriesFromJson(imported_data) {
-        var all_info = JSON.parse(imported_data);
         var categories = [];
-        all_info.settings.measurement_categories.forEach(category => {
+        imported_data.settings.measurement_categories.forEach(category => {
             categories.push(category.category_key);
         });
         return categories;
     }
 
     extractClueDatasetsFromJson(imported_data) {
-        var all_info = JSON.parse(imported_data);
         //rename date attribute
         //"data" is the key in the JSON for the data I need
-        all_info.data.forEach(element => {
+        imported_data.data.forEach(element => {
+            //creates a new property and adds the value of the old date field to it
             element[this.new_date_field_name] = element[datasources.CLUE.date_field];
+            //deletes the old property
             delete element[datasources.CLUE.date_field];
         });
-        return all_info.data;
+        return imported_data.data;
     }
 
     extractCategoriesFromCsv(imported_data) {

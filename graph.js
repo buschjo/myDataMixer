@@ -41,46 +41,46 @@ class Graph {
         //if categoryorder == 'trace' categoryarray will not be used
         var templates = [];
         if (this.traces.length === 1) {
-            templates.push(this.getFirstYAxisTemplate(this.traces[0]));
+            templates.push(getFirstYAxisTemplate(this.traces[0]));
         } else if (this.traces.length === 2) {
-            templates.push(this.getFirstYAxisTemplate(this.traces[0]));
-            templates.push(this.getSecondYAxisTemplate(this.traces[1]));
+            templates.push(getFirstYAxisTemplate(this.traces[0]));
+            templates.push(getSecondYAxisTemplate(this.traces[1]));
         } else {
-            templates.push(this.getSecondYAxisTemplate(this.traces[1]));
+            templates.push(getSecondYAxisTemplate(this.traces[1]));
             // templates.push(this.getFirstYAxisTemplate(this.traces[2]));
         }
         return templates;
 
-    }
-
-    getFirstYAxisTemplate(trace) {
-        return {
-            showline: true,
-            title: trace.yaxis_title,
-            categoryorder: this.getCategoryOrder(trace),
-            categoryarray: trace.categoryarray
-        };
-    }
-    
-    getSecondYAxisTemplate(trace) {
-        return {
-            showline: true,
-            title: trace.yaxis_title,
-            categoryorder: this.getCategoryOrder(trace),
-            categoryarray: trace.categoryarray,
-            anchor: 'free',
-            overlaying: 'y',
-            side: 'left',
-            position: 0.15
-        };
-    }
-
-    getCategoryOrder(trace) {
-        if (trace.categoryarray !== undefined) {
-            return 'array';
-        } else {
-            return 'trace';
+        function getFirstYAxisTemplate(trace) {
+            return {
+                showline: true,
+                title: trace.yaxis_title,
+                categoryorder: getCategoryOrder(trace),
+                categoryarray: trace.categoryarray
+            };
         }
+
+        function getSecondYAxisTemplate(trace) {
+            return {
+                showline: true,
+                title: trace.yaxis_title,
+                categoryorder: getCategoryOrder(trace),
+                categoryarray: trace.categoryarray,
+                anchor: 'free',
+                overlaying: 'y',
+                side: 'left',
+                position: 0.15
+            };
+        }
+
+        function getCategoryOrder(trace) {
+            if (trace.categoryarray !== undefined) {
+                return 'array';
+            } else {
+                return 'trace';
+            }
+        }
+
     }
 
     getOneTraceLayout(y_axis_templates) {

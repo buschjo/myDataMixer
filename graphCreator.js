@@ -9,7 +9,7 @@ class GraphCreator {
             this.datastructure.id + ' ' + categories.toString(),
             'dates',
             this.datastructure.labeltext + ' ' + categories.toString(),
-            true
+            false
         );
     }
 
@@ -41,8 +41,8 @@ class GraphCreator {
 
     getValuesForCategory(data, category_name) {
         var values = [];
-        data.forEach(el => {
-            values.push(el[category_name]);
+        data.forEach(value => {
+            values.push(value[category_name]);
         });
         return values;
     }

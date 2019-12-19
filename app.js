@@ -21,12 +21,12 @@ Vue.component('import_component', {
                 var converter = new DataConverter();
                 // event target is the file reader, in result is the read data
                 dataobject = converter.convert(event.target.result, id, labeltext);
-                createGraph(dataobject);
+                createDefaultGraph(dataobject);
                 app.imported_data.push(dataobject);
             };
             reader.readAsText(selectedFile);
 
-            function createGraph(dataobject) {
+            function createDefaultGraph(dataobject) {
                 var creator = new GraphCreator(dataobject);
                 var graph = creator.createDefaultGraph();
                 app.graphs.push(graph);
@@ -64,6 +64,23 @@ Vue.component('datalist_component', {
 
 });
 
+Vue.component('datalist_element_component', {
+    props: ['imported_data_structure'],
+    methods: {
+        showCategories: function () {
+            var categories_container = document.getElementById(this.imported_data_structure.id + "Categories");
+            if (categories_container.style.display === "none") {
+                categories_container.style.display = '';
+            } else {
+                categories_container.style.display = 'none';
+            }
+        },
+        getCssClass: function (id) {
+            return app.getCssClass(id);
+        }
+    }
+});
+
 Vue.component('create_graph_component', {
     template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' v-on:click='createGraph()' id='createGraphButton'>Create Graph from Selection &rarr;</button>",
     methods: {
@@ -89,23 +106,6 @@ Vue.component('create_graph_component', {
                 }
                 return categories;
             }
-        }
-    }
-});
-
-Vue.component('datalist_element_component', {
-    props: ['imported_data_structure'],
-    methods: {
-        showCategories: function () {
-            var categories_container = document.getElementById(this.imported_data_structure.id + "Categories");
-            if (categories_container.style.display === "none") {
-                categories_container.style.display = '';
-            } else {
-                categories_container.style.display = 'none';
-            }
-        },
-        getCssClass: function (id) {
-            return app.getCssClass(id);
         }
     }
 });

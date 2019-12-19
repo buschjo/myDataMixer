@@ -3,6 +3,21 @@ const datasources = {
         title: 'clue',
         date_field: 'day',
         default_graph_category: 'period',
+        standardize_date: function (date) {
+            if (date != "") {
+                //source: Clue date format: YYYY-MM-DDTHH:MM:SSZ
+                var date_and_time = date.split('T');
+                var date_pieces = date_and_time[0].split('-');
+                var yyyy = date_pieces[0];
+                var mm = date_pieces[1];
+                var dd = date_pieces[2];
+                var time_pieces = date_and_time[1].split(':');
+                var hh = time_pieces[0];
+                var min = time_pieces[1];
+                //mm-1 because january == 0
+                return new Date(Date.UTC(yyyy, mm-1, dd, hh, min));
+            }
+        },
         categories: {
             period: {
                 values: {
@@ -125,9 +140,11 @@ const datasources = {
                 var dd = date_pieces[0];
                 var mm = date_pieces[1];
                 var yyyy = '20' + year_and_time[0];
-                var time = 'T' + year_and_time[1] + ':00Z';
-                // return new Date(yyyy + '-' + mm + '-' + dd + time);
-                return yyyy + '-' + mm + '-' + dd + time;
+                var time_pieces = year_and_time[1].split(':');
+                var hh = time_pieces[0];
+                var min = time_pieces[1];
+                //mm-1 because january == 0
+                return new Date(Date.UTC(yyyy, mm-1, dd, hh, min));
             }
         },
         categories: {
@@ -144,14 +161,20 @@ const datasources = {
         default_graph_category: 'mood',
         standardize_date: function (date, time) {
             //source: daylio date format: DD-MM-YY | time format HH:MM
-            //target: ISO Date Time (YYYY-MM-DDTHH:MM:SSZ)
-            if (date != "" || time != "") {
+            if (date != "") {
                 var date_pieces = date.split('-');
                 var dd = date_pieces[0];
                 var mm = date_pieces[1];
                 var yyyy = '20' + date_pieces[2];
-                // return new Date(yyyy + '-' + mm + '-' + dd + "T" + time + ":00Z");
-                return yyyy + '-' + mm + '-' + dd + 'T' + time + ':00Z';
+                var hh = 0;
+                var min = 0;
+                if (time != "") {
+                    var time_pieces = time.split(':');
+                    hh = time_pieces[0];
+                    min = time_pieces[1];
+                }
+                //mm-1 because january == 0
+                return new Date(Date.UTC(yyyy, mm-1, dd, hh, min));
             }
         },
         categories: {
