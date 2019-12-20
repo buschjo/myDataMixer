@@ -8,8 +8,7 @@ class DataConverter {
         var data;
         var current_datasource;
         if (id.includes(datasources.CLUE.title)) {
-            console.log(id);
-            categories = this.extractClueCategoriesFromJson(JSON.parse(imported_data));
+            categories = datasources.CLUE.categories;
             data = this.extractClueDatasetsFromJson(JSON.parse(imported_data));
             current_datasource = datasources.CLUE;
         } else if (id.includes(datasources.DAYLIO.title)) {
@@ -27,16 +26,8 @@ class DataConverter {
 
     addCalculatedDatasets(data, categories){
         data.forEach(dataset => {
-            dataset[categories.exercised.id] = 'exercised';
+            dataset[categories.exercised.id] = categories.exercised.id;
         });
-    }
-
-    extractClueCategoriesFromJson(imported_data) {
-        var categories = [];
-        imported_data.settings.measurement_categories.forEach(category => {
-            categories.push(category.category_key);
-        });
-        return categories;
     }
 
     extractClueDatasetsFromJson(imported_data) {

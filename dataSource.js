@@ -20,6 +20,8 @@ const datasources = {
         },
         categories: {
             period: {
+                title: 'Period',
+                id: 'period',
                 values: {
                     HEAVY: 'heavy',
                     MEDIUM: 'medium',
@@ -27,7 +29,19 @@ const datasources = {
                     SPOTTING: 'spotting'
                 }
             },
+            fluid: {
+                title: 'Fluid',
+                id: 'fluid',
+                values: {
+                    EGGWHITE : 'egg-white',
+                    STICKY: 'sticky',
+                    CREAMY: 'creamy',
+                    ATYPICAL: 'atypical'
+                }
+            },
             digestion: {
+                title: 'Digestion',
+                id: 'digestion',
                 values: {
                     GREAT: 'great',
                     BLOATED: 'bloated',
@@ -36,6 +50,8 @@ const datasources = {
                 }
             },
             energy: {
+                title: 'Energy',
+                id: 'energy',
                 values: {
                     EXHAUSTED: 'exhausted',
                     LOW: 'low',
@@ -43,8 +59,13 @@ const datasources = {
                     ENERGIZED: 'energized'
                 }
             },
-            ailment: {},
+            ailment: {
+                title: 'Ailment',
+                id: 'ailment',
+            },
             poop: {
+                title: 'Poop',
+                id: 'poop',
                 values: {
                     GREAT: 'great',
                     NORMAL: 'normal',
@@ -53,6 +74,8 @@ const datasources = {
                 }
             },
             motivation: {
+                title: 'Motivation',
+                id: 'motivation',
                 values: {
                     MOTIVATED: 'motivated',
                     UNMOTIVATED: 'unmotivated',
@@ -60,9 +83,17 @@ const datasources = {
                     UNPRODUCTIVE: 'unproductive'
                 }
             },
-            craving: {},
-            collection_method: {},
+            craving: {
+                title: 'Craving',
+                id: 'craving',
+            },
+            collection_method: {
+                title: 'Collection Method',
+                id: 'collection_method',
+            },
             sex: {
+                title: 'Sex',
+                id: 'sex',
                 values: {
                     UNPROTECTED: 'unprodtected',
                     PROTECTED: 'protected',
@@ -70,10 +101,21 @@ const datasources = {
                     WITHDRAWAL: 'withdrawal'
                 }
             },
-            appointment: {},
-            social: {},
-            party: {},
+            appointment: {
+                title: 'Appointment',
+                id: 'appointment',
+            },
+            social: {
+                title: 'Socioal',
+                id: 'social',
+            },
+            party: {
+                title: 'Party',
+                id: 'party',
+            },
             hair: {
+                title: 'Hair',
+                id: 'hair',
                 values: {
                     BAD: 'bad',
                     OILY: 'oily',
@@ -81,8 +123,14 @@ const datasources = {
                     GOOD: 'good'
                 }
             },
-            test: {},
+            test: {
+                title: 'Test',
+                id: 'test',
+                
+            },
             mood: {
+                title: 'Mood',
+                id: 'mood',
                 values: {
                     HAPPY: 'happy',
                     SENSITIVE: 'sensitive',
@@ -90,8 +138,14 @@ const datasources = {
                     PMS: 'pms'
                 }
             },
-            medication: {},
+            medication: {
+                title: 'Medication',
+                id: 'medication',
+                
+            },
             skin: {
+                title: 'Skin',
+                id: 'skin',
                 values: {
                     GOOD: 'good',
                     OILY: 'oily',
@@ -99,9 +153,19 @@ const datasources = {
                     ACNE: 'acne'
                 }
             },
-            pain: {},
-            exercise: {},
+            pain: {
+                title: 'Pain',
+                id: 'pain',
+                
+            },
+            exercise: {
+                title: 'Exercise',
+                id: 'exercis',
+                
+            },
             mental: {
+                title: 'Mental',
+                id: 'mental',
                 values: {
                     FOCUSED: 'focused',
                     DISTRACTED: 'distracted',
@@ -110,6 +174,8 @@ const datasources = {
                 }
             },
             sleep: {
+                title: 'Sleep',
+                id: 'sleep',
                 values: {
                     0: '0 to 3 hours',
                     3: '3 to 6 hours',
@@ -118,6 +184,8 @@ const datasources = {
                 }
             },
             pill: {
+                title: 'Pill',
+                id: 'pill',
                 values: {
                     TAKEN: 'taken',
                     LATE: 'late',

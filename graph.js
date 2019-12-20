@@ -29,48 +29,64 @@ class Graph {
     }
 
     getLayout() {
-        if (this.traces.length === 1) {
-            return this.getOneTraceLayout(getFirstYAxisTemplate(this.traces[0]));
-        } else if (this.traces.length === 2) {
-            return this.getTwoTraceLayout(getFirstYAxisTemplate(this.traces[0]), getSecondYAxisTemplate(this.traces[1]));
-        } else {
-            return this.getThreeTraceLayout(getFirstYAxisTemplate(this.traces[0]), getSecondYAxisTemplate(this.traces[1]), getThridYAxisTemplate(this.traces[2]));
-        }
 
-        function getFirstYAxisTemplate(trace) {
-            return {
+        var layout = {
+            xaxis: {
                 showline: true,
-                title: trace.yaxis_title,
-                categoryorder: getCategoryOrder(trace),
-                categoryarray: trace.categoryarray
-            };
-        }
+                title: this.xaxis_title
+            },
+            yaxis: {
+                showline: true,
+                title: this.traces[0].yaxis_title,
+                categoryorder: getCategoryOrder(this.traces[0]),
+                categoryarray: this.traces[0].categoryarray
+            },
+            showlegend: true,
+            legend: {
+                x: 0.7,
+                y: 1.2
+            },
+            margin: {
+                l: 60,
+                b: 50,
+                r: 10,
+                t: 1,
+            } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)}
+        };
 
-        function getSecondYAxisTemplate(trace) {
-            return {
+        if (this.traces.length >= 2) {
+            layout.yaxis2 = {
                 showline: true,
-                title: trace.yaxis_title,
-                categoryorder: getCategoryOrder(trace),
-                categoryarray: trace.categoryarray,
+                title: this.traces[1].yaxis_title,
+                categoryorder: getCategoryOrder(this.traces[1]),
+                categoryarray: this.traces[1].categoryarray,
                 anchor: 'x',
                 overlaying: 'y',
                 side: 'right'
             };
+            layout.margin.r = 60;
         }
 
-        function getThridYAxisTemplate(trace) {
-            console.log();
-            return {
+        if (this.traces.length >= 3) {
+            layout.xaxis.domain = [0.3, 1];
+            layout.yaxis3 = {
                 showline: true,
-                title: trace.yaxis_title,
-                categoryorder: getCategoryOrder(trace),
-                categoryarray: trace.categoryarray,
+                title: this.traces[2].yaxis_title,
+                categoryorder: getCategoryOrder(this.traces[2]),
+                categoryarray: this.traces[2].categoryarray,
                 anchor: 'free',
                 overlaying: 'y',
                 side: 'left',
                 position: 0.15
             };
+            layout.margin.l =1;
+
         }
+
+        if (this.more_space_needed) {
+            layout.margin.l = 250;
+        }
+        return layout;
 
         function getCategoryOrder(trace) {
             if (trace.categoryarray !== undefined) {
@@ -79,82 +95,6 @@ class Graph {
                 return 'trace';
             }
         }
-    }
-
-    getOneTraceLayout(y_axis_template) {
-        return {
-            xaxis: {
-                showline: true,
-                title: this.xaxis_title
-            },
-            yaxis: y_axis_template,
-            showlegend: true,
-            legend: {
-                x: 0.7,
-                y: 1.2
-            },
-            margin: {
-                l: this.getMarginLeft(),
-                b: 50,
-                r: 1,
-                t: 1,
-            } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)
-        };
-    }
-
-    getMarginLeft() {
-        if (this.more_space_needed) {
-            return 250;
-        } else {
-            return 60;
-        }
-
-    }
-
-    getTwoTraceLayout(first_axis_template, second_axis_template) {
-        return {
-            xaxis: {
-                showline: true,
-                title: this.xaxis_title
-            },
-            yaxis: first_axis_template,
-            yaxis2: second_axis_template,
-            showlegend: true,
-            legend: {
-                x: 0.7,
-                y: 1.2
-            },
-            margin: {
-                l: this.getMarginLeft(),
-                b: 50,
-                r: 60,
-                t: 1,
-            }
-        };
-    }
-
-    getThreeTraceLayout(first_axis_template, second_axis_template, third_axis_template) {
-        return {
-            xaxis: {
-                showline: true,
-                title: this.xaxis_title,
-                domain: [0.3, 1]
-            },
-            yaxis: first_axis_template,
-            yaxis2: second_axis_template,
-            yaxis3: third_axis_template,
-            showlegend: true,
-            legend: {
-                x: 0.7,
-                y: 1.2
-            },
-            margin: {
-                l: 1,
-                b: 50,
-                r: 60,
-                t: 1,
-            }
-        };
     }
 
     getConfig() {
