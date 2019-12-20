@@ -15,7 +15,7 @@ const datasources = {
                 var hh = time_pieces[0];
                 var min = time_pieces[1];
                 //mm-1 because january == 0
-                return new Date(Date.UTC(yyyy, mm-1, dd, hh, min));
+                return new Date(Date.UTC(yyyy, mm - 1, dd, hh, min));
             }
         },
         categories: {
@@ -144,14 +144,18 @@ const datasources = {
                 var hh = time_pieces[0];
                 var min = time_pieces[1];
                 //mm-1 because january == 0
-                return new Date(Date.UTC(yyyy, mm-1, dd, hh, min));
+                return new Date(Date.UTC(yyyy, mm - 1, dd, hh, min));
             }
         },
         categories: {
-            ExerciseName: {},
-            Reps: {},
-            Distance: {},
-            Seconds: {},
+            exerciseName: {
+                id: 'ExerciseName',
+                title: 'All Exercises'
+            },
+            exercised: {
+                id: 'exercised',
+                title: 'Did Exercise'
+            }
         }
     },
     DAYLIO: {
@@ -174,11 +178,13 @@ const datasources = {
                     min = time_pieces[1];
                 }
                 //mm-1 because january == 0
-                return new Date(Date.UTC(yyyy, mm-1, dd, hh, min));
+                return new Date(Date.UTC(yyyy, mm - 1, dd, hh, min));
             }
         },
         categories: {
             mood: {
+                title: 'Mood',
+                id: 'mood',
                 values: {
                     AWFUL: 'awful',
                     BAD: 'bad',
@@ -187,8 +193,14 @@ const datasources = {
                     RAD: 'rad'
                 },
             },
-            activities: {},
-            weekday: {}
+            activities: {
+                title: 'Activities',
+                id: 'activities'
+            },
+            weekday: {
+                title: 'Weekday',
+                id: 'weekday'
+            }
         }
     },
 };

@@ -8,19 +8,27 @@ class DataConverter {
         var data;
         var current_datasource;
         if (id.includes(datasources.CLUE.title)) {
+            console.log(id);
             categories = this.extractClueCategoriesFromJson(JSON.parse(imported_data));
             data = this.extractClueDatasetsFromJson(JSON.parse(imported_data));
             current_datasource = datasources.CLUE;
         } else if (id.includes(datasources.DAYLIO.title)) {
-            categories = this.extractCategoriesFromCsv(imported_data);
-            data = this.extractDaylioDatasetsFromCsv(imported_data, categories);
+            categories = datasources.DAYLIO.categories;
+            data = this.extractDaylioDatasetsFromCsv(imported_data);
             current_datasource = datasources.DAYLIO;
         } else if (id.includes(datasources.STRONG.title)) {
-            categories = this.extractCategoriesFromCsv(imported_data);
-            data = this.extractStrongDatasetsFromCsv(imported_data, categories);
+            categories = datasources.STRONG.categories;
+            data = this.extractStrongDatasetsFromCsv(imported_data);
+            this.addCalculatedDatasets(data, datasources.STRONG.categories);
             current_datasource = datasources.STRONG;
         }
         return new DataStructure(categories, data, id, labeltext, current_datasource);
+    }
+
+    addCalculatedDatasets(data, categories){
+        data.forEach(dataset => {
+            dataset[categories.exercised.id] = 'exercised';
+        });
     }
 
     extractClueCategoriesFromJson(imported_data) {
@@ -43,18 +51,20 @@ class DataConverter {
         return imported_data.data;
     }
 
-    extractCategoriesFromCsv(imported_data) {
+    getAllColumnTitles(imported_data) {
         var splitdata = imported_data.split('\n');
         //first line has category info
         return splitdata[0].split(',');
     }
 
-    extractStrongDatasetsFromCsv(imported_data, categories) {
-        return this.extractDatasetsFromCsv(imported_data, categories, datasources.STRONG);
+    extractStrongDatasetsFromCsv(imported_data) {
+        var columntitles = this.getAllColumnTitles(imported_data);
+        return this.extractDatasetsFromCsv(imported_data, columntitles, datasources.STRONG);
     }
-
-    extractDaylioDatasetsFromCsv(imported_data, categories) {
-        return this.extractDatasetsFromCsv(imported_data, categories, datasources.DAYLIO);
+    
+    extractDaylioDatasetsFromCsv(imported_data) {
+        var columntitles = this.getAllColumnTitles(imported_data);
+        return this.extractDatasetsFromCsv(imported_data, columntitles, datasources.DAYLIO);
     }
 
     //changes csv format to key value pairs
@@ -69,7 +79,7 @@ class DataConverter {
         return data;
 
         function isEmptyLine(line) {
-            return line.startsWith(',,');
+            return line.startsWith(',,') || line === '';
         }
 
         function createDataSet(line) {

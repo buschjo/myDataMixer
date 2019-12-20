@@ -9,7 +9,7 @@ class GraphCreator {
             this.datastructure.id + ' ' + categories.toString(),
             'dates',
             this.datastructure.labeltext + ' ' + categories.toString(),
-            false
+            this.moreSpaceNeeded(this.datastructure.datasource)
         );
     }
 

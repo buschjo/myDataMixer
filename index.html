@@ -38,7 +38,7 @@
     <!-- CDN Link because (content delivery networks) higher availability and performance -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <title>My Data Mixer</title>
+    <title>My Data Mix</title>
 
 </head>
 
@@ -124,10 +124,10 @@
                                     <div class="form-check" style="display: none;"
                                         v-bind:id="imported_data_structure.id+'Categories'">
                                         <div v-for="category in imported_data_structure.categories">
-                                            <input class="form-check-input datalist-category-option" type="checkbox" v-bind:value="category"
-                                                v-bind:id="category">
-                                            <label class="form-check-label" v-bind:for="category">
-                                                {{category}}
+                                            <input class="form-check-input datalist-category-option" type="checkbox" v-bind:value="category.id"
+                                                v-bind:id="category.id">
+                                            <label class="form-check-label" v-bind:for="category.id">
+                                                {{category.title}}
                                             </label>
                                         </div>
                                     </div>
