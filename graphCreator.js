@@ -14,12 +14,23 @@ class GraphCreator {
     }
 
     createDefaultGraph() {
+        var traces;
+        var multiple_yaxis;
+        if (this.datastructure.datasource === datasources.STRONG) {
+            traces = this.getTraces(this.datastructure.data, this.datastructure.datasource, this.datastructure.data.exercises);
+            multiple_yaxis = false;
+        }else{
+            traces = [this.getTrace(this.datastructure.data, this.datastructure.datasource, this.datastructure.datasource.default_graph_category)];
+            multiple_yaxis = true;
+        }
+
         return new Graph(
-            [this.getTrace(this.datastructure.data, this.datastructure.datasource, this.datastructure.datasource.default_graph_category)], //traces as an array, so it can be iterated in graph.draw
+            traces, //traces as an array, so it can be iterated in graph.draw
             this.datastructure.id + '_default_graph',
             'dates',
             this.datastructure.labeltext + ' Default Graph',
-            this.moreSpaceNeeded(this.datastructure.datasource));
+            this.moreSpaceNeeded(this.datastructure.datasource),
+            multiple_yaxis);
     }
 
     getTraces(data, datasource, categories) {

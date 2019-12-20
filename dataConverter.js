@@ -19,9 +19,30 @@ class DataConverter {
             categories = datasources.STRONG.categories;
             data = this.extractStrongDatasetsFromCsv(imported_data);
             this.addCalculatedDatasets(data, datasources.STRONG.categories);
+            this.extractExercises(data);
             current_datasource = datasources.STRONG;
         }
         return new DataStructure(categories, data, id, labeltext, current_datasource);
+    }
+
+    extractExercises(data){
+        var exercises = [];
+        data.forEach(dataset => {
+            if (!exercises.includes(dataset.ExerciseName)) {
+                exercises.push(dataset.ExerciseName);
+            }
+        });
+        data.exercises = exercises;
+        data.forEach(dataset => {
+            for (let index = 0; index < exercises.length; index++) {
+                const exercise = exercises[index];
+                if (dataset.ExerciseName === exercise) {
+                    dataset[exercise] = exercise;
+                }else{
+                    dataset[exercise] = undefined;
+                }
+            }
+        });
     }
 
     addCalculatedDatasets(data, categories){
