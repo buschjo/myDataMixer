@@ -29,27 +29,13 @@ class Graph {
     }
 
     getLayout() {
-        var y_axis_templates = this.getYAxisTemplates();
-        if (y_axis_templates.length === 1) {
-            return this.getOneTraceLayout(y_axis_templates);
-        } else if (y_axis_templates.length === 2) {
-            return this.getTwoTraceLayout(y_axis_templates);
-        }
-    }
-
-    getYAxisTemplates() {
-        //if categoryorder == 'trace' categoryarray will not be used
-        var templates = [];
         if (this.traces.length === 1) {
-            templates.push(getFirstYAxisTemplate(this.traces[0]));
+            return this.getOneTraceLayout(getFirstYAxisTemplate(this.traces[0]));
         } else if (this.traces.length === 2) {
-            templates.push(getFirstYAxisTemplate(this.traces[0]));
-            templates.push(getSecondYAxisTemplate(this.traces[1]));
+            return this.getTwoTraceLayout(getFirstYAxisTemplate(this.traces[0]), getSecondYAxisTemplate(this.traces[1]));
         } else {
-            templates.push(getSecondYAxisTemplate(this.traces[1]));
-            // templates.push(this.getFirstYAxisTemplate(this.traces[2]));
+            return this.getThreeTraceLayout(getFirstYAxisTemplate(this.traces[0]), getSecondYAxisTemplate(this.traces[1]), getThridYAxisTemplate(this.traces[2]));
         }
-        return templates;
 
         function getFirstYAxisTemplate(trace) {
             return {
@@ -61,6 +47,19 @@ class Graph {
         }
 
         function getSecondYAxisTemplate(trace) {
+            return {
+                showline: true,
+                title: trace.yaxis_title,
+                categoryorder: getCategoryOrder(trace),
+                categoryarray: trace.categoryarray,
+                anchor: 'x',
+                overlaying: 'y',
+                side: 'right'
+            };
+        }
+
+        function getThridYAxisTemplate(trace) {
+            console.log();
             return {
                 showline: true,
                 title: trace.yaxis_title,
@@ -80,16 +79,18 @@ class Graph {
                 return 'trace';
             }
         }
-
     }
 
-    getOneTraceLayout(y_axis_templates) {
+    getOneTraceLayout(y_axis_template) {
         return {
-            xaxis: this.getXAxisTemplate(),
-            yaxis: y_axis_templates[0],
+            xaxis: {
+                showline: true,
+                title: this.xaxis_title
+            },
+            yaxis: y_axis_template,
             showlegend: true,
             legend: {
-                x: 0.5,
+                x: 0.7,
                 y: 1.2
             },
             margin: {
@@ -98,13 +99,6 @@ class Graph {
                 r: 1,
                 t: 1,
             } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)
-        };
-    }
-
-    getXAxisTemplate() {
-        return {
-            showline: true,
-            title: this.xaxis_title
         };
     }
 
@@ -117,20 +111,47 @@ class Graph {
 
     }
 
-    getTwoTraceLayout(y_axis_templates) {
+    getTwoTraceLayout(first_axis_template, second_axis_template) {
         return {
-            xaxis: this.getXAxisTemplate(),
-            yaxis: y_axis_templates[0],
-            yaxis2: y_axis_templates[1],
+            xaxis: {
+                showline: true,
+                title: this.xaxis_title
+            },
+            yaxis: first_axis_template,
+            yaxis2: second_axis_template,
             showlegend: true,
             legend: {
-                x: 0.5,
+                x: 0.7,
                 y: 1.2
             },
             margin: {
                 l: this.getMarginLeft(),
                 b: 50,
-                r: 1,
+                r: 60,
+                t: 1,
+            }
+        };
+    }
+
+    getThreeTraceLayout(first_axis_template, second_axis_template, third_axis_template) {
+        return {
+            xaxis: {
+                showline: true,
+                title: this.xaxis_title,
+                domain: [0.3, 1]
+            },
+            yaxis: first_axis_template,
+            yaxis2: second_axis_template,
+            yaxis3: third_axis_template,
+            showlegend: true,
+            legend: {
+                x: 0.7,
+                y: 1.2
+            },
+            margin: {
+                l: 1,
+                b: 50,
+                r: 60,
                 t: 1,
             }
         };
