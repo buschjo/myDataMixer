@@ -37,8 +37,9 @@ class DataConverter {
 
     extractStrongDatasetsFromCsv(imported_data) {
         var columntitles = this.getCsvColumnTitles(imported_data);
+        var extracted_categories_field_name = 'extracted_categories';
         return addCalculatedDatasets(this.extractDatasetsFromCsv(imported_data, columntitles, datasources.STRONG), datasources.STRONG.categories);
-
+        
         function addCalculatedDatasets(data, categories) {
             var newData = data;
             newData.forEach(dataset => {
@@ -46,7 +47,7 @@ class DataConverter {
             });
             return addExerciseAsProperties(newData);
         }
-
+        
         function addExerciseAsProperties(data) {
             var newData = data;
             var exercises = [];
@@ -55,7 +56,7 @@ class DataConverter {
                     exercises.push(dataset.ExerciseName);
                 }
             });
-            newData.exercises = exercises;
+            newData[extracted_categories_field_name] = exercises;
             newData.forEach(dataset => {
                 for (let index = 0; index < exercises.length; index++) {
                     const exercise = exercises[index];

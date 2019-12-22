@@ -217,8 +217,9 @@ const datasources = {
         },
         categories: {
             exerciseName: {
-                id: 'ExerciseName',
-                title: 'All Exercises'
+                id: 'exerciseName',
+                title: 'All Exercises',
+                is_extracted_category: true
             },
             exercised: {
                 id: 'exercised',

@@ -68,7 +68,8 @@ Vue.component('datalist_element_component', {
     props: ['imported_data_structure'],
     methods: {
         showCategories: function () {
-            var categories_container = document.getElementById(this.imported_data_structure.id + "Categories");
+            var categories_container = document.getElementById(this.imported_data_structure.id + 'Categories');
+
             if (categories_container.style.display === "none") {
                 categories_container.style.display = '';
             } else {
@@ -77,6 +78,61 @@ Vue.component('datalist_element_component', {
         },
         getCssClass: function (id) {
             return app.getCssClass(id);
+        }
+    },
+    mounted: function () {
+        var categories = this.imported_data_structure.datasource.categories;
+        for (const category_name in categories) {
+            const category = categories[category_name];
+            if (category.is_extracted_category) {
+                removeParentCategory(category_name);
+                addSubcategories(this.imported_data_structure);
+            }
+        }
+        
+        function removeParentCategory(category_name) {
+            var parent_category = document.getElementById(category_name).parentNode;
+            var container = parent_category.parentNode;
+            container.removeChild(parent_category);
+        }
+        
+        function addSubcategories(imported_data_structure) {
+            var categories_container = document.getElementById(imported_data_structure.id + 'Categories');
+            imported_data_structure.data.extracted_categories.forEach(subCategory => {
+                var newContainer = document.createElement('div');
+                newContainer.appendChild(createHiddenElement(imported_data_structure.id));
+                newContainer.appendChild(createCheckbox(subCategory));
+                newContainer.appendChild(createLabel(subCategory));
+                categories_container.appendChild(newContainer);
+            });
+        }
+
+        function createHiddenElement(id) {
+            var element = document.createElement('input');
+            element.type = 'hidden';
+            element.value = id;
+            return element;
+        }
+
+        function createCheckbox(subCategory) {
+            var newCheckbox = document.createElement('input');
+            newCheckbox.type = 'checkbox';
+            newCheckbox.classList.add('form-check-input');
+            newCheckbox.classList.add('datalist-category-option');
+            newCheckbox.value = subCategory;
+            // removes all spaces (/g is command to look for all occurences)
+            var id = subCategory.replace(/ /g, '');
+            newCheckbox.id = id;
+            return newCheckbox;
+        }
+
+        function createLabel(subCategory) {
+            var newLabel = document.createElement('label');
+            newLabel.classList.add('form-check-label');
+            var id = subCategory.replace(/ /g, '');
+            newLabel.htmlFor = id;
+            newLabel.innerHTML = subCategory;
+            return newLabel;
         }
     }
 });

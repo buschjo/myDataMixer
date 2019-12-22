@@ -28,7 +28,7 @@ class GraphCreator {
         var traces;
         var multiple_yaxis;
         if (datastructure.datasource === datasources.STRONG) {
-            traces = this.getTraces(datastructure.data, datastructure.datasource, datastructure.data.exercises);
+            traces = this.getTraces(datastructure.data, datastructure.datasource, datastructure.data.extracted_categories);
             multiple_yaxis = false;
         }else{
             traces = [this.getTrace(datastructure.data, datastructure.datasource, datastructure.datasource.default_graph_category)];
