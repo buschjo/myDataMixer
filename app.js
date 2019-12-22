@@ -54,6 +54,36 @@ Vue.component('open_data_selection_component', {
     }
 });
 
+Vue.component('navigation', {
+    data: function() {
+        return {
+            views: [{
+                label: 'Import',
+                viewid: 'importView'
+            }, {
+                label: 'Graphs',
+                viewid: 'graphView'
+            }, {
+                label: 'Settings',
+                viewid: 'settingsView'
+            }, {
+                label: 'About',
+                viewid: 'aboutView'
+            }]
+        };
+    }
+});
+
+Vue.component('navigation_element', {
+    props: ['view'],
+    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewid)'>{{view.label}}</button></div>",
+    methods: {
+        changeView: function (new_view) {
+            app.current_view = new_view;
+        }
+    }
+});
+
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
 Vue.component('datalist_component', {
     data: function () {
@@ -184,16 +214,6 @@ Vue.component('graphcard_component', {
     }
 });
 
-Vue.component('navigation_component', {
-    props: ['view'],
-    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewid)'>{{view.label}}</button></div>",
-    methods: {
-        changeView: function (new_view) {
-            app.current_view = new_view;
-        }
-    }
-});
-
 Vue.component('settings_component', {
     methods: {
         deleteAllData: function () {
@@ -231,19 +251,6 @@ var app = new Vue({
             labeltext: 'Strong Data'
         }],
         current_view: 'importView',
-        views: [{
-            label: 'Import',
-            viewid: 'importView'
-        }, {
-            label: 'Graphs',
-            viewid: 'graphView'
-        }, {
-            label: 'Settings',
-            viewid: 'settingsView'
-        }, {
-            label: 'About',
-            viewid: 'aboutView'
-        }],
         graphs: [],
         imported_data: []
     },

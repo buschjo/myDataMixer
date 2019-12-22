@@ -119,16 +119,15 @@
                                     <button type="button"
                                         class="btn btn-lg btn-block dropdown-toggle source-list-button"
                                         v-bind:class="getCssClass(imported_data_structure.id)"
-                                        v-on:click="showCategories"
-                                        v-bind:value="imported_data_structure.id">
+                                        v-on:click="showCategories" v-bind:value="imported_data_structure.id">
                                         {{imported_data_structure.labeltext}} </button>
                                     <div class="form-check" style="display: none;"
-                                        v-bind:id="imported_data_structure.id+'Categories'"> 
+                                        v-bind:id="imported_data_structure.id+'Categories'">
                                         <!-- id is used for styling -->
                                         <div v-for="category in imported_data_structure.categories">
                                             <input type="hidden" v-bind:value="imported_data_structure.id">
-                                            <input class="form-check-input datalist-category-option" type="checkbox" v-bind:value="category.id"
-                                                v-bind:id="category.id">
+                                            <input class="form-check-input datalist-category-option" type="checkbox"
+                                                v-bind:value="category.id" v-bind:id="category.id">
                                             <label class="form-check-label" v-bind:for="category.id">
                                                 {{category.title}}
                                             </label>
@@ -141,10 +140,12 @@
                     </datalist_component>
                 </template>
             </template>
-            <div class="row">
-                <navigation_component v-for="item in views" v-bind:view="item" v-bind:key="item.viewid">
-                </navigation_component>
-            </div>
+            <navigation inline-template>
+                <div class="row">
+                    <navigation_element v-for="item in views" v-bind:view="item" v-bind:key="item.viewid">
+                    </navigation_element>
+                </div>
+            </navigation>
         </div>
     </div>
 
