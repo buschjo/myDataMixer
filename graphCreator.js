@@ -1,35 +1,46 @@
 class GraphCreator {
-    constructor(datastructure) {
-        this.datastructure = datastructure;
-    }
 
     createCustomGraph(categories) {
+        var traces = [];
+        var id = '';
+        var label = '';
+        var moreSpaceNeeded = false;
+
+        categories.forEach(category => {
+            traces.push(this.getTrace(category.datasource.data, category.datasource, category.categoryname));
+            id += category.categoryname;
+            label += (category.categoryname + ', ');
+            moreSpaceNeeded = moreSpaceNeeded || this.moreSpaceNeeded(category.datasource);
+        });
+
+        // last argument for multiple yaxis in case there is more than one category
         return new Graph(
-            this.getTraces(this.datastructure.data, this.datastructure.datasource, categories),
-            this.datastructure.id + ' ' + categories.toString(),
+            traces,
+            id,
             'dates',
-            this.datastructure.labeltext + ' ' + categories.toString(),
-            this.moreSpaceNeeded(this.datastructure.datasource)
+            label,
+            moreSpaceNeeded,
+            categories.length > 1
         );
     }
 
-    createDefaultGraph() {
+    createDefaultGraph(datastructure) {
         var traces;
         var multiple_yaxis;
-        if (this.datastructure.datasource === datasources.STRONG) {
-            traces = this.getTraces(this.datastructure.data, this.datastructure.datasource, this.datastructure.data.exercises);
+        if (datastructure.datasource === datasources.STRONG) {
+            traces = this.getTraces(datastructure.data, datastructure.datasource, datastructure.data.exercises);
             multiple_yaxis = false;
         }else{
-            traces = [this.getTrace(this.datastructure.data, this.datastructure.datasource, this.datastructure.datasource.default_graph_category)];
+            traces = [this.getTrace(datastructure.data, datastructure.datasource, datastructure.datasource.default_graph_category)];
             multiple_yaxis = true;
         }
 
         return new Graph(
             traces, //traces as an array, so it can be iterated in graph.draw
-            this.datastructure.id + '_default_graph',
+            datastructure.id + '_default_graph',
             'dates',
-            this.datastructure.labeltext + ' Default Graph',
-            this.moreSpaceNeeded(this.datastructure.datasource),
+            datastructure.labeltext + ' Default Graph',
+            this.moreSpaceNeeded(datastructure.datasource),
             multiple_yaxis);
     }
 
@@ -85,6 +96,5 @@ class GraphCreator {
             return orderedvalues;
         }
     }
-
 
 }

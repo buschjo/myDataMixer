@@ -27,8 +27,8 @@ Vue.component('import_component', {
             reader.readAsText(selectedFile);
 
             function createDefaultGraph(dataobject) {
-                var creator = new GraphCreator(dataobject);
-                var graph = creator.createDefaultGraph();
+                var creator = new GraphCreator();
+                var graph = creator.createDefaultGraph(dataobject);
                 app.graphs.push(graph);
             }
         }
@@ -85,26 +85,37 @@ Vue.component('create_graph_component', {
     template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' v-on:click='createGraph()' id='createGraphButton'>Create Graph from Selection &rarr;</button>",
     methods: {
         createGraph: function () {
-            createGraph(app.imported_data[0], getSelectedCategories());
+            createGraph(getSelectedCategories());
             app.current_view = "graphView";
 
-            function createGraph(dataobject, categories) {
-                var creator = new GraphCreator(dataobject);
-                var graph = creator.createCustomGraph(categories);
+            function createGraph(selectedCategories) {
+                var creator = new GraphCreator();
+                var graph = creator.createCustomGraph(selectedCategories);
                 app.graphs.push(graph);
             }
-            
+
             function getSelectedCategories() {
                 //all checkboxes have this class
                 var categoryToggles = document.getElementsByClassName('datalist-category-option');
                 var categories = [];
+                // gets all checked checkboxes and their datasources
                 for (let index = 0; index < categoryToggles.length; index++) {
                     const toggle = categoryToggles[index];
                     if (toggle.checked) {
-                        categories.push(toggle.value);
+                        categories.push({
+                            datasource: getDatasource(toggle),
+                            categoryname: toggle.value
+                        });
                     }
                 }
                 return categories;
+
+                function getDatasource(toggle) {
+                    // filter the correct datasource (as DataStructure) from the list of imported_data in root (app)
+                    //the id of the data source is stored as value in the hidden element previous to the toggle (checkbox) element
+                    //filter returns an array, but we only need the first match (there should only be one match)
+                    return app.imported_data.filter(datastructre => datastructre.id === toggle.previousElementSibling.value)[0];
+                }
             }
         }
     }
@@ -147,7 +158,7 @@ Vue.component('settings_component', {
 
 //Create vue app with name "app" and data
 var app = new Vue({
-    el: '#app',
+    el: '#app', //identifier for vue internals
     data: {
         title: 'My Data Mix',
         import_sources: [{

@@ -18,37 +18,9 @@ class DataConverter {
         } else if (id.includes(datasources.STRONG.title)) {
             categories = datasources.STRONG.categories;
             data = this.extractStrongDatasetsFromCsv(imported_data);
-            this.addCalculatedDatasets(data, datasources.STRONG.categories);
-            this.extractExercises(data);
             current_datasource = datasources.STRONG;
         }
         return new DataStructure(categories, data, id, labeltext, current_datasource);
-    }
-
-    extractExercises(data){
-        var exercises = [];
-        data.forEach(dataset => {
-            if (!exercises.includes(dataset.ExerciseName)) {
-                exercises.push(dataset.ExerciseName);
-            }
-        });
-        data.exercises = exercises;
-        data.forEach(dataset => {
-            for (let index = 0; index < exercises.length; index++) {
-                const exercise = exercises[index];
-                if (dataset.ExerciseName === exercise) {
-                    dataset[exercise] = exercise;
-                }else{
-                    dataset[exercise] = undefined;
-                }
-            }
-        });
-    }
-
-    addCalculatedDatasets(data, categories){
-        data.forEach(dataset => {
-            dataset[categories.exercised.id] = categories.exercised.id;
-        });
     }
 
     extractClueDatasetsFromJson(imported_data) {
@@ -63,19 +35,49 @@ class DataConverter {
         return imported_data.data;
     }
 
-    getAllColumnTitles(imported_data) {
+    extractStrongDatasetsFromCsv(imported_data) {
+        var columntitles = this.getCsvColumnTitles(imported_data);
+        return addCalculatedDatasets(this.extractDatasetsFromCsv(imported_data, columntitles, datasources.STRONG), datasources.STRONG.categories);
+
+        function addCalculatedDatasets(data, categories) {
+            var newData = data;
+            newData.forEach(dataset => {
+                dataset[categories.exercised.id] = categories.exercised.id;
+            });
+            return addExerciseAsProperties(newData);
+        }
+
+        function addExerciseAsProperties(data) {
+            var newData = data;
+            var exercises = [];
+            data.forEach(dataset => {
+                if (!exercises.includes(dataset.ExerciseName)) {
+                    exercises.push(dataset.ExerciseName);
+                }
+            });
+            newData.exercises = exercises;
+            newData.forEach(dataset => {
+                for (let index = 0; index < exercises.length; index++) {
+                    const exercise = exercises[index];
+                    if (dataset.ExerciseName === exercise) {
+                        dataset[exercise] = exercise;
+                    } else {
+                        dataset[exercise] = undefined;
+                    }
+                }
+            });
+            return newData;
+        }
+    }
+
+    getCsvColumnTitles(imported_data) {
         var splitdata = imported_data.split('\n');
         //first line has category info
         return splitdata[0].split(',');
     }
 
-    extractStrongDatasetsFromCsv(imported_data) {
-        var columntitles = this.getAllColumnTitles(imported_data);
-        return this.extractDatasetsFromCsv(imported_data, columntitles, datasources.STRONG);
-    }
-    
     extractDaylioDatasetsFromCsv(imported_data) {
-        var columntitles = this.getAllColumnTitles(imported_data);
+        var columntitles = this.getCsvColumnTitles(imported_data);
         return this.extractDatasetsFromCsv(imported_data, columntitles, datasources.DAYLIO);
     }
 
