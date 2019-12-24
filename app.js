@@ -8,7 +8,29 @@ if ('serviceWorker' in navigator) {
         .catch(err => console.error('there is a problem', err));
 }
 
-Vue.component('import_component', {
+// Import View
+
+Vue.component('import', {
+    data: function () {
+        return {
+            import_sources: [{
+                cssclass: 'btn-clue',
+                labelid: 'clueData',
+                labeltext: 'Clue Data'
+            }, {
+                cssclass: 'btn-daylio',
+                labelid: 'daylioData',
+                labeltext: 'Daylio Data'
+            }, {
+                cssclass: 'btn-strong',
+                labelid: 'strongData',
+                labeltext: 'Strong Data'
+            }]
+        };
+    }
+});
+
+Vue.component('file_importer', {
     props: ['import_source'],
     methods: {
         importFile(id) {
@@ -54,38 +76,9 @@ Vue.component('open_data_selection_component', {
     }
 });
 
-Vue.component('navigation', {
-    data: function() {
-        return {
-            views: [{
-                label: 'Import',
-                viewid: 'importView'
-            }, {
-                label: 'Graphs',
-                viewid: 'graphView'
-            }, {
-                label: 'Settings',
-                viewid: 'settingsView'
-            }, {
-                label: 'About',
-                viewid: 'aboutView'
-            }]
-        };
-    }
-});
-
-Vue.component('navigation_element', {
-    props: ['view'],
-    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewid)'>{{view.label}}</button></div>",
-    methods: {
-        changeView: function (new_view) {
-            app.current_view = new_view;
-        }
-    }
-});
-
+// Datalist View
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
-Vue.component('datalist_component', {
+Vue.component('category_list', {
     data: function () {
         return {
             imported_data: app.imported_data
@@ -94,7 +87,7 @@ Vue.component('datalist_component', {
 
 });
 
-Vue.component('datalist_element_component', {
+Vue.component('category_list_element', {
     props: ['imported_data_structure'],
     methods: {
         showCategories: function () {
@@ -119,13 +112,13 @@ Vue.component('datalist_element_component', {
                 addSubcategories(this.imported_data_structure);
             }
         }
-        
+
         function removeParentCategory(category_name) {
             var parent_category = document.getElementById(category_name).parentNode;
             var container = parent_category.parentNode;
             container.removeChild(parent_category);
         }
-        
+
         function addSubcategories(imported_data_structure) {
             var categories_container = document.getElementById(imported_data_structure.id + 'Categories');
             imported_data_structure.data.extracted_categories.forEach(subCategory => {
@@ -167,7 +160,7 @@ Vue.component('datalist_element_component', {
     }
 });
 
-Vue.component('create_graph_component', {
+Vue.component('graph_creator', {
     template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' v-on:click='createGraph()' id='createGraphButton'>Create Graph from Selection &rarr;</button>",
     methods: {
         createGraph: function () {
@@ -207,14 +200,17 @@ Vue.component('create_graph_component', {
     }
 });
 
-Vue.component('graphcard_component', {
+// Graphs View
+
+Vue.component('graph_card', {
     props: ['graph'],
     mounted: function () {
         this.graph.draw(document.getElementById(this.graph.graphid));
     }
 });
 
-Vue.component('settings_component', {
+// Settings View
+Vue.component('settings', {
     methods: {
         deleteAllData: function () {
             app.graphs = [];
@@ -232,7 +228,38 @@ Vue.component('settings_component', {
     }
 });
 
-//Create vue app with name "app" and data
+// Navigation components
+Vue.component('navigation', {
+    data: function () {
+        return {
+            views: [{
+                label: 'Import',
+                viewid: 'importView'
+            }, {
+                label: 'Graphs',
+                viewid: 'graphView'
+            }, {
+                label: 'Settings',
+                viewid: 'settingsView'
+            }, {
+                label: 'About',
+                viewid: 'aboutView'
+            }]
+        };
+    }
+});
+
+Vue.component('navigation_element', {
+    props: ['view'],
+    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewid)'>{{view.label}}</button></div>",
+    methods: {
+        changeView: function (new_view) {
+            app.current_view = new_view;
+        }
+    }
+});
+
+//Vue root app
 var app = new Vue({
     el: '#app', //identifier for vue internals
     data: {
