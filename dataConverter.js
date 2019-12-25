@@ -79,7 +79,9 @@ class DataConverter {
 
     extractDaylioDatasetsFromCsv(imported_data) {
         var columntitles = this.getCsvColumnTitles(imported_data);
-        return this.extractDatasetsFromCsv(imported_data, columntitles, datasources.DAYLIO);
+        var extracted_data = this.extractDatasetsFromCsv(imported_data, columntitles, datasources.DAYLIO);
+
+        return extracted_data;
     }
 
     //changes csv format to key value pairs
@@ -101,7 +103,12 @@ class DataConverter {
             var dataset = {};
             var values = line.split(',');
             for (var i = 0; i < categories.length; i++) {
+                const categroy = categories[i];
+                if (categories.isMultipleValueCategory) {
+                    console.log(category.title + 'is multiple value category');
+                }
                 //remove all spaces to make the keys better usable
+                // TODO: is this still neccesary, when category names are defined in datasources?
                 dataset[categories[i].replace(" ", "")] = values[i];
             }
             return dataset;

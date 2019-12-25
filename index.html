@@ -128,8 +128,8 @@
                                         <div v-for="category in imported_data_structure.categories">
                                             <input type="hidden" v-bind:value="imported_data_structure.id">
                                             <input class="form-check-input datalist-category-option" type="checkbox"
-                                                v-bind:value="category.id" v-bind:id="category.id">
-                                            <label class="form-check-label" v-bind:for="category.id">
+                                                v-bind:value="category.id" v-bind:id="imported_data_structure.datasource.title + category.id">
+                                            <label class="form-check-label" v-bind:for="imported_data_structure.datasource.title + category.id">
                                                 {{category.title}}
                                             </label>
                                         </div>
