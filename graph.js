@@ -127,7 +127,6 @@ class Graph {
                 position: 0.15
             };
             layout.margin.l = 1;
-
         }
 
         return layout;

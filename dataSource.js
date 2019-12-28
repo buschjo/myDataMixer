@@ -198,7 +198,7 @@ const datasources = {
     STRONG: {
         title: 'strong',
         date_field: 'Date',
-        default_graph_category: 'ExerciseName',
+        default_graph_category: 'exerciseName',
         standardize_date: function (date_string) {
             if (date_string != "") {
                 //source: Strong date format: DD-MM-YY HH:MM
@@ -219,7 +219,8 @@ const datasources = {
             exerciseName: {
                 id: 'exerciseName',
                 title: 'All Exercises',
-                is_extracted_category: true
+                is_extracted_category: true,
+                moreSpaceNeeded: true
             },
             exercised: {
                 id: 'exercised',
@@ -264,11 +265,9 @@ const datasources = {
             },
             activities: {
                 title: 'Activities',
-                id: 'activities'
-            },
-            weekday: {
-                title: 'Weekday',
-                id: 'weekday'
+                id: 'activities',
+                isMultipleValueCategory: true,
+                moreSpaceNeeded: true
             }
         }
     },

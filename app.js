@@ -108,13 +108,13 @@ Vue.component('category_list_element', {
         for (const category_name in categories) {
             const category = categories[category_name];
             if (category.is_extracted_category) {
-                removeParentCategory(category_name);
+                removeParentCategory(category_name, this.imported_data_structure.datasource);
                 addSubcategories(this.imported_data_structure);
             }
         }
 
-        function removeParentCategory(category_name) {
-            var parent_category = document.getElementById(category_name).parentNode;
+        function removeParentCategory(category_name, datasource) {
+            var parent_category = document.getElementById(datasource.title+category_name).parentNode;
             var container = parent_category.parentNode;
             container.removeChild(parent_category);
         }

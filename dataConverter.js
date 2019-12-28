@@ -39,7 +39,7 @@ class DataConverter {
         var columntitles = this.getCsvColumnTitles(imported_data);
         var extracted_categories_field_name = 'extracted_categories';
         return addCalculatedDatasets(this.extractDatasetsFromCsv(imported_data, columntitles, datasources.STRONG), datasources.STRONG.categories);
-        
+
         function addCalculatedDatasets(data, categories) {
             var newData = data;
             newData.forEach(dataset => {
@@ -47,7 +47,7 @@ class DataConverter {
             });
             return addExerciseAsProperties(newData);
         }
-        
+
         function addExerciseAsProperties(data) {
             var newData = data;
             var exercises = [];
@@ -79,13 +79,37 @@ class DataConverter {
 
     extractDaylioDatasetsFromCsv(imported_data) {
         var columntitles = this.getCsvColumnTitles(imported_data);
-        var extracted_data = this.extractDatasetsFromCsv(imported_data, columntitles, datasources.DAYLIO);
+        var extractedDatasets = this.extractDatasetsFromCsv(imported_data, columntitles, datasources.DAYLIO);
 
-        return extracted_data;
+        return extractMultiValueCategories(extractedDatasets);
+
+        function extractMultiValueCategories(extractedDatasets) {
+            var enrichedData = extractedDatasets;
+            // for each multivalue category, split the multiple values on '|'
+            for (const category_name in datasources.DAYLIO.categories) {
+                if (datasources.DAYLIO.categories.hasOwnProperty(category_name)) {
+                    const category = datasources.DAYLIO.categories[category_name];
+                    if (category.isMultipleValueCategory) {
+                        enrichedData.forEach(dataset => {
+                            dataset[category.id] = extractValues(dataset[category.id]);
+                        });
+                    }
+                }
+            }
+            return enrichedData;
+
+            function extractValues(dataset) {
+                if (dataset != "") {
+                    return dataset.split(' | ');
+                }else{
+                    return [];
+                }
+            }
+        }
     }
 
     //changes csv format to key value pairs
-    extractDatasetsFromCsv(imported_data, categories, datasource) {
+    extractDatasetsFromCsv(imported_data, column_titles, datasource) {
         var data = [];
         var lines = imported_data.split('\n');
         for (var j = 1; j < lines.length; j++) {
@@ -102,14 +126,10 @@ class DataConverter {
         function createDataSet(line) {
             var dataset = {};
             var values = line.split(',');
-            for (var i = 0; i < categories.length; i++) {
-                const categroy = categories[i];
-                if (categories.isMultipleValueCategory) {
-                    console.log(category.title + 'is multiple value category');
-                }
+            for (var i = 0; i < column_titles.length; i++) {
                 //remove all spaces to make the keys better usable
                 // TODO: is this still neccesary, when category names are defined in datasources?
-                dataset[categories[i].replace(" ", "")] = values[i];
+                dataset[column_titles[i].replace(" ", "")] = values[i];
             }
             return dataset;
         }
