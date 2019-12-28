@@ -9,6 +9,7 @@ class DataConverter {
         var current_datasource;
         if (id.includes(datasources.CLUE.title)) {
             categories = datasources.CLUE.categories;
+            console.log(datasources.CLUE);
             data = this.extractClueDatasetsFromJson(JSON.parse(imported_data));
             current_datasource = datasources.CLUE;
         } else if (id.includes(datasources.DAYLIO.title)) {

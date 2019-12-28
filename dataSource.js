@@ -19,24 +19,48 @@ const datasources = {
             }
         },
         categories: {
-            period: {
-                title: 'Period',
-                id: 'period',
+            ailment: {
+                title: 'Ailment',
+                id: 'ailment',
                 values: {
-                    HEAVY: 'heavy',
-                    MEDIUM: 'medium',
-                    LIGHT: 'light',
-                    SPOTTING: 'spotting'
+                    FEVER: 'fever',
+                    //TODO: check export
+                    COLDFLU: 'cold',
+                    ALLERGY: 'allergy',
+                    INJURY: 'injury'
                 }
             },
-            fluid: {
-                title: 'Fluid',
-                id: 'fluid',
+            appointment: {
+                title: 'Appointment',
+                id: 'appointment',
                 values: {
-                    EGGWHITE : 'egg-white',
-                    STICKY: 'sticky',
-                    CREAMY: 'creamy',
-                    ATYPICAL: 'atypical'
+                    //TODO: check export
+                    GYN: 'gyn',
+                    VACATION: 'vacation',
+                    DOCTOR: 'doctor',
+                    DATE: 'date'
+                }
+            },
+            collection_method: {
+                title: 'Collection Method',
+                id: 'collection_method',
+                values: {
+                    TAMPON: 'tampon',
+                    PAD: 'pad',
+                    //TODO: check export
+                    PANTYLINER: 'panty liner',
+                    //TODO: check export
+                    MENSTRUALCUP: 'menstrual cup',
+                }
+            },
+            craving: {
+                title: 'Craving',
+                id: 'craving',
+                values: {
+                    SWEET: 'sweet',
+                    SALTY: 'salty',
+                    CARBS: 'carbs',
+                    CHOCOLATE: 'chocolate'
                 }
             },
             digestion: {
@@ -59,18 +83,79 @@ const datasources = {
                     ENERGIZED: 'energized'
                 }
             },
-            ailment: {
-                title: 'Ailment',
-                id: 'ailment',
-            },
-            poop: {
-                title: 'Poop',
-                id: 'poop',
+            exercise: {
+                title: 'Exercise',
+                id: 'exercis',
                 values: {
-                    GREAT: 'great',
-                    NORMAL: 'normal',
-                    CONSTIPATED: 'constipated',
-                    DIARRHEA: 'diarrhea'
+                    RUNNING: 'running',
+                    YOGA: 'yoga',
+                    BIKING: 'biking',
+                    SWIMMING: 'swimming'
+                }
+            },
+            fluid: {
+                title: 'Fluid',
+                id: 'fluid',
+                values: {
+                    EGGWHITE: 'egg-white',
+                    STICKY: 'sticky',
+                    CREAMY: 'creamy',
+                    ATYPICAL: 'atypical'
+                }
+            },
+            hair: {
+                title: 'Hair',
+                id: 'hair',
+                values: {
+                    BAD: 'bad',
+                    OILY: 'oily',
+                    DRY: 'dry',
+                    GOOD: 'good'
+                }
+            },
+            injection: {
+                title: 'Injection',
+                id: 'injection',
+                values: {
+                    ADMINISTERED: 'administered'
+                }
+            },
+            iud: {
+                title: 'IUD',
+                id: 'iud',
+                values: {
+                    //TODO: check export
+                    CHECKED: 'thread checked',
+                    INSERTED: 'inserted',
+                    REMOVED: 'removed'
+                }
+            },
+            medication: {
+                title: 'Medication',
+                id: 'medication',
+                values: {
+                    PAIN: 'pain',
+                    //TODO: check export
+                    COLD: 'cold',
+                    ANTIBIOTIC: 'antibiotic',
+                    ANTIHISTAMINE: 'anstihistamine'
+                }
+            },
+            meditation: {
+                title: 'Meditation',
+                id: 'meditation',
+                values: {
+                    DURATION: 'duration_in_minutes'
+                }
+            },
+            mental: {
+                title: 'Mental',
+                id: 'mental',
+                values: {
+                    FOCUSED: 'focused',
+                    DISTRACTED: 'distracted',
+                    CALM: 'calm',
+                    STRESSED: 'stressed'
                 }
             },
             motivation: {
@@ -83,13 +168,91 @@ const datasources = {
                     UNPRODUCTIVE: 'unproductive'
                 }
             },
-            craving: {
-                title: 'Craving',
-                id: 'craving',
+            mood: {
+                title: 'Mood',
+                id: 'mood',
+                values: {
+                    HAPPY: 'happy',
+                    SENSITIVE: 'sensitive',
+                    SAD: 'sad',
+                    PMS: 'pms'
+                }
             },
-            collection_method: {
-                title: 'Collection Method',
-                id: 'collection_method',
+            pain: {
+                title: 'Pain',
+                id: 'pain',
+                values: {
+                    CRAMPS: 'cramps',
+                    HEADACHE: 'headache',
+                    OVULATION: 'ovulation',
+                    // TODO: check in export
+                    BREASTS: 'tender breasts'
+                }
+            },
+            party: {
+                title: 'Party',
+                id: 'party',
+                values: {
+                    DRINKS: 'drinks',
+                    CIGARETTES: 'cigarettes',
+                    HANGOVER: 'hangover',
+                    // TODO: Check export
+                    BIGNIGHT: 'big night'
+                }
+            },
+            patch: {
+                title: 'Patch',
+                id: 'patch',
+                values: {
+                    REMOVED: 'removed',
+                    REPLACED: 'replaced',
+                    // TODO: check export
+                    REMOVEDLATE: 'removed late',
+                    // TODO: check export
+                    REPLACEDLATE: 'replaced late'
+                }
+            },
+            period: {
+                title: 'Period',
+                id: 'period',
+                values: {
+                    HEAVY: 'heavy',
+                    MEDIUM: 'medium',
+                    LIGHT: 'light',
+                    SPOTTING: 'spotting'
+                }
+            },
+            pill: {
+                title: 'Pill',
+                id: 'pill',
+                values: {
+                    TAKEN: 'taken',
+                    LATE: 'late',
+                    DOUBLE: 'double',
+                    MISSED: 'missed'
+                }
+            },
+            poop: {
+                title: 'Poop',
+                id: 'poop',
+                values: {
+                    GREAT: 'great',
+                    NORMAL: 'normal',
+                    CONSTIPATED: 'constipated',
+                    DIARRHEA: 'diarrhea'
+                }
+            },
+            ring: {
+                title: 'Ring',
+                id: 'ring',
+                values: {
+                    REMOVED: 'removed',
+                    REPLACED: 'replaced',
+                    // TODO: check export
+                    REMOVEDLATE: 'removed late',
+                    // TODO: check export
+                    REPLACEDLATE: 'replaced late'
+                }
             },
             sex: {
                 title: 'Sex',
@@ -101,48 +264,6 @@ const datasources = {
                     WITHDRAWAL: 'withdrawal'
                 }
             },
-            appointment: {
-                title: 'Appointment',
-                id: 'appointment',
-            },
-            social: {
-                title: 'Socioal',
-                id: 'social',
-            },
-            party: {
-                title: 'Party',
-                id: 'party',
-            },
-            hair: {
-                title: 'Hair',
-                id: 'hair',
-                values: {
-                    BAD: 'bad',
-                    OILY: 'oily',
-                    DRY: 'dry',
-                    GOOD: 'good'
-                }
-            },
-            test: {
-                title: 'Test',
-                id: 'test',
-                
-            },
-            mood: {
-                title: 'Mood',
-                id: 'mood',
-                values: {
-                    HAPPY: 'happy',
-                    SENSITIVE: 'sensitive',
-                    SAD: 'sad',
-                    PMS: 'pms'
-                }
-            },
-            medication: {
-                title: 'Medication',
-                id: 'medication',
-                
-            },
             skin: {
                 title: 'Skin',
                 id: 'skin',
@@ -151,26 +272,6 @@ const datasources = {
                     OILY: 'oily',
                     DRY: 'dry',
                     ACNE: 'acne'
-                }
-            },
-            pain: {
-                title: 'Pain',
-                id: 'pain',
-                
-            },
-            exercise: {
-                title: 'Exercise',
-                id: 'exercis',
-                
-            },
-            mental: {
-                title: 'Mental',
-                id: 'mental',
-                values: {
-                    FOCUSED: 'focused',
-                    DISTRACTED: 'distracted',
-                    CALM: 'calm',
-                    STRESSED: 'stressed'
                 }
             },
             sleep: {
@@ -183,14 +284,40 @@ const datasources = {
                     9: '9 hours or more'
                 }
             },
-            pill: {
-                title: 'Pill',
-                id: 'pill',
+            social: {
+                title: 'Socioal',
+                id: 'social',
                 values: {
-                    TAKEN: 'taken',
-                    LATE: 'late',
-                    DOUBLE: 'double',
-                    MISSED: 'missed'
+                    CONFLICT: 'conflict',
+                    SUPPORTIVE: 'supportive',
+                    SOCIABLE: 'sociable',
+                    WITHDRAWN: 'withdrawn'
+                }
+            },
+            temperature: {
+                title: 'Temperature',
+                // TODO: does that work?
+                id: 'bbt',
+                values: {
+                    TEMPERATURE: 'temperature'
+                }
+            },
+            test: {
+                title: 'Test',
+                id: 'test',
+                values: {
+                    // TODO: check all of those in export
+                    OVULATIONPOS: 'ovulation test pos',
+                    OVULATIONNEG: 'ovulation test neg',
+                    PREGNANCYPOS: 'pregnancy test pos',
+                    PREGNANCYNEG: 'pregnancy test neg'
+                }
+            },
+            weight: {
+                title: 'Weight',
+                id: 'weight',
+                values: {
+                    WEIGHT: 'weight'
                 }
             }
         }
@@ -199,11 +326,11 @@ const datasources = {
         title: 'strong',
         date_field: 'Date',
         default_graph_category: 'exerciseName',
-        standardize_date: function (date_string) {
-            if (date_string != "") {
+        standardize_date: function (date) {
+            if (date != "") {
                 //source: Strong date format: DD-MM-YY HH:MM
                 //target: ISO Date Time (YYYY-MM-DDTHH:MM:SSZ)
-                var date_pieces = date_string.split('-');
+                var date_pieces = date.split('-');
                 var year_and_time = date_pieces[2].split(' ');
                 var dd = date_pieces[0];
                 var mm = date_pieces[1];
