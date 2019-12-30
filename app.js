@@ -67,15 +67,6 @@ Vue.component('file_importer', {
     }
 });
 
-Vue.component('open_data_selection_component', {
-    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='openDataSelection()'>Create a Graph &rarr;</button>",
-    methods: {
-        openDataSelection: function () {
-            app.current_view = "listView";
-        }
-    }
-});
-
 // Datalist View
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
 Vue.component('category_list', {
@@ -114,7 +105,7 @@ Vue.component('category_list_element', {
         }
 
         function removeParentCategory(category_name, datasource) {
-            var parent_category = document.getElementById(datasource.title+category_name).parentNode;
+            var parent_category = document.getElementById(datasource.title + category_name).parentNode;
             var container = parent_category.parentNode;
             container.removeChild(parent_category);
         }
@@ -246,6 +237,16 @@ Vue.component('navigation', {
                 viewid: 'aboutView'
             }]
         };
+    }
+});
+
+Vue.component('loose_navigation_element', {
+    props: ['view', 'linktext'],
+    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='navigate(view)'>{{linktext}}</button>",
+    methods: {
+        navigate: function (view) {
+            app.current_view = view;
+        }
     }
 });
 

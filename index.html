@@ -71,7 +71,7 @@
                         <!-- end adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
                     </div>
                 </import>
-                <open_data_selection_component></open_data_selection_component>
+                <loose_navigation_element linktext="Create Graph &rarr;" view="listView"></loose_navigation_element>
             </template>
             <template v-else-if="current_view ==='graphView'">
                 <template v-if="graphs.length === 0">
@@ -107,6 +107,7 @@
                 <p>This app was developed by Josefine S. Busch.</p>
                 <p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p>
                 <p>You can delete all your imported data and all graphs in settings.</p>
+                <loose_navigation_element linktext="Go to settings &rarr;" view="settingsView"></loose_navigation_element>
             </template>
             <template v-else-if="current_view ==='listView'">
                 <template v-if="imported_data.length === 0">
