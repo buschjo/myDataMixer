@@ -13,26 +13,26 @@ class GraphCreator {
             moreSpaceNeeded = moreSpaceNeeded || this.moreSpaceNeeded(category.datasource);
         });
 
-        // last argument for multiple yaxis in case there is more than one category
+        // last argument, use default layout because it is not 'one y axis and multiple traces'
         return new Graph(
             traces,
             id,
             'dates',
             label,
             moreSpaceNeeded,
-            categories.length > 1
+            true
         );
     }
 
     createDefaultGraph(datastructure) {
         var traces;
-        var multiple_yaxis_multiple_trace;
+        var multiple_yaxis_multiple_traces;
         if (datastructure.datasource === datasources.STRONG) {
             // traces = this.getTraces(datastructure.data, datastructure.datasource, datastructure.data.extracted_categories);
-            multiple_yaxis_multiple_trace = false;
+            multiple_yaxis_multiple_traces = false;
         } else {
             // TODO: is this right?
-            multiple_yaxis_multiple_trace = true;
+            multiple_yaxis_multiple_traces = true;
         }
         traces = this.getTraces(datastructure.data, datastructure.datasource, [datastructure.datasource.default_graph_category]);
         return new Graph(
@@ -41,7 +41,7 @@ class GraphCreator {
             'dates',
             datastructure.labeltext + ' Default Graph',
             this.moreSpaceNeeded(datastructure.datasource),
-            multiple_yaxis_multiple_trace);
+            multiple_yaxis_multiple_traces);
     }
 
     getTraces(data, datasource, categories) {

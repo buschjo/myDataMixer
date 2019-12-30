@@ -17,7 +17,7 @@ class Graph {
     }
 
     getTraces(multiple_yaxis_multiple_traces) {
-        var yaxes = ['y1', 'y2', 'y3'];
+        var yaxes = ['y', 'y2', 'y3'];
         var traces = [];
         for (let index = 0; index < this.traces.length; index++) {
             const trace = this.traces[index];
@@ -70,34 +70,11 @@ class Graph {
                 t: 1,
             } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)}
         };
-
         return layout;
     }
 
     getDefaultLayout() {
-        var layout = {
-            xaxis: {
-                showline: true,
-                title: this.xaxis_title
-            },
-            yaxis: {
-                showline: true,
-                title: this.traces[0].yaxis_title,
-                categoryorder: this.getCategoryOrder(this.traces[0]),
-                categoryarray: this.traces[0].categoryarray
-            },
-            showlegend: true,
-            legend: {
-                x: 0.7,
-                y: 1.2
-            },
-            margin: {
-                l: 60,
-                b: 50,
-                r: 10,
-                t: 1,
-            } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)}
-        };
+        var layout = getOneAxisLayout(this.xaxis_title, this.traces[0], this.getCategoryOrder);
 
         if (this.traces.length >= 2) {
             addTwoTraceOptions(layout, this.traces[1], this.getCategoryOrder);
@@ -106,7 +83,34 @@ class Graph {
         if (this.traces.length >= 3) {
             addThreeTraceOptions(layout, this.traces[2], this.getCategoryOrder);
         }
+
         return layout;
+
+        function getOneAxisLayout(xaxis_title, trace, getCategoryOrder) {
+            return {
+                xaxis: {
+                    showline: true,
+                    title: xaxis_title
+                },
+                yaxis: {
+                    showline: true,
+                    title: trace.yaxis_title,
+                    categoryorder: getCategoryOrder(trace),
+                    categoryarray: trace.categoryarray
+                },
+                showlegend: true,
+                legend: {
+                    x: 0.7,
+                    y: 1.2
+                },
+                margin: {
+                    l: 60,
+                    b: 50,
+                    r: 10,
+                    t: 1,
+                } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)}
+            };
+        }
 
         function addTwoTraceOptions(layout, trace, getCategoryOrder) {
             layout.yaxis2 = {
