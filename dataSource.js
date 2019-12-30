@@ -22,52 +22,53 @@ const datasources = {
             ailment: {
                 title: 'Ailment',
                 id: 'ailment',
+                isMultipleValueCategory: true,
                 values: {
-                    FEVER: 'fever',
-                    //TODO: check export
-                    COLDFLU: 'cold',
-                    ALLERGY: 'allergy',
-                    INJURY: 'injury'
+                    FEVER: 'fever_ailment',
+                    COLDFLU: 'cold_flu_ailment',
+                    ALLERGY: 'allergy_ailment',
+                    INJURY: 'injury_ailment'
                 }
             },
             appointment: {
                 title: 'Appointment',
                 id: 'appointment',
+                isMultipleValueCategory: true,
                 values: {
-                    //TODO: check export
-                    GYN: 'gyn',
-                    VACATION: 'vacation',
-                    DOCTOR: 'doctor',
-                    DATE: 'date'
+                    GYN: 'ob_gyn_appointment',
+                    VACATION: 'vacation_appointment',
+                    DOCTOR: 'doctor_appointment',
+                    DATE: 'date_appointment'
                 }
             },
             collection_method: {
                 title: 'Collection Method',
                 id: 'collection_method',
+                isMultipleValueCategory: true,
                 values: {
-                    TAMPON: 'tampon',
-                    PAD: 'pad',
-                    //TODO: check export
-                    PANTYLINER: 'panty liner',
-                    //TODO: check export
-                    MENSTRUALCUP: 'menstrual cup',
+                    TAMPON: 'tampon_collection_method',
+                    PAD: 'pad_collection_method',
+                    PANTYLINER: 'panty_liner_collection_method',
+                    MENSTRUALCUP: 'menstrual_cup_collection_method'
                 }
             },
             craving: {
                 title: 'Craving',
                 id: 'craving',
+                isMultipleValueCategory: true,
                 values: {
-                    SWEET: 'sweet',
-                    SALTY: 'salty',
-                    CARBS: 'carbs',
-                    CHOCOLATE: 'chocolate'
+                    SWEET: 'sweet_craving',
+                    SALTY: 'salty_craving',
+                    CARBS: 'carbs_craving',
+                    CHOCOLATE: 'chocolate_craving'
                 }
             },
             digestion: {
                 title: 'Digestion',
                 id: 'digestion',
+                isMultipleValueCategory: true,
                 values: {
-                    GREAT: 'great',
+                    GREAT: 'great_digestion',
                     BLOATED: 'bloated',
                     NAUSEATED: 'nauseated',
                     GASSY: 'gassy'
@@ -76,16 +77,18 @@ const datasources = {
             energy: {
                 title: 'Energy',
                 id: 'energy',
+                isMultipleValueCategory: true,
                 values: {
                     EXHAUSTED: 'exhausted',
-                    LOW: 'low',
-                    HIGH: 'high',
+                    LOW: 'low_energy',
+                    HIGH: 'high_energy',
                     ENERGIZED: 'energized'
                 }
             },
             exercise: {
                 title: 'Exercise',
-                id: 'exercis',
+                id: 'exercise',
+                isMultipleValueCategory: true,
                 values: {
                     RUNNING: 'running',
                     YOGA: 'yoga',
@@ -97,7 +100,7 @@ const datasources = {
                 title: 'Fluid',
                 id: 'fluid',
                 values: {
-                    EGGWHITE: 'egg-white',
+                    EGGWHITE: 'egg_white',
                     STICKY: 'sticky',
                     CREAMY: 'creamy',
                     ATYPICAL: 'atypical'
@@ -106,11 +109,12 @@ const datasources = {
             hair: {
                 title: 'Hair',
                 id: 'hair',
+                isMultipleValueCategory: true,
                 values: {
-                    BAD: 'bad',
-                    OILY: 'oily',
-                    DRY: 'dry',
-                    GOOD: 'good'
+                    BAD: 'bad_hair',
+                    OILY: 'oily_hair',
+                    DRY: 'dry_hair',
+                    GOOD: 'good_hair'
                 }
             },
             injection: {
@@ -124,8 +128,7 @@ const datasources = {
                 title: 'IUD',
                 id: 'iud',
                 values: {
-                    //TODO: check export
-                    CHECKED: 'thread checked',
+                    CHECKED: 'thread_checked',
                     INSERTED: 'inserted',
                     REMOVED: 'removed'
                 }
@@ -133,24 +136,26 @@ const datasources = {
             medication: {
                 title: 'Medication',
                 id: 'medication',
+                isMultipleValueCategory: true,
                 values: {
-                    PAIN: 'pain',
-                    //TODO: check export
-                    COLD: 'cold',
-                    ANTIBIOTIC: 'antibiotic',
-                    ANTIHISTAMINE: 'anstihistamine'
+                    PAIN: 'pain_medication',
+                    COLD: 'cold_flu_medication',
+                    ANTIBIOTIC: 'antibiotic_medication',
+                    ANTIHISTAMINE: 'antihistamine_medication'
                 }
             },
-            meditation: {
-                title: 'Meditation',
-                id: 'meditation',
-                values: {
-                    DURATION: 'duration_in_minutes'
-                }
-            },
+            // meditation: {
+            //     // TODO: does not work
+            //     title: 'Meditation',
+            //     id: 'meditation',
+            //     values: {
+            //         DURATION: 'duration_in_minutes'
+            //     }
+            // },
             mental: {
                 title: 'Mental',
                 id: 'mental',
+                isMultipleValueCategory: true,
                 values: {
                     FOCUSED: 'focused',
                     DISTRACTED: 'distracted',
@@ -158,19 +163,10 @@ const datasources = {
                     STRESSED: 'stressed'
                 }
             },
-            motivation: {
-                title: 'Motivation',
-                id: 'motivation',
-                values: {
-                    MOTIVATED: 'motivated',
-                    UNMOTIVATED: 'unmotivated',
-                    PRODUCTIVE: 'productive',
-                    UNPRODUCTIVE: 'unproductive'
-                }
-            },
             mood: {
                 title: 'Mood',
                 id: 'mood',
+                isMultipleValueCategory: true,
                 values: {
                     HAPPY: 'happy',
                     SENSITIVE: 'sensitive',
@@ -178,26 +174,37 @@ const datasources = {
                     PMS: 'pms'
                 }
             },
+            motivation: {
+                title: 'Motivation',
+                id: 'motivation',
+                isMultipleValueCategory: true,
+                values: {
+                    MOTIVATED: 'motivated',
+                    UNMOTIVATED: 'unmotivated',
+                    PRODUCTIVE: 'productive',
+                    UNPRODUCTIVE: 'unproductive'
+                }
+            },
             pain: {
                 title: 'Pain',
                 id: 'pain',
+                isMultipleValueCategory: true,
                 values: {
                     CRAMPS: 'cramps',
                     HEADACHE: 'headache',
-                    OVULATION: 'ovulation',
-                    // TODO: check in export
-                    BREASTS: 'tender breasts'
+                    OVULATION: 'ovulation_pain',
+                    BREASTS: 'tender_breasts'
                 }
             },
             party: {
                 title: 'Party',
                 id: 'party',
+                isMultipleValueCategory: true,
                 values: {
-                    DRINKS: 'drinks',
+                    DRINKS: 'drinks_party',
                     CIGARETTES: 'cigarettes',
                     HANGOVER: 'hangover',
-                    // TODO: Check export
-                    BIGNIGHT: 'big night'
+                    BIGNIGHT: 'big_night_party'
                 }
             },
             patch: {
@@ -206,10 +213,8 @@ const datasources = {
                 values: {
                     REMOVED: 'removed',
                     REPLACED: 'replaced',
-                    // TODO: check export
-                    REMOVEDLATE: 'removed late',
-                    // TODO: check export
-                    REPLACEDLATE: 'replaced late'
+                    REMOVEDLATE: 'removed_late',
+                    REPLACEDLATE: 'replaced_late'
                 }
             },
             period: {
@@ -235,9 +240,10 @@ const datasources = {
             poop: {
                 title: 'Poop',
                 id: 'poop',
+                isMultipleValueCategory: true,
                 values: {
-                    GREAT: 'great',
-                    NORMAL: 'normal',
+                    GREAT: 'great_poop',
+                    NORMAL: 'normal_poop',
                     CONSTIPATED: 'constipated',
                     DIARRHEA: 'diarrhea'
                 }
@@ -248,78 +254,86 @@ const datasources = {
                 values: {
                     REMOVED: 'removed',
                     REPLACED: 'replaced',
-                    // TODO: check export
-                    REMOVEDLATE: 'removed late',
-                    // TODO: check export
-                    REPLACEDLATE: 'replaced late'
+                    REMOVEDLATE: 'removed_late',
+                    REPLACEDLATE: 'replaced_late'
                 }
             },
             sex: {
                 title: 'Sex',
                 id: 'sex',
+                isMultipleValueCategory: true,
                 values: {
-                    UNPROTECTED: 'unprodtected',
+                    UNPROTECTED: 'unprotected',
                     PROTECTED: 'protected',
-                    HIGH: 'high sex drive',
+                    HIGH: 'high_sex_drive',
                     WITHDRAWAL: 'withdrawal'
                 }
             },
             skin: {
                 title: 'Skin',
                 id: 'skin',
+                isMultipleValueCategory: true,
                 values: {
-                    GOOD: 'good',
-                    OILY: 'oily',
-                    DRY: 'dry',
-                    ACNE: 'acne'
+                    GOOD: 'good_skin',
+                    OILY: 'oily_skin',
+                    DRY: 'dry_skin',
+                    ACNE: 'acne_skin'
                 }
             },
             sleep: {
+                // TODO: not ordered and one value missing (0-3)
                 title: 'Sleep',
                 id: 'sleep',
                 values: {
-                    0: '0 to 3 hours',
-                    3: '3 to 6 hours',
-                    6: '6 to 9 hours',
-                    9: '9 hours or more'
+                    ZERO: '0_to_3_hours',
+                    THREE: '3_to_6_hours',
+                    SIX: '6_to_9_hours',
+                    NINE: '9_or_more_hours'
                 }
             },
             social: {
                 title: 'Socioal',
                 id: 'social',
+                isMultipleValueCategory: true,
                 values: {
-                    CONFLICT: 'conflict',
-                    SUPPORTIVE: 'supportive',
+                    CONFLICT: 'conflict_social',
+                    SUPPORTIVE: 'supportive_social',
                     SOCIABLE: 'sociable',
-                    WITHDRAWN: 'withdrawn'
+                    WITHDRAWN: 'withdrawn_social'
                 }
             },
-            temperature: {
-                title: 'Temperature',
-                // TODO: does that work?
-                id: 'bbt',
-                values: {
-                    TEMPERATURE: 'temperature'
-                }
+            tags: {
+                title: 'Tags',
+                id: 'tags',
+                isMultipleValueCategory: true
             },
+            // temperature: {
+            //     title: 'Temperature',
+            //     // TODO: doesn't work yet
+            //     id: 'bbt',
+            //     values: {
+            //         TEMPERATURE: 'temperature'
+            //     }
+            // },
             test: {
                 title: 'Test',
                 id: 'test',
+                isMultipleValueCategory: true,
                 values: {
-                    // TODO: check all of those in export
-                    OVULATIONPOS: 'ovulation test pos',
-                    OVULATIONNEG: 'ovulation test neg',
-                    PREGNANCYPOS: 'pregnancy test pos',
-                    PREGNANCYNEG: 'pregnancy test neg'
-                }
-            },
-            weight: {
-                title: 'Weight',
-                id: 'weight',
-                values: {
-                    WEIGHT: 'weight'
+                    OVULATIONPOS: 'ovulation_test_pos',
+                    OVULATIONNEG: 'ovulation_test_neg',
+                    PREGNANCYPOS: 'pregnancy_test_neg',
+                    PREGNANCYNEG: 'pregnancy_test_pos'
                 }
             }
+            // weight: {
+            //     // TODO: doesn't work yet
+            //     title: 'Weight',
+            //     id: 'weight',
+            //     values: {
+            //         WEIGHT: 'weight'
+            //     }
+            // }
         }
     },
     STRONG: {

@@ -26,13 +26,13 @@ class GraphCreator {
 
     createDefaultGraph(datastructure) {
         var traces;
-        var multiple_yaxis;
+        var multiple_yaxis_multiple_trace;
         if (datastructure.datasource === datasources.STRONG) {
             // traces = this.getTraces(datastructure.data, datastructure.datasource, datastructure.data.extracted_categories);
-            multiple_yaxis = false;
+            multiple_yaxis_multiple_trace = false;
         } else {
             // TODO: is this right?
-            multiple_yaxis = false;
+            multiple_yaxis_multiple_trace = true;
         }
         traces = this.getTraces(datastructure.data, datastructure.datasource, [datastructure.datasource.default_graph_category]);
         return new Graph(
@@ -41,7 +41,7 @@ class GraphCreator {
             'dates',
             datastructure.labeltext + ' Default Graph',
             this.moreSpaceNeeded(datastructure.datasource),
-            multiple_yaxis);
+            multiple_yaxis_multiple_trace);
     }
 
     getTraces(data, datasource, categories) {
@@ -62,7 +62,7 @@ class GraphCreator {
     }
 
     getTrace(data, datasource, category_name) {
-        var valuesAndDates = this.getValuesForCategory(data, category_name, datasource.categories[category_name].isMultipleValueCategory);
+        var valuesAndDates = this.getValuesForCategory(data, category_name, datasource.categories[category_name]);
         return new GraphTrace(
             valuesAndDates[0],
             valuesAndDates[1],
@@ -71,16 +71,18 @@ class GraphCreator {
         );
     }
 
-    getValuesForCategory(data, category_name, isMultipleValueCategory) {
+    getValuesForCategory(data, category_name, category) {
         var values = [];
         var dates = [];
         data.forEach(value => {
-            if (isMultipleValueCategory) {
+            // category can be undefined (-> evaluates to false) in case of extracted categories, that are not defined in the datasources list
+            if (category && category.isMultipleValueCategory) {
                 value[category_name].forEach(single_value => {
                     values.push(single_value);
                     dates.push(value.unified_date);
                 });
-            } else {
+                // only include values that are not undefined
+            } else if (value[category_name]) {
                 values.push(value[category_name]);
                 dates.push(value.unified_date);
             }

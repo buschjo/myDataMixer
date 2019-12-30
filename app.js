@@ -105,7 +105,6 @@ Vue.component('category_list_element', {
     },
     mounted: function () {
         var categories = this.imported_data_structure.datasource.categories;
-        console.log(categories);
         for (const category_name in categories) {
             const category = categories[category_name];
             if (category.is_extracted_category) {

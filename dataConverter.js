@@ -9,7 +9,6 @@ class DataConverter {
         var current_datasource;
         if (id.includes(datasources.CLUE.title)) {
             categories = datasources.CLUE.categories;
-            console.log(datasources.CLUE);
             data = this.extractClueDatasetsFromJson(JSON.parse(imported_data));
             current_datasource = datasources.CLUE;
         } else if (id.includes(datasources.DAYLIO.title)) {
@@ -27,9 +26,10 @@ class DataConverter {
     extractClueDatasetsFromJson(imported_data) {
         //rename date attribute
         //"data" is the key in the JSON for the data I need
+        //add new date field (unified_date) to each dataset
         imported_data.data.forEach(element => {
-            //creates a new property and adds the value of the old date field to it
-            element[this.new_date_field_name] = element[datasources.CLUE.date_field];
+            //creates a new property and adds the value of the old date field in the standardized form to it
+            element[this.new_date_field_name] = datasources.CLUE.standardize_date(element[datasources.CLUE.date_field]);
             //deletes the old property
             delete element[datasources.CLUE.date_field];
         });
