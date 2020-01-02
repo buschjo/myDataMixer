@@ -57,10 +57,6 @@ class GraphCreator {
         return traces;
     }
 
-    moreSpaceNeeded(datasource) {
-        return datasource === datasources.STRONG;
-    }
-
     getTrace(data, datasource, category_name) {
         var valuesAndDates = this.getValuesForCategory(data, category_name, datasource.categories[category_name]);
         return new GraphTrace(
@@ -69,6 +65,10 @@ class GraphCreator {
             category_name,
             this.getOrderedValueOptionsForCategory(datasource, category_name)
         );
+    }
+
+    moreSpaceNeeded(datasource) {
+        return datasource === datasources.STRONG;
     }
 
     getValuesForCategory(data, category_name, category) {

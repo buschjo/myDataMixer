@@ -252,9 +252,9 @@ Vue.component('loose_navigation_element', {
 
 Vue.component('navigation_element', {
     props: ['view'],
-    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='changeView(view.viewid)'>{{view.label}}</button></div>",
+    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='navigate(view.viewid)'>{{view.label}}</button></div>",
     methods: {
-        changeView: function (new_view) {
+        navigate: function (new_view) {
             app.current_view = new_view;
         }
     }

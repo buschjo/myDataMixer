@@ -50,7 +50,7 @@ class Graph {
     }
 
     getOneAxisMultipleTraceLayout() {
-        var layout = {
+        return {
             xaxis: {
                 showline: true,
                 title: this.xaxis_title
@@ -70,7 +70,6 @@ class Graph {
                 t: 1,
             } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)}
         };
-        return layout;
     }
 
     getDefaultLayout() {

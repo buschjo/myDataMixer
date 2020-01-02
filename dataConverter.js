@@ -46,10 +46,10 @@ class DataConverter {
             newData.forEach(dataset => {
                 dataset[categories.exercised.id] = categories.exercised.id;
             });
-            return addExerciseAsProperties(newData);
+            return addExerciseAsCategories(newData);
         }
 
-        function addExerciseAsProperties(data) {
+        function addExerciseAsCategories(data) {
             var newData = data;
             var exercises = [];
             data.forEach(dataset => {
@@ -84,8 +84,8 @@ class DataConverter {
 
         return extractMultiValueCategories(extractedDatasets);
 
-        function extractMultiValueCategories(extractedDatasets) {
-            var enrichedData = extractedDatasets;
+        function extractMultiValueCategories(datasets) {
+            var enrichedData = datasets;
             // for each multivalue category, split the multiple values on '|'
             for (const category_name in datasources.DAYLIO.categories) {
                 if (datasources.DAYLIO.categories.hasOwnProperty(category_name)) {
@@ -115,7 +115,7 @@ class DataConverter {
         var lines = imported_data.split('\n');
         for (var j = 1; j < lines.length; j++) {
             if (!isEmptyLine(lines[j])) {
-                data.push(this.standardize(datasource, createDataSet(lines[j])));
+                data.push(this.standardize(datasource, createDataset(lines[j])));
             }
         }
         return data;
@@ -124,7 +124,7 @@ class DataConverter {
             return line.startsWith(',,') || line === '';
         }
 
-        function createDataSet(line) {
+        function createDataset(line) {
             var dataset = {};
             var values = line.split(',');
             for (var i = 0; i < column_titles.length; i++) {
