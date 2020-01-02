@@ -5,32 +5,24 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')
         //location is important for the sw scope
         .then(r => console.log('SW Registered'))
-        .catch(err => console.error('there is a problem', err));
+        .catch(err => console.error('Problem with service worker.', err));
 }
 
 // Import View
 
-Vue.component('import', {
+//  v-on:change listens to "change" event and calls importFile method defined in component import-button
+// only components used by the router are declared as const
+const Import = Vue.component('import', {
+    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><loose_navigation_element linktext='Create Graph ->' url='/#/categories'></loose_navigation_element></div>",
     data: function () {
         return {
-            import_sources: [{
-                cssclass: 'btn-clue',
-                labelid: 'clueData',
-                labeltext: 'Clue Data'
-            }, {
-                cssclass: 'btn-daylio',
-                labelid: 'daylioData',
-                labeltext: 'Daylio Data'
-            }, {
-                cssclass: 'btn-strong',
-                labelid: 'strongData',
-                labeltext: 'Strong Data'
-            }]
+            import_sources
         };
     }
 });
 
 Vue.component('file_importer', {
+    template: "<div><label v-bind:for='import_source.labelid' v-bind:class='import_source.cssclass' class='btn btn-lg btn-block'>{{ import_source.labeltext }}</label><input type='file' v-bind:name='import_source.labelid' v-bind:id='import_source.labelid' v-on:change='importFile(import_source.labelid)'></div>",
     props: ['import_source'],
     methods: {
         importFile(id) {
@@ -69,18 +61,23 @@ Vue.component('file_importer', {
 
 // Datalist View
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
-Vue.component('category_list', {
+// id is used for styling 
+const Categories = Vue.component('category_list', {
+    template: "<div><template v-if='imported_data.length === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator url='/#/graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
     data: function () {
         return {
             imported_data: app.imported_data
         };
     }
-
 });
 
 Vue.component('category_list_element', {
+    template: "<div><button type='button' class='btn btn-lg btn-block dropdown-toggle source-list-button' v-bind:class='getCssClass(imported_data_structure.id)' v-on:click='showCategories' v-bind:value='imported_data_structure.id'>{{imported_data_structure.labeltext}} </button><div class='form-check' style='display: none;' v-bind:id='getId()'><div v-for='category in imported_data_structure.categories'><input type='hidden' v-bind:value='imported_data_structure.id'><input class='form-check-input datalist-category-option' type='checkbox' v-bind:value='category.id' v-bind:id='imported_data_structure.datasource.title + category.id'><label class='form-check-label' v-bind:for='imported_data_structure.datasource.title + category.id'>{{category.title}}</label></div></div></div>",
     props: ['imported_data_structure'],
     methods: {
+        getId: function(){
+            return this.imported_data_structure.id+'Categories';
+        },
         showCategories: function () {
             var categories_container = document.getElementById(this.imported_data_structure.id + 'Categories');
 
@@ -152,7 +149,8 @@ Vue.component('category_list_element', {
 });
 
 Vue.component('graph_creator', {
-    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' v-on:click='createGraph()' id='createGraphButton'>Create Graph from Selection &rarr;</button>",
+    props: ['url','linktext'],
+    template: "<a v-bind:href=url class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='createGraph()'>{{linktext}}</a>",
     methods: {
         createGraph: function () {
             createGraph(getSelectedCategories());
@@ -191,9 +189,21 @@ Vue.component('graph_creator', {
     }
 });
 
+// https://getbootstrap.com/docs/4.0/components/card/
+
 // Graphs View
+const Graphs = Vue.component('graphs', {
+    template: "<div><template v-if='graphs.length === 0'><p>No data is imported yet</p></template><template v-else><graph_card v-for='item in graphs' v-bind:graph='item' v-bind:key='item.graphid'></graph_card></template></div>",
+    data: function () {
+        return {
+            graphs: app.graphs
+        };
+    }
+});
+
 
 Vue.component('graph_card', {
+    template: "<div class='card'><div class='card-body'><h5 class='card-title'>{{graph.title}}</h5><div v-bind:id='graph.graphid' style='width:100%;'></div></div></div>",
     props: ['graph'],
     mounted: function () {
         this.graph.draw(document.getElementById(this.graph.graphid));
@@ -201,7 +211,8 @@ Vue.component('graph_card', {
 });
 
 // Settings View
-Vue.component('settings', {
+const Settings = Vue.component('settings', {
+    template: "<div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div>",
     methods: {
         deleteAllData: function () {
             app.graphs = [];
@@ -219,30 +230,13 @@ Vue.component('settings', {
     }
 });
 
-// Navigation components
-Vue.component('navigation', {
-    data: function () {
-        return {
-            views: [{
-                label: 'Import',
-                viewid: 'importView'
-            }, {
-                label: 'Graphs',
-                viewid: 'graphView'
-            }, {
-                label: 'Settings',
-                viewid: 'settingsView'
-            }, {
-                label: 'About',
-                viewid: 'aboutView'
-            }]
-        };
-    }
+const About = Vue.component('about', {
+    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>You can delete all your imported data and all graphs in settings.</p><loose_navigation_element linktext='Go to settings ->' url='/#/settings' ></loose_navigation_element></div>"
 });
 
 Vue.component('loose_navigation_element', {
-    props: ['view', 'linktext'],
-    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='navigate(view)'>{{linktext}}</button>",
+    props: ['url', 'linktext'],
+    template: "<a v-bind:href=url class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton'>{{linktext}}</a>",
     methods: {
         navigate: function (view) {
             app.current_view = view;
@@ -250,35 +244,52 @@ Vue.component('loose_navigation_element', {
     }
 });
 
-Vue.component('navigation_element', {
-    props: ['view'],
-    template: "<div class='col'><button type='button' class='btn btn-link' v-on:click='navigate(view.viewid)'>{{view.label}}</button></div>",
-    methods: {
-        navigate: function (new_view) {
-            app.current_view = new_view;
-        }
-    }
+const routes = [{
+    path: '/',
+    component: Import
+}, {
+    path: '/import',
+    component: Import
+},{
+    path: '/graphs',
+    component: Graphs
+},{
+    path: '/settings',
+    component: Settings
+},{
+    path: '/about',
+    component: About
+},{
+    path: '/categories',
+    component: Categories
+}];
+
+
+const router = new VueRouter({
+    routes // short for `routes: routes`
 });
+
+const import_sources = [{
+    cssclass: 'btn-clue',
+    labelid: 'clueData',
+    labeltext: 'Clue Data'
+}, {
+    cssclass: 'btn-daylio',
+    labelid: 'daylioData',
+    labeltext: 'Daylio Data'
+}, {
+    cssclass: 'btn-strong',
+    labelid: 'strongData',
+    labeltext: 'Strong Data'
+}];
 
 //Vue root app
 var app = new Vue({
+    router,
     el: '#app', //identifier for vue internals
     data: {
         title: 'My Data Mix',
-        import_sources: [{
-            cssclass: 'btn-clue',
-            labelid: 'clueData',
-            labeltext: 'Clue Data'
-        }, {
-            cssclass: 'btn-daylio',
-            labelid: 'daylioData',
-            labeltext: 'Daylio Data'
-        }, {
-            cssclass: 'btn-strong',
-            labelid: 'strongData',
-            labeltext: 'Strong Data'
-        }],
-        current_view: 'importView',
+        import_sources: import_sources,
         graphs: [],
         imported_data: []
     },
@@ -294,4 +305,4 @@ var app = new Vue({
             return "";
         }
     }
-});
+}).$mount('#app');

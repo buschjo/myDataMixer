@@ -33,6 +33,7 @@
     <!-- Vue JavaScript -->
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 
     <!-- Plotly Graphics Library -->
     <!-- CDN Link because (content delivery networks) higher availability and performance -->
@@ -48,108 +49,25 @@
     <div id="app">
         <!-- Bootstrap class to make this element span the whole width of the viewport -->
         <div class="container-fluid main-content">
-            <h1>{{title}}</h1>
+            <a href='/'>
+                <h1>{{title}}</h1>
+            </a>
+            <!-- route outlet -->
+            <!-- component matched by the route will render here -->
+            <router-view></router-view>
 
-            <template v-if="current_view === 'importView'">
-                <!-- adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
-                <!-- v-for iterate trough an array (defined in vue app component) and create new import-button component for each item in the list -->
-                <!-- v-bind:import_source passes the item as a property to the component. import_source is defined as a property in the component -->
-                <!-- v-bind:key is not mandatory. It is used by vue.js for example to reorder elements (https://vuejs.org/v2/guide/list.html#Maintaining-State accessed 11/17/2019)-->
-                <!-- inline-template adapted from https://vuejsdevelopers.com/2017/03/24/vue-js-component-templates/ accessed on 11/17/2019 -->
-                <import inline-template>
-                    <div>
-                        <file_importer v-for="item in import_sources" v-bind:import_source="item"
-                            v-bind:key="item.labelid" inline-template>
-                            <div>
-                                <!-- v-on:change listens to "change" event and calls importFile method defined in component import-button -->
-                                <label v-bind:for="import_source.labelid" v-bind:class="import_source.cssclass"
-                                    class="btn btn-lg btn-block">{{ import_source.labeltext }}</label>
-                                <input type='file' v-bind:name="import_source.labelid" v-bind:id="import_source.labelid"
-                                    v-on:change="importFile(import_source.labelid)">
-                            </div>
-                        </file_importer>
-                        <!-- end adapted from https://vuejs.org/v2/guide/ accessed on 11/17/2019 -->
-                    </div>
-                </import>
-                <loose_navigation_element linktext="Create Graph &rarr;" view="listView"></loose_navigation_element>
-            </template>
-            <template v-else-if="current_view ==='graphView'">
-                <template v-if="graphs.length === 0">
-                    <p>No data is imported yet</p>
-                </template>
-                <template v-else>
-                    <graph_card inline-template v-for="item in graphs" v-bind:graph="item" v-bind:key="item.graphid">
-                        <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{graph.title}}</h5>
-                                <div v-bind:id='graph.graphid' style="width:100%;"></div>
-                                <!-- <svg v-bind:id='graph.graphid' style='width: 100%;'></svg> -->
-                            </div>
-                        </div>
-                    </graph_card>
-                </template>
-            </template>
-            <template v-else-if="current_view ==='settingsView'">
-                <settings inline-template>
-                    <div class="col">
-                        <button type="button" class="btn btn-outline-danger btn-lg btn-block"
-                            v-on:click='deleteData()'>Delete Imported Data</button>
-                        <button type="button" class="btn btn-outline-danger btn-lg btn-block"
-                            v-on:click='deleteGraphs()'>Delete Graphs</button>
-                        <button type="button" class="btn btn-danger btn-lg btn-block"
-                            v-on:click='deleteAllData()'>Delete Everything</button>
-                    </div>
-                </settings>
-                <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Change Colors</button> -->
-            </template>
-            <template v-else-if="current_view ==='aboutView'">
-                <p>This app was developed by Josefine S. Busch.</p>
-                <p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p>
-                <p>You can delete all your imported data and all graphs in settings.</p>
-                <loose_navigation_element linktext="Go to settings &rarr;" view="settingsView"></loose_navigation_element>
-            </template>
-            <template v-else-if="current_view ==='listView'">
-                <template v-if="imported_data.length === 0">
-                    <p>No data is imported yet</p>
-                </template>
-                <template v-else>
-                    <category_list inline-template>
-                        <div>
-                            <category_list_element inline-template v-for="item in imported_data"
-                                v-bind:imported_data_structure="item" v-bind:key="item.id">
-                                <div>
-                                    <button type="button"
-                                        class="btn btn-lg btn-block dropdown-toggle source-list-button"
-                                        v-bind:class="getCssClass(imported_data_structure.id)"
-                                        v-on:click="showCategories" v-bind:value="imported_data_structure.id">
-                                        {{imported_data_structure.labeltext}} </button>
-                                    <div class="form-check" style="display: none;"
-                                        v-bind:id="imported_data_structure.id+'Categories'">
-                                        <!-- id is used for styling -->
-                                        <div v-for="category in imported_data_structure.categories">
-                                            <input type="hidden" v-bind:value="imported_data_structure.id">
-                                            <input class="form-check-input datalist-category-option" type="checkbox"
-                                                v-bind:value="category.id" v-bind:id="imported_data_structure.datasource.title + category.id">
-                                            <label class="form-check-label" v-bind:for="imported_data_structure.datasource.title + category.id">
-                                                {{category.title}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </category_list_element>
-                            <graph_creator></graph_creator>
-                        </div>
-                    </category_list>
-                </template>
-            </template>
-            <navigation inline-template>
-                <div class="row">
-                    <navigation_element v-for="item in views" v-bind:view="item" v-bind:key="item.viewid">
-                    </navigation_element>
-                </div>
-            </navigation>
         </div>
+
+        <p>
+            <!-- use router-link component for navigation. -->
+            <!-- specify the link by passing the `to` prop. -->
+            <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
+            <router-link to="/import">Import</router-link>
+            <router-link to="/graphs">Graphs</router-link>
+            <router-link to="/settings">Settings</router-link>
+            <router-link to="/about">About</router-link>
+        </p>
+
     </div>
 
     <!-- Bootstrap JavaScript-->
