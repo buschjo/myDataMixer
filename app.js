@@ -63,7 +63,7 @@ Vue.component('file_importer', {
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
 // id is used for styling 
 const Categories = Vue.component('category_list', {
-    template: "<div><template v-if='imported_data.length === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator url='/#/graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
+    template: "<div><template v-if='imported_data.length === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator target='graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
     data: function () {
         return {
             imported_data: app.imported_data
@@ -149,17 +149,23 @@ Vue.component('category_list_element', {
 });
 
 Vue.component('graph_creator', {
-    props: ['url','linktext'],
-    template: "<a v-bind:href=url class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='createGraph()'>{{linktext}}</a>",
+    props: ['target','linktext'],
+    template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='createGraph()'>{{linktext}}</button>",
     methods: {
+        routeTo: function (target) {
+            routes.forEach(route => {
+                if (route.name === target) {
+                    this.$router.push(route);
+                }
+            });
+        },
         createGraph: function () {
-            createGraph(getSelectedCategories());
-            app.current_view = "graphView";
+            app.graphs.push(createGraph(getSelectedCategories()));
+            this.routeTo(this.target);
 
             function createGraph(selectedCategories) {
                 var creator = new GraphCreator();
-                var graph = creator.createCustomGraph(selectedCategories);
-                app.graphs.push(graph);
+                return creator.createCustomGraph(selectedCategories);
             }
 
             function getSelectedCategories() {
