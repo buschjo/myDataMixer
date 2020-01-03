@@ -1,10 +1,10 @@
 //Service Worker is in the root directory of the project so everything is in scope
 
 //Service worker basics from pluralsight course
-const version = 15;
+const version = 16;
 
 //https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4 by Google Developers accessed 13.11.2019
-const CACHE_NAME = 'static-cache-v12';
+const CACHE_NAME = 'static-cache-v13';
 const FILES_TO_CACHE = [
 	'index.html',
 	'images/favicon.png',

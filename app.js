@@ -51,9 +51,9 @@ Vue.component('file_importer', {
         adjustColor(this.import_source);
         hideInputfields();
 
-        function adjustColor(import_source){
+        function adjustColor(import_source) {
             var colorcode = import_source.colorcode;
-            var classname = "."+ import_source.cssclass;
+            var classname = "." + import_source.cssclass;
             document.querySelectorAll(classname).forEach(function (p) {
                 p.style.backgroundColor = colorcode;
                 p.style.border = colorcode;
@@ -108,11 +108,11 @@ Vue.component('category_list_element', {
     mounted: function () {
         adjustColor(getImportSource(this.imported_data_structure.id));
         prepareCategorylist(this.imported_data_structure);
-        
+
         // Get color codes for all ui elements
-        function adjustColor(import_source){
+        function adjustColor(import_source) {
             var colorcode = import_source.colorcode;
-            var classname = "."+ import_source.cssclass;
+            var classname = "." + import_source.cssclass;
             document.querySelectorAll(classname).forEach(function (p) {
                 p.style.backgroundColor = colorcode;
                 p.style.border = colorcode;
@@ -120,13 +120,7 @@ Vue.component('category_list_element', {
         }
 
         function getImportSource(id) {
-            var import_source;
-            app.import_sources.forEach(source => {
-                if (source.labelid === id) {
-                    import_source = source;
-                }
-            });
-            return import_source;
+            return app.getImportSource(id);
         }
 
         // prepare category list
@@ -263,7 +257,7 @@ Vue.component('graph_card', {
 
 // Settings View
 const Settings = Vue.component('settings', {
-    template: "<div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button><color_changer></color_changer></div>",
+    template: "<div><div class='row'><div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div></div><color_changer></color_changer></div>",
     methods: {
         deleteAllData: function () {
             app.graphs = [];
@@ -282,22 +276,35 @@ const Settings = Vue.component('settings', {
 });
 
 Vue.component('color_changer', {
-    template: "<div><input type='color' value='#e66465' id='colorPicker'><button type='button' class='btn btn-outline-danger btn-lg btn-block' id='p2' v-on:click='changeColor()'>Change Color</button></div>",
-    methods: {
-        changeColor: function () {
-            document.getElementById("p2").style.color = "blue";
-        },
+    data: function () {
+        return {
+            import_sources
+        };
     },
-    mounted: function () {
-        var colorPicker = document.getElementById("colorPicker");
-        colorPicker.addEventListener("change", watchColorPicker, false);
+    template: "<div class='row'><h5>Customize Color Code</h5><div class='col'><color_changer_element v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></color_changer_element></div></div>",
+});
 
-        function watchColorPicker() {
-            console.log('event listener activated');
-            console.log(event.target.value);
-            document.querySelectorAll("button").forEach(function (p) {
-                p.style.color = event.target.value;
-            });
+Vue.component('color_changer_element', {
+    template: "<div class='col'>Customize {{import_source.name}} Color Code <input type='color' v-bind:id='import_source.labelid'></div>",
+    props: ['import_source'],
+    mounted: function () {
+        var colorPicker = document.getElementById(this.import_source.labelid);
+        var local_import_source = this.import_source;
+        colorPicker.addEventListener("change", function () {watchColorPicker(local_import_source);}, false);
+        // getColor(this.import_source);
+
+        function watchColorPicker(import_source) {
+            var global_import_source = getImportSource(import_source.labelid);
+            global_import_source.colorcode = event.target.value;
+        }
+
+        function getColor(import_source) {
+            var colorcode = getImportSource(local_import_source.labelid).hexcode;
+            colorPicker.value = colorcode;
+        }
+
+        function getImportSource(id) {
+            return app.getImportSource(id);
         }
     }
 });
@@ -352,21 +359,24 @@ const router = new VueRouter({
 });
 
 const import_sources = [{
+    name: 'Clue',
     cssclass: 'btn-clue',
     colorcode: 'rgb(189, 0, 0)',
-    colorcode2: 'rgb(99, 0, 0)',
+    hexcode: '#BD0000',
     labelid: 'clueData',
     labeltext: 'Clue Data'
 }, {
+    name: 'Daylio',
     cssclass: 'btn-daylio',
     colorcode: 'rgb(86, 0, 94)',
-    colorcode2: 'rgb(99, 0, 0)',
+    hexcode: '#56005E',
     labelid: 'daylioData',
     labeltext: 'Daylio Data'
 }, {
+    name: 'Strong',
     cssclass: 'btn-strong',
     colorcode: 'rgb(9, 0, 136)',
-    colorcode2: 'rgb(39, 0, 62)',
+    hexcode: '#090088',
     labelid: 'strongData',
     labeltext: 'Strong Data'
 }];
@@ -391,6 +401,15 @@ var app = new Vue({
             }
             //if no fitting css class can be found an empty string is returned, which means no added class to the html tag
             return "";
+        },
+        getImportSource(id) {
+            var import_source;
+            this.import_sources.forEach(source => {
+                if (source.labelid === id) {
+                    import_source = source;
+                }
+            });
+            return import_source;
         }
     }
 }).$mount('#app');
