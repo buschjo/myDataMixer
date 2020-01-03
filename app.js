@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator) {
 //  v-on:change listens to "change" event and calls importFile method defined in component import-button
 // only components used by the router are declared as const
 const Import = Vue.component('import', {
-    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><loose_navigation_element linktext='Create Graph ->' url='#/categories'></loose_navigation_element></div>",
+    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><loose_navigation_element linktext='Create Graph ->' target='categories'></loose_navigation_element></div>",
     data: function () {
         return {
             import_sources
@@ -231,35 +231,45 @@ const Settings = Vue.component('settings', {
 });
 
 const About = Vue.component('about', {
-    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>You can delete all your imported data and all graphs in settings.</p><loose_navigation_element linktext='Go to settings ->' url='#/settings' ></loose_navigation_element></div>"
+    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>You can delete all your imported data and all graphs in settings.</p><loose_navigation_element linktext='Go to settings ->' target='settings' ></loose_navigation_element></div>"
 });
 
 Vue.component('loose_navigation_element', {
-    props: ['url', 'linktext'],
-    template: "<a v-bind:href=url class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton'>{{linktext}}</a>",
+    props: ['target', 'linktext'],
+    template: "<button type='button' v-on:click='routeTo(target)' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' >{{linktext}}</button>",
     methods: {
-        navigate: function (view) {
-            app.current_view = view;
+        routeTo: function (target) {
+            routes.forEach(route => {
+                if (route.name === target) {
+                    this.$router.push(route);
+                }
+            });
         }
     }
 });
 
 const routes = [{
+    name: 'home',
     path: '/',
     component: Import
 }, {
+    name: 'import',
     path: '/import',
     component: Import
 },{
+    name: 'graphs',
     path: '/graphs',
     component: Graphs
 },{
+    name: 'settings',
     path: '/settings',
     component: Settings
 },{
+    name: 'about',
     path: '/about',
     component: About
 },{
+    name: 'categories',
     path: '/categories',
     component: Categories
 }];

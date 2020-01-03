@@ -12,8 +12,9 @@ const FILES_TO_CACHE = [
 	'dataConverter.js',
 	'dataSource.js',
 	'graph.js',
-	'graphCreator',
-	'graphTrace.js'
+	'graphCreator.js',
+	'graphTrace.js',
+	'customButtonStyling.css'
 ];
 //end of https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4
 
