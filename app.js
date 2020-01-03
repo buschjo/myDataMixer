@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator) {
 //  v-on:change listens to "change" event and calls importFile method defined in component import-button
 // only components used by the router are declared as const
 const Import = Vue.component('import', {
-    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><loose_navigation_element linktext='Create Graph ->' url='/#/categories'></loose_navigation_element></div>",
+    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><loose_navigation_element linktext='Create Graph ->' url='#/categories'></loose_navigation_element></div>",
     data: function () {
         return {
             import_sources
@@ -231,7 +231,7 @@ const Settings = Vue.component('settings', {
 });
 
 const About = Vue.component('about', {
-    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>You can delete all your imported data and all graphs in settings.</p><loose_navigation_element linktext='Go to settings ->' url='/#/settings' ></loose_navigation_element></div>"
+    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>You can delete all your imported data and all graphs in settings.</p><loose_navigation_element linktext='Go to settings ->' url='#/settings' ></loose_navigation_element></div>"
 });
 
 Vue.component('loose_navigation_element', {
