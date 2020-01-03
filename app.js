@@ -48,14 +48,28 @@ Vue.component('file_importer', {
         }
     },
     mounted: function () {
-        //adapted from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
-        //hide the input elements
-        //display = none instead of hidden or disabled because of screen readers 
-        var fileInputs = document.getElementsByTagName('input');
-        for (var input of fileInputs) {
-            input.style.display = 'none';
+        adjustColor(this.import_source);
+        hideInputfields();
+
+        function adjustColor(import_source){
+            var colorcode = import_source.colorcode;
+            var classname = "."+ import_source.cssclass;
+            document.querySelectorAll(classname).forEach(function (p) {
+                p.style.backgroundColor = colorcode;
+                p.style.border = colorcode;
+            });
         }
-        //end https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
+
+        function hideInputfields() {
+            //adapted from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
+            //hide the input elements
+            //display = none instead of hidden or disabled because of screen readers 
+            var fileInputs = document.getElementsByTagName('input');
+            for (var input of fileInputs) {
+                input.style.display = 'none';
+            }
+            //end https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
+        }
     }
 });
 
@@ -89,15 +103,41 @@ Vue.component('category_list_element', {
         },
         getCssClass: function (id) {
             return app.getCssClass(id);
-        }
+        },
     },
     mounted: function () {
-        var categories = this.imported_data_structure.datasource.categories;
-        for (const category_name in categories) {
-            const category = categories[category_name];
-            if (category.is_extracted_category) {
-                removeParentCategory(category_name, this.imported_data_structure.datasource);
-                addSubcategories(this.imported_data_structure);
+        adjustColor(getImportSource(this.imported_data_structure.id));
+        prepareCategorylist(this.imported_data_structure);
+        
+        // Get color codes for all ui elements
+        function adjustColor(import_source){
+            var colorcode = import_source.colorcode;
+            var classname = "."+ import_source.cssclass;
+            document.querySelectorAll(classname).forEach(function (p) {
+                p.style.backgroundColor = colorcode;
+                p.style.border = colorcode;
+            });
+        }
+
+        function getImportSource(id) {
+            var import_source;
+            app.import_sources.forEach(source => {
+                if (source.labelid === id) {
+                    import_source = source;
+                }
+            });
+            return import_source;
+        }
+
+        // prepare category list
+        function prepareCategorylist(imported_data_structure) {
+            var categories = imported_data_structure.datasource.categories;
+            for (const category_name in categories) {
+                const category = categories[category_name];
+                if (category.is_extracted_category) {
+                    removeParentCategory(category_name, imported_data_structure.datasource);
+                    addSubcategories(imported_data_structure);
+                }
             }
         }
 
@@ -223,7 +263,7 @@ Vue.component('graph_card', {
 
 // Settings View
 const Settings = Vue.component('settings', {
-    template: "<div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div>",
+    template: "<div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button><color_changer></color_changer></div>",
     methods: {
         deleteAllData: function () {
             app.graphs = [];
@@ -237,6 +277,27 @@ const Settings = Vue.component('settings', {
         deleteData: function () {
             app.imported_data = [];
             alert('All imported data was deleted.');
+        }
+    }
+});
+
+Vue.component('color_changer', {
+    template: "<div><input type='color' value='#e66465' id='colorPicker'><button type='button' class='btn btn-outline-danger btn-lg btn-block' id='p2' v-on:click='changeColor()'>Change Color</button></div>",
+    methods: {
+        changeColor: function () {
+            document.getElementById("p2").style.color = "blue";
+        },
+    },
+    mounted: function () {
+        var colorPicker = document.getElementById("colorPicker");
+        colorPicker.addEventListener("change", watchColorPicker, false);
+
+        function watchColorPicker() {
+            console.log('event listener activated');
+            console.log(event.target.value);
+            document.querySelectorAll("button").forEach(function (p) {
+                p.style.color = event.target.value;
+            });
         }
     }
 });
@@ -292,14 +353,20 @@ const router = new VueRouter({
 
 const import_sources = [{
     cssclass: 'btn-clue',
+    colorcode: 'rgb(189, 0, 0)',
+    colorcode2: 'rgb(99, 0, 0)',
     labelid: 'clueData',
     labeltext: 'Clue Data'
 }, {
     cssclass: 'btn-daylio',
+    colorcode: 'rgb(86, 0, 94)',
+    colorcode2: 'rgb(99, 0, 0)',
     labelid: 'daylioData',
     labeltext: 'Daylio Data'
 }, {
     cssclass: 'btn-strong',
+    colorcode: 'rgb(9, 0, 136)',
+    colorcode2: 'rgb(39, 0, 62)',
     labelid: 'strongData',
     labeltext: 'Strong Data'
 }];

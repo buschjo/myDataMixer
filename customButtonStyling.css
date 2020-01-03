@@ -1,8 +1,8 @@
 /* adapted from https://www.jquery-az.com/bootstrap-button-9-demos-of-custom-color-size-dropdown-navbar-and-more/ */
 .btn-clue {
-    background-color: rgb(189, 0, 0);
+    /* background-color: rgb(189, 0, 0); */
     color: #FFF;
-    border-color: rgb(189, 0, 0);
+    /* border-color: rgb(189, 0, 0); */
 }
 
 .btn-clue:hover,
@@ -11,15 +11,15 @@
 .btn-clue.active,
 .btn-clue.visited,
 .open .dropdown-toggle.btn-clue {
-    background-color: rgb(99, 0, 0);
+    /* background-color: rgb(99, 0, 0); */
     color: #FFF;
-    border-color: rgb(99, 0, 0);
+    /* border-color: rgb(99, 0, 0); */
 }
 
 .btn-strong {
-    background-color: rgb(39, 0, 62);
+    background-color: rgb(9, 0, 136);
     color: #FFF;
-    border-color: rgb(39, 0, 62);
+    border-color: rgb(9, 0, 136);
 }
 
 .btn-strong:hover,
