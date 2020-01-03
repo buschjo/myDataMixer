@@ -75,8 +75,8 @@ Vue.component('category_list_element', {
     template: "<div><button type='button' class='btn btn-lg btn-block dropdown-toggle source-list-button' v-bind:class='getCssClass(imported_data_structure.id)' v-on:click='showCategories' v-bind:value='imported_data_structure.id'>{{imported_data_structure.labeltext}} </button><div class='form-check' style='display: none;' v-bind:id='getId()'><div v-for='category in imported_data_structure.categories'><input type='hidden' v-bind:value='imported_data_structure.id'><input class='form-check-input datalist-category-option' type='checkbox' v-bind:value='category.id' v-bind:id='imported_data_structure.datasource.title + category.id'><label class='form-check-label' v-bind:for='imported_data_structure.datasource.title + category.id'>{{category.title}}</label></div></div></div>",
     props: ['imported_data_structure'],
     methods: {
-        getId: function(){
-            return this.imported_data_structure.id+'Categories';
+        getId: function () {
+            return this.imported_data_structure.id + 'Categories';
         },
         showCategories: function () {
             var categories_container = document.getElementById(this.imported_data_structure.id + 'Categories');
@@ -149,7 +149,7 @@ Vue.component('category_list_element', {
 });
 
 Vue.component('graph_creator', {
-    props: ['target','linktext'],
+    props: ['target', 'linktext'],
     template: "<button type='button' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' v-on:click='createGraph()'>{{linktext}}</button>",
     methods: {
         routeTo: function (target) {
@@ -160,8 +160,13 @@ Vue.component('graph_creator', {
             });
         },
         createGraph: function () {
-            app.graphs.push(createGraph(getSelectedCategories()));
-            this.routeTo(this.target);
+            var selectedCategories = getSelectedCategories();
+            if (selectedCategories.length > 3) {
+                alert('Please only select up to three categories.');
+            } else {
+                app.graphs.push(createGraph(getSelectedCategories()));
+                this.routeTo(this.target);
+            }
 
             function createGraph(selectedCategories) {
                 var creator = new GraphCreator();
@@ -262,19 +267,19 @@ const routes = [{
     name: 'import',
     path: '/import',
     component: Import
-},{
+}, {
     name: 'graphs',
     path: '/graphs',
     component: Graphs
-},{
+}, {
     name: 'settings',
     path: '/settings',
     component: Settings
-},{
+}, {
     name: 'about',
     path: '/about',
     component: About
-},{
+}, {
     name: 'categories',
     path: '/categories',
     component: Categories
