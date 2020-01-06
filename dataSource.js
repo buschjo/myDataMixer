@@ -397,11 +397,11 @@ const datasources = {
                 title: 'Mood',
                 id: 'mood',
                 values: {
-                    AWFUL: 'awful',
-                    BAD: 'bad',
-                    MEH: 'meh',
+                    RAD: 'rad',
                     GOOD: 'good',
-                    RAD: 'rad'
+                    MEH: 'meh',
+                    BAD: 'bad',
+                    AWFUL: 'awful'
                 },
             },
             activities: {

@@ -7,9 +7,10 @@ class GraphCreator {
         var moreSpaceNeeded = false;
 
         categories.forEach(category => {
-            traces.push(this.getTrace(category.datasource.data, category.datasource, category.categoryname));
+            // datasource is not the same as a datasource from the constant list of datasources. It is a datastructure
+            traces.push(this.getTrace(category.datasource.data, category.datasource, category.categoryname, category.datasource.datasource.title));
             id += category.categoryname;
-            label += (category.categoryname + ' ');
+            label += (category.categoryname + ' (' + category.datasource.datasource.title + ') ');
             moreSpaceNeeded = moreSpaceNeeded || this.moreSpaceNeeded(category.datasource);
         });
 
@@ -45,6 +46,8 @@ class GraphCreator {
     }
 
     getTraces(data, datasource, categories) {
+        // datasource can be a datasource from the datasource list (in case of default graphs) or a 'graph datasource' (in case of custom graphs)
+        // graph datasources are structured differently, they are DataStructures
         var traces = [];
         categories.forEach(category => {
             if (datasource.categories[category] && datasource.categories[category].is_extracted_category) {
@@ -57,12 +60,17 @@ class GraphCreator {
         return traces;
     }
 
-    getTrace(data, datasource, category_name) {
+    // datasource title is optional and only used in custom graphs
+    getTrace(data, datasource, category_name, datasource_title) {
+        var trace_name = category_name;
+        if (datasource_title) {
+            trace_name = category_name + ' (' + datasource_title + ')';
+        }
         var valuesAndDates = this.getValuesForCategory(data, category_name, datasource.categories[category_name]);
         return new GraphTrace(
             valuesAndDates[0],
             valuesAndDates[1],
-            category_name,
+            trace_name,
             this.getOrderedValueOptionsForCategory(datasource, category_name)
         );
     }
