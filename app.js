@@ -291,17 +291,19 @@ Vue.component('color_changer_element', {
         var colorPicker = document.getElementById(this.import_source.labelid);
         var local_import_source = this.import_source;
         colorPicker.addEventListener("change", function () {
-            watchColorPicker(local_import_source);
+            watchColorPicker(local_import_source.labelid);
         }, false);
-        setColorPickerColor();
+        setColorPickerColor(local_import_source.labelid);
 
-        function watchColorPicker(import_source) {
-            var global_import_source = getImportSource(import_source.labelid);
-            global_import_source.colorcode = event.target.value;
+        function watchColorPicker(import_source_id) {
+            var global_import_source = getImportSource(import_source_id);
+            var color = event.target.value;
+            global_import_source.colorcode = color;
+            document.cookie = import_source_id + "=" + color;
         }
 
-        function setColorPickerColor() {
-            var colorcode = getImportSource(local_import_source.labelid).colorcode;
+        function setColorPickerColor(import_source_id) {
+            var colorcode = getImportSource(import_source_id).colorcode;
             // only neccessary the first time because default color is rgb but if changed will be stored as hex
             // this is because the color for html elements input field etc need to be set as rgb
             if (colorcode.includes('rgb')) {
@@ -430,6 +432,21 @@ var app = new Vue({
                 }
             });
             return import_source;
+        }
+    },
+    created: function(){
+        if (document.cookie) {
+            var cookies = document.cookie.split("; ");
+            var colors = new Map();
+            cookies.forEach(cookie => {
+                var id_and_color = cookie.split('=');
+                colors.set(id_and_color[0], id_and_color[1]);
+            });
+            this.import_sources.forEach(source => {
+                if (colors.get(source.labelid)) {
+                    source.colorcode = colors.get(source.labelid);
+                }
+            });
         }
     }
 }).$mount('#app');
