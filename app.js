@@ -102,8 +102,8 @@ Vue.component('category_list_element', {
             }
         },
         getCssClass: function (id) {
-            return app.getCssClass(id);
-        },
+            return app.getImportSource(id).cssclass;
+        }
     },
     mounted: function () {
         adjustColor(getImportSource(this.imported_data_structure.id));
@@ -321,13 +321,13 @@ Vue.component('color_changer_element', {
                 var hex_bb = dec_bb.toString(16);
                 // if hex string is single-digit fill the string to two digits with a leading zero
                 if (hex_rr.length == 1) {
-                    hex_rr = '0'+hex_rr;
+                    hex_rr = '0' + hex_rr;
                 }
                 if (hex_gg.length == 1) {
-                    hex_gg = '0'+hex_gg;
+                    hex_gg = '0' + hex_gg;
                 }
                 if (hex_bb.length == 1) {
-                    hex_bb = '0'+hex_bb;
+                    hex_bb = '0' + hex_bb;
                 }
                 // assemble and return
                 colorPicker.value = '#' + hex_rr + hex_gg + hex_bb;
@@ -422,16 +422,6 @@ var app = new Vue({
         imported_data: []
     },
     methods: {
-        getCssClass: function (id) {
-            for (var import_source of this.import_sources) {
-                // === checks for equal value and equal type (== only checks value)
-                if (import_source.labelid === id) {
-                    return import_source.cssclass;
-                }
-            }
-            //if no fitting css class can be found an empty string is returned, which means no added class to the html tag
-            return "";
-        },
         getImportSource(id) {
             var import_source;
             this.import_sources.forEach(source => {
