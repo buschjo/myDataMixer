@@ -61,11 +61,11 @@ class Graph {
             showlegend: true,
             legend: {
                 x: 0.7,
-                y: 1.2
+                y: 0.95
             },
             margin: {
                 l: 60,
-                b: 50,
+                b: 70,
                 r: 10,
                 t: 1,
             } //margin and legend values trial and error (https://plot.ly/javascript/setting-graph-size/)}
@@ -99,7 +99,7 @@ class Graph {
                 },
                 showlegend: true,
                 legend: {
-                    x: 0.7,
+                    x: 0.1,
                     y: 1.2
                 },
                 margin: {
@@ -151,7 +151,12 @@ class Graph {
     
     getConfig() {
         return {
-            displayModeBar: false,
+            // modebar display etc: https://plot.ly/javascript/configuration-options/ (accessed 06.01.2020)
+            displayModeBar: true,
+            // all mode bar commands that should not be displayed
+            displaylogo: false,
+            // list of mode bar buttons https://github.com/plotly/plotly.js/blob/master/src/components/modebar/buttons.js (accessed 06.01.2020)
+            modeBarButtonsToRemove: ["zoomIn2d", "zoomOut2d", "zoom2d", "pan2d", "select2d", "lasso2d", "toggleSpikelines", "autoScale2d"],
             responsive: true
         };
         // responsive: true for resizing when switching landscape/portrait mode (https://plot.ly/javascript/responsive-fluid-layout/)
