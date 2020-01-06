@@ -9,7 +9,7 @@ class GraphCreator {
         categories.forEach(category => {
             traces.push(this.getTrace(category.datasource.data, category.datasource, category.categoryname));
             id += category.categoryname;
-            label += (category.categoryname + ', ');
+            label += (category.categoryname + ' ');
             moreSpaceNeeded = moreSpaceNeeded || this.moreSpaceNeeded(category.datasource);
         });
 

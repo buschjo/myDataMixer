@@ -35,15 +35,20 @@ Vue.component('file_importer', {
                 var converter = new DataConverter();
                 // event target is the file reader, in result is the read data
                 dataobject = converter.convert(event.target.result, id, labeltext);
-                createDefaultGraph(dataobject);
-                app.imported_data.push(dataobject);
+                if(app.importedDataExists(id)){
+                    app.replaceData(dataobject, id);
+                    app.replaceDefaultGraph(createDefaultGraph(dataobject));
+                }else{
+                    app.imported_data.push(dataobject);
+                    app.graphs.push(createDefaultGraph(dataobject));
+                }
             };
             reader.readAsText(selectedFile);
 
             function createDefaultGraph(dataobject) {
                 var creator = new GraphCreator();
                 var graph = creator.createDefaultGraph(dataobject);
-                app.graphs.push(graph);
+                return graph;
             }
         }
     },
@@ -77,7 +82,7 @@ Vue.component('file_importer', {
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
 // id is used for styling 
 const Categories = Vue.component('category_list', {
-    template: "<div><template v-if='imported_data.length === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator target='graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
+    template: "<div><template v-if='imported_data.size === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator target='graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
     data: function () {
         return {
             imported_data: app.imported_data
@@ -86,7 +91,7 @@ const Categories = Vue.component('category_list', {
 });
 
 Vue.component('category_list_element', {
-    template: "<div><button type='button' class='btn btn-lg btn-block dropdown-toggle source-list-button' v-bind:class='getCssClass(imported_data_structure.id)' v-on:click='showCategories' v-bind:value='imported_data_structure.id'>{{imported_data_structure.labeltext}} </button><div class='form-check' style='display: none;' v-bind:id='getId()'><div v-for='category in imported_data_structure.categories'><input type='hidden' v-bind:value='imported_data_structure.id'><input class='form-check-input datalist-category-option' type='checkbox' v-bind:value='category.id' v-bind:id='imported_data_structure.datasource.title + category.id'><label class='form-check-label' v-bind:for='imported_data_structure.datasource.title + category.id'>{{category.title}}</label></div></div></div>",
+    template: "<div><button type='button' class='btn btn-lg btn-block dropdown-toggle source-list-button' v-bind:class='getCssClass()' v-on:click='showCategories' v-bind:value='imported_data_structure.id'>{{imported_data_structure.labeltext}} </button><div class='form-check' style='display: none;' v-bind:id='getId()'><div v-for='category in imported_data_structure.categories'><input type='hidden' v-bind:value='imported_data_structure.id'><input class='form-check-input datalist-category-option' type='checkbox' v-bind:value='category.id' v-bind:id='imported_data_structure.datasource.title + category.id'><label class='form-check-label' v-bind:for='imported_data_structure.datasource.title + category.id'>{{category.title}}</label></div></div></div>",
     props: ['imported_data_structure'],
     methods: {
         getId: function () {
@@ -101,8 +106,8 @@ Vue.component('category_list_element', {
                 categories_container.style.display = 'none';
             }
         },
-        getCssClass: function (id) {
-            return app.getImportSource(id).cssclass;
+        getCssClass: function () {
+            return app.getImportSource(this.imported_data_structure.id).cssclass;
         }
     },
     mounted: function () {
@@ -441,6 +446,29 @@ var app = new Vue({
                 }
             });
             return import_source;
+        },
+        importedDataExists(id){
+            var exists = false;
+            this.imported_data.forEach(datastructre => {
+                if (datastructre.id === id) {
+                    exists =  true;
+                }
+            });
+            return exists;
+        },
+        replaceData(datastructure, id){
+            for (let index = 0; index < this.imported_data.length; index++) {
+                if (this.imported_data[index].id === id) {
+                    this.imported_data[index] = datastructure;
+                }
+            }
+        },
+        replaceDefaultGraph(graph){
+            for (let index = 0; index < this.graphs.length; index++) {
+                if (this.graphs[index].graphid === graph.graphid) {
+                    this.graphs[index] = graph;
+                }
+            }
         }
     },
     created: function(){
