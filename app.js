@@ -290,17 +290,50 @@ Vue.component('color_changer_element', {
     mounted: function () {
         var colorPicker = document.getElementById(this.import_source.labelid);
         var local_import_source = this.import_source;
-        colorPicker.addEventListener("change", function () {watchColorPicker(local_import_source);}, false);
-        // getColor(this.import_source);
+        colorPicker.addEventListener("change", function () {
+            watchColorPicker(local_import_source);
+        }, false);
+        setColorPickerColor();
 
         function watchColorPicker(import_source) {
             var global_import_source = getImportSource(import_source.labelid);
             global_import_source.colorcode = event.target.value;
         }
 
-        function getColor(import_source) {
-            var colorcode = getImportSource(local_import_source.labelid).hexcode;
-            colorPicker.value = colorcode;
+        function setColorPickerColor() {
+            var colorcode = getImportSource(local_import_source.labelid).colorcode;
+            // only neccessary the first time because default color is rgb but if changed will be stored as hex
+            // this is because the color for html elements input field etc need to be set as rgb
+            if (colorcode.includes('rgb')) {
+                // get color in rgb format and split into pieces -> rgb(rr, gg, bb)
+                var colorcode_pieces = colorcode.split(',');
+                // remove all parts from the string, that are not the number
+                var rr = colorcode_pieces[0].replace('rgb(', '');
+                var gg = colorcode_pieces[1];
+                var bb = colorcode_pieces[2].replace(')', '');
+                // parse String to Int
+                var dec_rr = parseInt(rr);
+                var dec_gg = parseInt(gg);
+                var dec_bb = parseInt(bb);
+                // convert dec int to hex string
+                var hex_rr = dec_rr.toString(16);
+                var hex_gg = dec_gg.toString(16);
+                var hex_bb = dec_bb.toString(16);
+                // if hex string is single-digit fill the string to two digits with a leading zero
+                if (hex_rr.length == 1) {
+                    hex_rr = '0'+hex_rr;
+                }
+                if (hex_gg.length == 1) {
+                    hex_gg = '0'+hex_gg;
+                }
+                if (hex_bb.length == 1) {
+                    hex_bb = '0'+hex_bb;
+                }
+                // assemble and return
+                colorPicker.value = '#' + hex_rr + hex_gg + hex_bb;
+            } else {
+                colorPicker.value = colorcode;
+            }
         }
 
         function getImportSource(id) {
@@ -362,21 +395,18 @@ const import_sources = [{
     name: 'Clue',
     cssclass: 'btn-clue',
     colorcode: 'rgb(189, 0, 0)',
-    hexcode: '#BD0000',
     labelid: 'clueData',
     labeltext: 'Clue Data'
 }, {
     name: 'Daylio',
     cssclass: 'btn-daylio',
     colorcode: 'rgb(86, 0, 94)',
-    hexcode: '#56005E',
     labelid: 'daylioData',
     labeltext: 'Daylio Data'
 }, {
     name: 'Strong',
     cssclass: 'btn-strong',
     colorcode: 'rgb(9, 0, 136)',
-    hexcode: '#090088',
     labelid: 'strongData',
     labeltext: 'Strong Data'
 }];
