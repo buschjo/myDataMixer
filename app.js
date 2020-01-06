@@ -257,7 +257,7 @@ Vue.component('graph_card', {
 
 // Settings View
 const Settings = Vue.component('settings', {
-    template: "<div><div class='row'><div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteCookies()'>Delete Cookies</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div></div><color_changer></color_changer></div>",
+    template: "<div><color_changer></color_changer><div class='card'><div class='card-body'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteCookies()'>Delete Cookies</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div></div></div>",
     methods: {
         deleteAllData: function () {
             app.graphs = [];
@@ -290,7 +290,7 @@ Vue.component('color_changer', {
             import_sources
         };
     },
-    template: "<div class='row'><h5>Customize Color Code</h5><div class='col'><color_changer_element v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></color_changer_element></div></div>",
+    template: "<div class='card'><h5>Customize Color Code</h5><div class='col'><div class='card-body'><color_changer_element v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></color_changer_element></div></div></div>",
 });
 
 Vue.component('color_changer_element', {
