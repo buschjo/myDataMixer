@@ -258,8 +258,13 @@ const Graphs = Vue.component('graphs', {
 
 
 Vue.component('graph_card', {
-    template: "<div class='card'><div class='card-body'><h5 class='card-title'>{{graph.title}}</h5><div v-bind:id='graph.graphid' style='width:100%;'></div></div></div>",
+    template: "<div class='card'><div class='card-body'><h5 class='card-title'>{{graph.title}}</h5><button type='button' class='btn btn-outline-danger btn-sm' v-on:click='deleteGraph()'>x</button><div v-bind:id='graph.graphid' style='width:100%;'></div></div></div>",
     props: ['graph'],
+    methods: {
+        deleteGraph: function(){
+            app.deleteGraph(this.graph.graphid);
+        }
+    },
     mounted: function () {
         this.graph.draw(document.getElementById(this.graph.graphid));
     }
@@ -474,7 +479,19 @@ var app = new Vue({
                     this.graphs[index] = graph;
                 }
             }
+        },
+        // Adapted from https://hosting.review/tutorial/javascript-remove-element-from-array/ by Paul Mahony (accessed: 06.01.2020)
+        deleteGraph(graphid){
+            var index_of_graph_to_remove;
+            for (let index = 0; index < this.graphs.length; index++) {
+                const graph = this.graphs[index];
+                if (graph.graphid === graphid) {
+                    index_of_graph_to_remove = index;
+                }
+            }
+            this.graphs.splice(index_of_graph_to_remove, 1);
         }
+        //end of adapted
     },
     created: function(){
         if (document.cookie) {
