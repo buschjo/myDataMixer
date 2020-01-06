@@ -257,7 +257,7 @@ Vue.component('graph_card', {
 
 // Settings View
 const Settings = Vue.component('settings', {
-    template: "<div><div class='row'><div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div></div><color_changer></color_changer></div>",
+    template: "<div><div class='row'><div class='col'><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteData()'>Delete Imported Data</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteGraphs()'>Delete Graphs</button><button type='button' class='btn btn-outline-danger btn-lg btn-block' v-on:click='deleteCookies()'>Delete Cookies</button><button type='button' class='btn btn-danger btn-lg btn-block' v-on:click='deleteAllData()'>Delete Everything</button></div></div><color_changer></color_changer></div>",
     methods: {
         deleteAllData: function () {
             app.graphs = [];
@@ -271,6 +271,15 @@ const Settings = Vue.component('settings', {
         deleteData: function () {
             app.imported_data = [];
             alert('All imported data was deleted.');
+        },
+        deleteCookies: function() {
+            var cookies = document.cookie.split('; ');
+            var expiry_date = new Date(Date.UTC(1991, 11, 23));
+            cookies.forEach(cookie => {
+                var cookie_pieces = cookie.split(':');
+                document.cookie = cookie_pieces[0]+'= ; expires =' + expiry_date;
+            });
+            alert('Cookies deleted. App colors will be back to normal after restarting the app.');
         }
     }
 });
@@ -345,7 +354,7 @@ Vue.component('color_changer_element', {
 });
 
 const About = Vue.component('about', {
-    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>You can delete all your imported data and all graphs in settings.</p><loose_navigation_element linktext='Go to settings ->' target='settings' ></loose_navigation_element></div>"
+    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>If you change the display colors in settings, the color codes will be stored as cookies. You can delete stored cookies through your browser settings.</p><p>You can delete all your imported data, graphs and cookies in settings.</p><loose_navigation_element linktext='Go to settings ->' target='settings' ></loose_navigation_element></div>"
 });
 
 Vue.component('loose_navigation_element', {
