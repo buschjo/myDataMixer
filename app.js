@@ -33,14 +33,19 @@ Vue.component('file_importer', {
             //the onload event is fired when a read was successfull (full exp. https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
             reader.onload = function (event) {
                 var converter = new DataConverter();
-                // event target is the file reader, in result is the read data
-                dataobject = converter.convert(event.target.result, id, labeltext);
-                if(app.importedDataExists(id)){
-                    app.replaceData(dataobject, id);
-                    app.replaceDefaultGraph(createDefaultGraph(dataobject));
-                }else{
-                    app.imported_data.push(dataobject);
-                    app.graphs.push(createDefaultGraph(dataobject));
+                // try catch to catch errors from file conversion if invalid file was imported
+                try {
+                    // event target is the file reader, in result is the read data
+                    dataobject = converter.convert(event.target.result, id, labeltext);
+                    if(app.importedDataExists(id)){
+                        app.replaceData(dataobject, id);
+                        app.replaceDefaultGraph(createDefaultGraph(dataobject));
+                    }else{
+                        app.imported_data.push(dataobject);
+                        app.graphs.push(createDefaultGraph(dataobject));
+                    }
+                } catch (error) {
+                    alert('Invalid input. Please select valid input file.');
                 }
             };
             reader.readAsText(selectedFile);

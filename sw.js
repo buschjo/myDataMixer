@@ -28,7 +28,7 @@ self.addEventListener('install', function (event) {
 	//adapted from https://codelabs.developers.google.com/codelabs/your-first-pwapp/#4 by Google Developers accessed 13.11.2019
 	event.waitUntil(
 		caches.open(CACHE_NAME).then((cache) => {
-			console.log('[ServiceWorker] Pre-caching offline page');
+			console.log('[ServiceWorker] Pre-caching files');
 			return cache.addAll(FILES_TO_CACHE);
 		})
 	);
