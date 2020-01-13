@@ -1,12 +1,14 @@
-//code from pluralsight course
+// service worker registration from  https://developers.google.com/web/fundamentals/primers/service-workers/registration accessed on 13.01.2020
 //sw should be handled as progressive enhancement
-//see if it is actually available
+//see if service worker is available at navigator
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        //location is important for the sw scope
-        .then(r => console.log('SW Registered'))
-        .catch(err => console.error('Problem with service worker.', err));
-}
+    // register service worker after load, because otherwise the sw registration would delay the initial page load
+    window.addEventListener('load', function() {
+        // the location of the service worker is important for the scope. For example, which files can be cached
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+//   end of service worker registration
 
 // Import View
 
@@ -37,10 +39,10 @@ Vue.component('file_importer', {
                 try {
                     // event target is the file reader, in result is the read data
                     dataobject = converter.convert(event.target.result, id, labeltext);
-                    if(app.importedDataExists(id)){
+                    if (app.importedDataExists(id)) {
                         app.replaceData(dataobject, id);
                         app.replaceDefaultGraph(createDefaultGraph(dataobject));
-                    }else{
+                    } else {
                         app.imported_data.push(dataobject);
                         app.graphs.push(createDefaultGraph(dataobject));
                     }
@@ -261,7 +263,7 @@ Vue.component('graph_card', {
     template: "<div class='card'><div class='card-body'><h5 class='card-title'>{{graph.title}}</h5><button type='button' class='btn btn-outline-danger btn-sm' v-on:click='deleteGraph()'>x</button><div v-bind:id='graph.graphid' style='width:100%;'></div></div></div>",
     props: ['graph'],
     methods: {
-        deleteGraph: function(){
+        deleteGraph: function () {
             app.deleteGraph(this.graph.graphid);
         }
     },
@@ -287,12 +289,12 @@ const Settings = Vue.component('settings', {
             app.imported_data = [];
             alert('All imported data was deleted.');
         },
-        deleteCookies: function() {
+        deleteCookies: function () {
             var cookies = document.cookie.split('; ');
             var expiry_date = new Date(Date.UTC(1991, 11, 23));
             cookies.forEach(cookie => {
                 var cookie_pieces = cookie.split(':');
-                document.cookie = cookie_pieces[0]+'= ; expires =' + expiry_date;
+                document.cookie = cookie_pieces[0] + '= ; expires =' + expiry_date;
             });
             alert('Cookies deleted. App colors will be back to normal after restarting the app.');
         }
@@ -457,23 +459,23 @@ var app = new Vue({
             });
             return import_source;
         },
-        importedDataExists(id){
+        importedDataExists(id) {
             var exists = false;
             this.imported_data.forEach(datastructre => {
                 if (datastructre.id === id) {
-                    exists =  true;
+                    exists = true;
                 }
             });
             return exists;
         },
-        replaceData(datastructure, id){
+        replaceData(datastructure, id) {
             for (let index = 0; index < this.imported_data.length; index++) {
                 if (this.imported_data[index].id === id) {
                     this.imported_data[index] = datastructure;
                 }
             }
         },
-        replaceDefaultGraph(graph){
+        replaceDefaultGraph(graph) {
             for (let index = 0; index < this.graphs.length; index++) {
                 if (this.graphs[index].graphid === graph.graphid) {
                     this.graphs[index] = graph;
@@ -481,7 +483,7 @@ var app = new Vue({
             }
         },
         // Adapted from https://hosting.review/tutorial/javascript-remove-element-from-array/ by Paul Mahony (accessed: 06.01.2020)
-        deleteGraph(graphid){
+        deleteGraph(graphid) {
             var index_of_graph_to_remove;
             for (let index = 0; index < this.graphs.length; index++) {
                 const graph = this.graphs[index];
@@ -493,7 +495,7 @@ var app = new Vue({
         }
         //end of adapted
     },
-    created: function(){
+    created: function () {
         if (document.cookie) {
             var cookies = document.cookie.split("; ");
             var colors = new Map();

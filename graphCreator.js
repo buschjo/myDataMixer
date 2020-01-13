@@ -89,7 +89,7 @@ class GraphCreator {
                     values.push(single_value);
                     dates.push(value.unified_date);
                 });
-                // only include values that are not undefined
+            // only include values that are not undefined
             } else if (value[category_name]) {
                 values.push(value[category_name]);
                 dates.push(value.unified_date);
