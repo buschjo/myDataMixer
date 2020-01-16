@@ -388,6 +388,7 @@ Vue.component('loose_navigation_element', {
     }
 });
 
+// adpated from https://router.vuejs.org/guide/#javascript accessed: 01.16.2020
 const routes = [{
     name: 'home',
     path: '/',
@@ -418,6 +419,7 @@ const routes = [{
 const router = new VueRouter({
     routes // short for `routes: routes`
 });
+// end of adapted from https://router.vuejs.org/guide/#javascript
 
 const import_sources = [{
     name: 'Clue',
@@ -510,4 +512,4 @@ var app = new Vue({
             });
         }
     }
-}).$mount('#app');
+});
