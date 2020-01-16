@@ -87,9 +87,9 @@ Vue.component('file_importer', {
 
 // Datalist View
 //in components, data must be a function so that each instance has their own https://vuejs.org/v2/guide/components.html
-// id is used for styling 
+// id is used for styling
 const Categories = Vue.component('category_list', {
-    template: "<div><template v-if='imported_data.size === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator target='graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
+    template: "<div><template v-if='imported_data.length === 0'><p>No data is imported yet</p></template><template v-else><category_list_element v-for='item in imported_data' v-bind:imported_data_structure='item' v-bind:key='item.id'></category_list_element><graph_creator target='graphs' linktext='Create Graph from Selection'></graph_creator></template></div>",
     data: function () {
         return {
             imported_data: app.imported_data
