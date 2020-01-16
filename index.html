@@ -3,7 +3,7 @@
 
 <head>
     <meta name="author" content="Josefine S. Busch">
-    <meta name="version" content="0.1">
+    <meta name="version" content="1.2">
     <meta name="title" content="My Data Mixer">
     <!-- Required by lighthouse for pwa audit -->
     <meta name="theme-color" content="#2F3BA2">
@@ -48,22 +48,25 @@
     <!-- Vue root component -->
     <div id="app">
         <!-- Bootstrap class to make this element span the whole width of the viewport -->
+        <!-- Main Content -->
         <div class="container-fluid main-content">
-                <h1>{{title}}</h1>
+            <h1>{{title}}</h1>
             <!-- router adapted from: https://router.vuejs.org/guide/#javascript accessed: 02.01.2020 -->
             <!-- route outlet -->
             <!-- component matched by the route will render here -->
             <router-view></router-view>
         </div>
-        <p>
+        <!-- Navigation area -->
+        <div>
             <!-- use router-link component for navigation. -->
             <!-- specify the link by passing the `to` prop. -->
             <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
             <router-link to="/import">Import</router-link>
+            <router-link to="/categories">Categories</router-link>
             <router-link to="/graphs">Graphs</router-link>
             <router-link to="/settings">Settings</router-link>
             <router-link to="/about">About</router-link>
-        </p>
+        </div>
         <!-- end of adapted (Router) -->
 
     </div>
