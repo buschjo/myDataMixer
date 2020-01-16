@@ -250,7 +250,7 @@ Vue.component('graph_creator', {
 
 // Graphs View
 const Graphs = Vue.component('graphs', {
-    template: "<div><template v-if='graphs.length === 0'><p>No data is imported yet</p></template><template v-else><graph_card v-for='item in graphs' v-bind:graph='item' v-bind:key='item.graphid'></graph_card></template></div>",
+    template: "<div><template v-if='graphs.length === 0'><p>No graphs were created yet</p></template><template v-else><graph_card v-for='item in graphs' v-bind:graph='item' v-bind:key='item.graphid'></graph_card></template></div>",
     data: function () {
         return {
             graphs: app.graphs
@@ -442,7 +442,7 @@ const import_sources = [{
 //Vue root app
 var app = new Vue({
     router,
-    el: '#app', //identifier for vue internals
+    el: '#app', //id of html element in index.html
     data: {
         title: 'My Data Mix',
         import_sources: import_sources,
