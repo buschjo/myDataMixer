@@ -279,7 +279,8 @@ const Settings = Vue.component('settings', {
         deleteAllData: function () {
             app.graphs = [];
             app.imported_data = [];
-            alert('All imported data and graphs were deleted.');
+            this.deleteAllCookies();
+            alert('All personalized data was deleted.');
         },
         deleteGraphs: function () {
             app.graphs = [];
@@ -290,13 +291,16 @@ const Settings = Vue.component('settings', {
             alert('All imported data was deleted.');
         },
         deleteCookies: function () {
+            this.deleteAllCookies();
+            alert('Cookies deleted. App colors will be back to normal after restarting the app.');
+        },
+        deleteAllCookies: function(){
             var cookies = document.cookie.split('; ');
             var expiry_date = new Date(Date.UTC(1991, 11, 23));
             cookies.forEach(cookie => {
                 var cookie_pieces = cookie.split(':');
                 document.cookie = cookie_pieces[0] + '= ; expires =' + expiry_date;
             });
-            alert('Cookies deleted. App colors will be back to normal after restarting the app.');
         }
     }
 });
@@ -318,7 +322,7 @@ Vue.component('color_changer_element', {
         var local_import_source = this.import_source;
         colorPicker.addEventListener("change", function () {
             watchColorPicker(local_import_source.labelid);
-        }, false);
+        }, false); //false for "useCapture" event will bubble up through the dom tree (but it doesn't do anything else in mdx)
         setColorPickerColor(local_import_source.labelid);
 
         function watchColorPicker(import_source_id) {
