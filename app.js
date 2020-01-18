@@ -135,7 +135,7 @@ Vue.component('category_list_element', {
             return app.getImportSource(id);
         }
 
-        // prepare category list
+        // prepare category list for all "extracted" categories
         function prepareCategorylist(imported_data_structure) {
             var categories = imported_data_structure.datasource.categories;
             for (const category_name in categories) {
@@ -207,8 +207,8 @@ Vue.component('graph_creator', {
         },
         createGraph: function () {
             var selectedCategories = getSelectedCategories();
-            if (selectedCategories.length > 3) {
-                alert('Please only select up to three categories.');
+            if (selectedCategories.length <= 0 || selectedCategories.length > 3) {
+                alert('Please select one to three categories.');
             } else {
                 app.graphs.push(createGraph(getSelectedCategories()));
                 this.routeTo(this.target);
