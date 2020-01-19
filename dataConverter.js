@@ -129,7 +129,6 @@ class DataConverter {
             var values = line.split(',');
             for (var i = 0; i < column_titles.length; i++) {
                 //remove all spaces to make the keys better usable
-                // TODO: is this still neccesary, when category names are defined in datasources?
                 dataset[column_titles[i].replace(" ", "")] = values[i];
             }
             return dataset;
