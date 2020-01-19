@@ -8,7 +8,10 @@ if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     });
   }
-//   end of service worker registration
+//   end of service worker registration (from https://developers.google.com/web/fundamentals/primers/service-workers/registration)
+
+document.getElementById('javascriptAvailable').style.display = "none";
+
 
 // Import View
 
