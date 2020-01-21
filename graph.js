@@ -103,7 +103,7 @@ class Graph {
                     y: 1.2
                 },
                 margin: {
-                    l: 60,
+                    l: 110,
                     b: 50,
                     r: 10,
                     t: 1,
