@@ -29,10 +29,8 @@ class GraphCreator {
         var traces;
         var multiple_yaxis_multiple_traces;
         if (datastructure.datasource === datasources.STRONG) {
-            // traces = this.getTraces(datastructure.data, datastructure.datasource, datastructure.data.extracted_categories);
             multiple_yaxis_multiple_traces = false;
         } else {
-            // TODO: is this right?
             multiple_yaxis_multiple_traces = true;
         }
         traces = this.getTraces(datastructure.data, datastructure.datasource, [datastructure.datasource.default_graph_category]);
@@ -51,7 +49,12 @@ class GraphCreator {
         var traces = [];
         categories.forEach(category => {
             if (datasource.categories[category] && datasource.categories[category].is_extracted_category) {
-                // concat existing traces with traces for extracted categories
+                // concat existing traces with traces for extracted categories (Strong exercise categories)
+                // recursive call 
+                // a "extracted category" is the "parent" of other categories
+                // categories in "extracted_categories" are categories that are extracted from this "parent category"
+                // getTraces gets called recursively for this new list of categories (extracted_categories)
+                // getTraces returns an array, concat creates one array from the local traces array and the returned traces array to prevent array[array[]]
                 traces = traces.concat(this.getTraces(data, datasource, data.extracted_categories));
             } else {
                 traces.push(this.getTrace(data, datasource, category));
