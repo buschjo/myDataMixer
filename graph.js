@@ -121,7 +121,7 @@ class Graph {
                 overlaying: 'y',
                 side: 'right'
             };
-            layout.margin.r = 60;
+            layout.margin.r = 90;
         }
 
         function addThreeTraceOptions(layout, trace, getCategoryOrder) {

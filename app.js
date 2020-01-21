@@ -27,7 +27,7 @@ const Import = Vue.component('import', {
 });
 
 Vue.component('file_importer', {
-    template: "<div><label v-bind:for='import_source.labelid' v-bind:class='import_source.cssclass' class='btn btn-lg btn-block'>{{ import_source.labeltext }}</label><input type='file' v-bind:name='import_source.labelid' v-bind:id='import_source.labelid' v-on:change='importFile(import_source.labelid)'></div>",
+    template: "<div><label v-bind:for='import_source.labelid' v-bind:class='import_source.cssclass' class='btn btn-lg btn-block'>{{ import_source.labeltext }}</label><input type='file' v-bind:accept='import_source.fileformat' v-bind:name='import_source.labelid' v-bind:id='import_source.labelid' v-on:change='importFile(import_source.labelid)'></div>",
     props: ['import_source'],
     methods: {
         importFile(id) {
@@ -433,19 +433,22 @@ const import_sources = [{
     cssclass: 'btn-clue',
     colorcode: 'rgb(189, 0, 0)',
     labelid: 'clueData',
-    labeltext: 'Clue Data'
+    labeltext: 'Clue Data',
+    fileformat: '.cluedata'
 }, {
     name: 'Daylio',
     cssclass: 'btn-daylio',
     colorcode: 'rgb(86, 0, 94)',
     labelid: 'daylioData',
-    labeltext: 'Daylio Data'
+    labeltext: 'Daylio Data',
+    fileformat: '.csv'
 }, {
     name: 'Strong',
     cssclass: 'btn-strong',
     colorcode: 'rgb(9, 0, 136)',
     labelid: 'strongData',
-    labeltext: 'Strong Data'
+    labeltext: 'Strong Data',
+    fileformat: '.csv'
 }];
 
 //Vue root app
