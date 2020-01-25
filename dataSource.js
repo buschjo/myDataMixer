@@ -360,7 +360,7 @@ const datasources = {
             exerciseName: {
                 id: 'exerciseName',
                 title: 'All Exercises',
-                is_extracted_category: true,
+                is_extractable_category: true,
                 moreSpaceNeeded: true
             },
             exercised: {

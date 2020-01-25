@@ -48,7 +48,7 @@ class GraphCreator {
         // graph datasources are structured differently, they are DataStructures
         var traces = [];
         categories.forEach(category => {
-            if (datasource.categories[category] && datasource.categories[category].is_extracted_category) {
+            if (datasource.categories[category] && datasource.categories[category].is_extractable_category) {
                 // concat existing traces with traces for extracted categories (Strong exercise categories)
                 // recursive call 
                 // a "extracted category" is the "parent" of other categories

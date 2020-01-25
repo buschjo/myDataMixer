@@ -143,7 +143,7 @@ Vue.component('category_list_element', {
             var categories = imported_data_structure.datasource.categories;
             for (const category_name in categories) {
                 const category = categories[category_name];
-                if (category.is_extracted_category) {
+                if (category.is_extractable_category) {
                     removeParentCategory(category_name, imported_data_structure.datasource);
                     addSubcategories(imported_data_structure);
                 }
