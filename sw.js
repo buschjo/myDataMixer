@@ -1,9 +1,9 @@
 //adapted from https://codelabs.developers.google.com/codelabs/your-first-pwapp/ by Google Developers accessed 13.11.2019
 //Service Worker is in the root directory of the project so everything is in scope
 
-const version = 32;
+const version = 33;
 
-const CACHE_NAME = 'static-cache-v29';
+const CACHE_NAME = 'static-cache-v30';
 const FILES_TO_CACHE = [
 	'index.html',
 	'images/favicon.png',
@@ -15,7 +15,7 @@ const FILES_TO_CACHE = [
 	'graph.js',
 	'graphCreator.js',
 	'graphTrace.js',
-	'custom_styling.css'
+	'customButtonStyling.css'
 ];
 
 //listen to install event
