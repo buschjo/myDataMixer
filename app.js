@@ -18,7 +18,7 @@ document.getElementById('javascriptAvailable').style.display = "none";
 //  v-on:change listens to "change" event and calls importFile method defined in component import-button
 // only components used by the router are declared as const
 const Import = Vue.component('import', {
-    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><loose_navigation_element linktext='Create Graph ->' target='categories'></loose_navigation_element></div>",
+    template: "<div> <file_importer v-for='item in import_sources' v-bind:import_source='item' v-bind:key='item.labelid'></file_importer><router-link to='/categories' class='btn btn-outline-secondary btn-lg btn-block'>Create Graph -></router-link></div>",
     data: function () {
         return {
             import_sources
@@ -378,21 +378,7 @@ Vue.component('color_changer_element', {
 });
 
 const About = Vue.component('about', {
-    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>If you change the display colors in settings, the color codes will be stored as cookies. You can delete stored cookies through your browser settings.</p><p>You can delete all your imported data, graphs and cookies in settings.</p><loose_navigation_element linktext='Go to settings ->' target='settings' ></loose_navigation_element></div>"
-});
-
-Vue.component('loose_navigation_element', {
-    props: ['target', 'linktext'],
-    template: "<button type='button' v-on:click='routeTo(target)' class='btn btn-outline-secondary btn-lg btn-block' id='createGraphButton' >{{linktext}}</button>",
-    methods: {
-        routeTo: function (target) {
-            routes.forEach(route => {
-                if (route.name === target) {
-                    this.$router.push(route);
-                }
-            });
-        }
-    }
+    template: "<div><p>This app was developed by Josefine S. Busch.</p><p>The app stores your imported data as data objects and graphs. All data is stored locally and is never transmitted to a remote server.</p><p>If you change the display colors in settings, the color codes will be stored as cookies. You can delete stored cookies through your browser settings.</p><p>You can delete all your imported data, graphs and cookies in settings.</p><router-link to='/settings' class='btn btn-outline-secondary btn-lg btn-block'>Go to settings</router-link></div>"
 });
 
 // adpated from https://router.vuejs.org/guide/#javascript accessed: 01.16.2020

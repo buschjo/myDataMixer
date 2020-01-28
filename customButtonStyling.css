@@ -52,3 +52,7 @@
 .source-list-button {
     margin-bottom: .5rem;
 }
+
+#title a{
+    color: black;
+}
