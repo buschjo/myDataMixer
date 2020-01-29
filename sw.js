@@ -1,9 +1,9 @@
 //adapted from https://codelabs.developers.google.com/codelabs/your-first-pwapp/ by Google Developers accessed 13.11.2019
 //Service Worker is in the root directory of the project so everything is in scope
 
-const version = 33;
+const version = 34;
 
-const CACHE_NAME = 'static-cache-v30';
+const CACHE_NAME = 'static-cache-v31';
 const FILES_TO_CACHE = [
 	'index.html',
 	'images/favicon.png',

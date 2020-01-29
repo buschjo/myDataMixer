@@ -442,7 +442,7 @@ var app = new Vue({
     router,
     el: '#app', //id of html element in index.html
     data: {
-        title: 'My Data Mix',
+        title: 'MyDataMix',
         import_sources: import_sources,
         graphs: [],
         imported_data: []
